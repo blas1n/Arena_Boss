@@ -4,7 +4,7 @@
 
 namespace Math
 {
-    class Scalar
+    class Scalar final
     {
     public:
         Scalar(float f = 0.0f) { value = DirectX::XMVectorReplicate(f); }
@@ -44,6 +44,16 @@ namespace Math
     private:
         DirectX::XMVECTOR value;
     };
+
+    inline bool operator==(const Scalar& lhs, const Scalar& rhs)
+    {
+        return DirectX::XMVectorGetX(lhs) == DirectX::XMVectorGetX(rhs);
+    }
+
+    inline bool operator!=(const Scalar& lhs, const Scalar& rhs)
+    {
+        return !(lhs == rhs);
+    }
 
     inline Scalar operator-(const Scalar& s) { return Scalar{ DirectX::XMVectorNegate(s) }; }
 
