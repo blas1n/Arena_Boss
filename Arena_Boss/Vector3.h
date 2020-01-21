@@ -25,6 +25,7 @@ namespace Math
     public:
         Vector3() = default;
         Vector3(const Vector3&) = default;
+        Vector3(Vector3&&) noexcept = default;
 
         explicit Vector3(float x, float y, float z)
             : value(DirectX::XMVectorSet(x, y, z, 0.0f)) {}
@@ -36,6 +37,7 @@ namespace Math
             : value(vec) {}
 
         Vector3& operator=(const Vector3&) = default;
+        Vector3& operator=(Vector3&&) noexcept = default;
 
         operator Vector2() const noexcept;
 

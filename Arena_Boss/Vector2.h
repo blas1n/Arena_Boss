@@ -21,6 +21,7 @@ namespace Math
     public:
         Vector2() = default;
         Vector2(const Vector2&) = default;
+        Vector2(Vector2&&) noexcept = default;
 
         explicit Vector2(float x, float y)
             : value(DirectX::XMVectorSet(x, y, 0.0f, 0.0f)) {}
@@ -31,6 +32,7 @@ namespace Math
             : value(vec) {}
 
         Vector2& operator=(const Vector2&) = default;
+        Vector2& operator=(Vector2&&) noexcept = default;
 
         inline DirectX::XMVECTOR Get() const noexcept { return value; }
         inline operator DirectX::XMVECTOR() const noexcept { return value; }
