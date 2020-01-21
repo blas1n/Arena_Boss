@@ -1,5 +1,4 @@
 #include "Vector3.h"
-#include "Scalar.h"
 #include "Vector2.h"
 
 namespace Math

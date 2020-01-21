@@ -1,10 +1,9 @@
 #pragma once
 
-#include <DirectXMath.h>
+#include "Scalar.h"
 
 namespace Math
 {
-    class Scalar;
     class Vector2;
 
     class Vector3 final
@@ -122,8 +121,20 @@ namespace Math
         }
 
     private:
+        friend bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept;
+
         DirectX::XMVECTOR value;
     };
+
+    inline bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept
+    {
+        return DirectX::XMVector3Equal(lhs.value, rhs.value);
+    }
+
+    inline bool operator!=(const Vector3& lhs, const Vector3& rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
 
     inline Vector3 operator-(const Vector3& s) { return Vector3{ DirectX::XMVectorNegate(s) }; }
 
