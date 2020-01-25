@@ -37,6 +37,11 @@ namespace Math
         inline DirectX::XMVECTOR Get() const noexcept { return value; }
         inline operator DirectX::XMVECTOR() const noexcept { return value; }
 
+        inline void Set(float x, float y, float z, float w) noexcept
+        {
+            value = DirectX::XMVectorSet(x, y, z, w);
+        }
+
         inline float GetX() const noexcept { return DirectX::XMVectorGetX(value); }
         inline float GetY() const noexcept { return DirectX::XMVectorGetY(value); }
         inline float GetZ() const noexcept { return DirectX::XMVectorGetZ(value); }

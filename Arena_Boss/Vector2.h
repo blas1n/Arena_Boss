@@ -1,5 +1,7 @@
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 #include "Scalar.h"
 
 namespace Math
@@ -21,11 +23,14 @@ namespace Math
         Vector2(const Vector2&) = default;
         Vector2(Vector2&&) noexcept = default;
 
+        Vector2(POINT point)
+            : value(DirectX::XMVectorSet(point.x, point.y, 0.0f, 0.0f)) {}
+
         explicit Vector2(float x, float y)
             : value(DirectX::XMVectorSet(x, y, 0.0f, 0.0f)) {}
 
         explicit Vector2(const Scalar& s);
-
+        
         explicit Vector2(DirectX::FXMVECTOR vec)
             : value(vec) {}
 
@@ -34,6 +39,11 @@ namespace Math
 
         inline DirectX::XMVECTOR Get() const noexcept { return value; }
         inline operator DirectX::XMVECTOR() const noexcept { return value; }
+
+        inline void Set(float x, float y) noexcept
+        {
+            value = DirectX::XMVectorSet(x, y, 0.0f, 0.0f);
+        }
 
         inline float GetX() const noexcept { return DirectX::XMVectorGetX(value); }
         inline float GetY() const noexcept { return DirectX::XMVectorGetY(value); }
@@ -97,6 +107,16 @@ namespace Math
         inline static float Dot(const Vector2& lhs, const Vector2& rhs)
         {
             return DirectX::XMVectorGetX(DirectX::XMVector2Dot(lhs, rhs));
+        }
+
+        inline POINT AsPoint() const noexcept
+        {
+            return POINT{ DirectX::XMVectorGetX(value), DirectX::XMVectorGetY(value) };
+        }
+
+        inline operator POINT() const noexcept
+        {
+            return AsPoint();
         }
 
     private:
