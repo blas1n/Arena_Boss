@@ -13,22 +13,31 @@ public:
     explicit Color(const Math::Vector4& vec) : value(vec) {}
     explicit Color(Math::Vector4&& vec) : value(std::move(vec)) {}
 
-    explicit Color(float r, float g, float b, float a = 1.0f)
-        : value(r, g, b, a) {}
+    inline static Color FromFloat(const Math::Vector4& vec) { return Color{ vec }; }
+    inline static Color FromFloat(Math::Vector4&& vec) { return Color{ std::move(vec) }; }
 
-    explicit Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255)
-        : value(r, g, b, a)
+    inline static Color FromFloat(float r, float g, float b, float a = 1.0f)
     {
-        value /= 255.0f;
+        return FromFloat(Math::Vector4{ r, g, b, a });
     }
 
-    explicit Color(uint32_t rgba)
-        : Color(
+    inline static Color FromByte(const Math::Vector4& vec) { return Color{ vec / 255 }; }
+    inline static Color FromByte(Math::Vector4&& vec) { return Color{ std::move(vec /= 255) }; }
+
+    inline static Color FromByte(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255)
+    {
+        return FromByte(Math::Vector4{ r, g, b, a });
+    }
+
+    inline static Color FromByte(uint32_t rgba)
+    {
+        return FromByte(
             static_cast<uint8_t>((rgba >>  0) & 0xFF),
             static_cast<uint8_t>((rgba >>  8) & 0xFF),
             static_cast<uint8_t>((rgba >> 16) & 0xFF),
             static_cast<uint8_t>((rgba >> 24) & 0xFF)
-        ) {}
+        );
+    }
 
     Color& operator=(const Color&) = default;
     Color& operator=(Color&&) = default;    
