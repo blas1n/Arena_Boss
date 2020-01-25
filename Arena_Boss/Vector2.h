@@ -37,6 +37,11 @@ namespace Math
         Vector2& operator=(const Vector2&) = default;
         Vector2& operator=(Vector2&&) noexcept = default;
 
+        Vector2& operator=(POINT point) noexcept
+        {
+            value = DirectX::XMVectorSet(point.x, point.y, 0.0f, 0.0f);
+        }
+
         inline DirectX::XMVECTOR Get() const noexcept { return value; }
         inline operator DirectX::XMVECTOR() const noexcept { return value; }
 
