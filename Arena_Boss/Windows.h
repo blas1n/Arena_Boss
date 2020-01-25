@@ -2,44 +2,121 @@
 
 #include "Common.h"
 #include <d3d11.h>
+#include "Color.h"
 #include "Vector2.h"
 
 class Windows
 {
 public:
-	Windows(int width, int height, const tstring& title);
+	Windows(const tstring& title, int width, int height,
+		int sampleCount, int sampleQuality);
+
 	~Windows();
 
-	int GetWidth() const noexcept;
-	int GetHeight() const noexcept;
+	inline bool IsWindowAvailable() const noexcept { return hWnd != nullptr; }
+	inline bool IsD3DAvailable() const noexcept { return device != nullptr; }
 
-	float GetAspectRatio() const noexcept;
+	inline const Math::Vector2& GetCenterPos() const noexcept { return center; }
+	inline const Math::Vector2& GetSize() const noexcept { return size; }
 
-	bool IsVsync() const noexcept;
-	void SetVsync() noexcept;
+	inline float GetAspectRatio() const noexcept { return size.GetX() / size.GetY(); }
+
+	inline bool IsVsync() const noexcept { return vsync; }
+	inline void SetVsync(bool isVsync) noexcept { vsync = isVsync; }
 
 	void SetDefaultViewport();
-	void SetDefaultRTVAndDSV();
 
-	void SetBackgroundColor(const class Color& color);
-	void ClearRenderTarget();
-	void ClearDepthStencil();
+	inline void SetDefaultRTVAndDSV()
+	{
+		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+	}
 
-	Math::Vector2 GetCenterPos();
-	Math::Vector2 GetSize();
+	inline void SetBackgroundColor(const Color& color)
+	{
+		backgroundColor = color;
+	}
+	
+	inline void ClearRenderTarget()
+	{
+		float color[4];
+		backgroundColor.AsPtr(color);
+		deviceContext->ClearRenderTargetView(renderTargetView, color);
+	}
+
+	inline void ClearDepthStencil()
+	{
+		deviceContext->ClearDepthStencilView(
+			depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	}
 
 	void DoEvents();
-	void Present();
 
-	void SetFullScreen(bool isFullScreen);
+	inline void Present()
+	{
+		swapChain->Present(static_cast<UINT>(vsync), 0);
+	}
 
-	ID3D11Device* GetD3DDevice();
-	ID3D11DeviceContext* GetD3DDeviceContext();
+	inline void SetFullScreen(bool isFullScreen)
+	{
+		swapChain->SetFullscreenState(static_cast<BOOL>(isFullScreen), nullptr);
+	}
 
-	HWND GetWindowHandle();
-	HINSTANCE GetProgramHandle();
+	inline HWND GetWindowHandle() const noexcept { return hWnd; }
+	inline HINSTANCE GetProgramHandle() const noexcept { return hInstance; }
 
-	const tstring& GetProgramPath();
+	inline ID3D11Device* GetD3DDevice() const noexcept { return device; }
+	inline ID3D11DeviceContext* GetD3DDeviceContext() const noexcept { return deviceContext; }
 
-	void ShowErrorMessage(const tstring& errMsg);
+	const tstring& GetProgramPath() const noexcept { return programPath; }
+
+	void ShowErrorBox(const tstring& errMsg)
+	{
+		MessageBox(hWnd, errMsg.c_str(), TEXT("Error"), MB_ICONERROR | MB_OK);
+	}
+
+private:
+	void InitWindows(int width, int height);
+	void InitD3D(int sampleCount, int sampleQuality);
+
+	void UpdateClientPos();
+
+	bool CreateD3DDevice();
+	bool CreateSwapChain(int sampleCount, int sampleQuality);
+	bool CreateRenderTargetView();
+	bool CreateDepthStencilBuffer(int sampleCount, int sampleQuality);
+
+	void DestroyWindows();
+	void DestroyD3D();
+
+private:
+	constexpr static auto SWAPCHAIN_BUFFER_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
+	constexpr static auto DEPTHSTENCIL_BUFFER_FORMAT = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	constexpr static auto PRIMITIVE_TOPOLOGY = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	tstring programPath;
+
+	HWND hWnd = nullptr;
+	HINSTANCE hInstance = nullptr;
+
+	tstring windowClassName;
+	tstring windowTitle;
+
+	Math::Vector2 pos;
+	Math::Vector2 size;
+	Math::Vector2 center;
+
+	Color backgroundColor;
+
+	IDXGISwapChain* swapChain = nullptr;
+
+	ID3D11Device* device = nullptr;
+	ID3D11DeviceContext* deviceContext = nullptr;
+
+	ID3D11RenderTargetView* renderTargetView = nullptr;
+
+	ID3D11Texture2D* depthStencilBuffer = nullptr;
+	ID3D11DepthStencilView* depthStencilView = nullptr;
+
+	bool isFullscreen = false;
+	bool vsync = true;
 };
