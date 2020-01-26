@@ -38,7 +38,7 @@ namespace Util
     }
 
     template <class T, class... Others>
-    void ReleaseCOMObjects(T& ptr, Others&... others)
+    void ReleaseObjects(T& ptr, Others&... others)
     {
         ReleaseObjects(ptr);
         ReleaseObjects(others...);

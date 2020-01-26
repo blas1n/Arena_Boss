@@ -10,3 +10,5 @@ using tstring = std::wstring;
 #else
 using tstring = std::string;
 #endif
+
+using byte = unsigned char;

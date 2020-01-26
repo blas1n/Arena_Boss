@@ -1,11 +1,14 @@
 #include "Windows.h"
+#include "FileSystem.h"
 #include "Util.h"
+
+#pragma comment(lib, "d3d11.lib")
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-Windows::Windows(const tstring& title, int width, int height,
-    int sampleCount, int sampleQuality)
-    : programPath(/*FileSystem::CurrentRunningPath() 파일 시스템 구축 후 주석 해제*/),
+Windows::Windows(const tstring& title, uint32_t width, uint32_t height,
+    uint32_t sampleCount, uint32_t sampleQuality)
+    : programPath(FileSystem::GetCurrentPath()),
     hInstance(GetModuleHandle(nullptr)),
     windowTitle(title)
 {
@@ -19,10 +22,8 @@ Windows::~Windows()
     DestroyWindows();
 }
 
-void Windows::InitWindows(int width, int height)
+void Windows::InitWindows(uint32_t width, uint32_t height)
 {
-    assert(width > 0 && height > 0);
-
     WNDCLASSEX wc;
     wc.cbSize = sizeof(WNDCLASSEXA);
     wc.style = CS_HREDRAW | CS_VREDRAW | CS_NOCLOSE;
@@ -43,7 +44,7 @@ void Windows::InitWindows(int width, int height)
     style |= WS_VISIBLE;
     style &= ~WS_SIZEBOX;
 
-    RECT winRect = { 0, 0, width, height };
+    RECT winRect = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
     if (!AdjustWindowRect(&winRect, style, FALSE))
     {
         UnregisterClass(windowClassName.c_str(), hInstance);
@@ -52,20 +53,27 @@ void Windows::InitWindows(int width, int height)
 
     const auto resolution = Math::Vector2
     {
-        GetSystemMetrics(SM_CXSCREEN),
-        GetSystemMetrics(SM_CYSCREEN)
+        static_cast<float>(GetSystemMetrics(SM_CXSCREEN)),
+        static_cast<float>(GetSystemMetrics(SM_CYSCREEN))
     };
 
-    size.SetX(winRect.right - winRect.left);
-    size.SetX(winRect.bottom - winRect.top);
+    size.SetX(static_cast<float>(winRect.right - winRect.left));
+    size.SetX(static_cast<float>(winRect.bottom - winRect.top));
     pos = (resolution - size) / 2;
     center = resolution / 2;
-
+    
     hWnd = CreateWindow(
-        windowClassName.c_str(), windowTitle.c_str(),
-        style, pos.GetX(), pos.GetY(),
-        size.GetX(), size.GetY(),
-        nullptr, nullptr, hInstance, nullptr
+        windowClassName.c_str(),
+        windowTitle.c_str(),
+        style,
+        static_cast<int>(pos.GetX()),
+        static_cast<int>(pos.GetY()),
+        static_cast<int>(size.GetX()),
+        static_cast<int>(size.GetY()),
+        nullptr,
+        nullptr,
+        hInstance,
+        nullptr
     );
 
     if (!hWnd)
@@ -82,7 +90,7 @@ void Windows::InitWindows(int width, int height)
     UpdateClientPos();
 }
 
-void Windows::InitD3D(int sampleCount, int sampleQuality)
+void Windows::InitD3D(uint32_t sampleCount, uint32_t sampleQuality)
 {
     assert(CreateD3DDevice());
 
@@ -138,7 +146,7 @@ void Windows::UpdateClientPos()
 
 bool Windows::CreateD3DDevice()
 {
-    D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
+    auto featureLevel = D3D_FEATURE_LEVEL_11_0;
     UINT createDeviceFlag = 0;
 
 #ifdef _DEBUG
@@ -158,11 +166,11 @@ bool Windows::CreateD3DDevice()
     return SUCCEEDED(hr);
 }
 
-bool Windows::CreateSwapChain(int sampleCount, int sampleQuality)
+bool Windows::CreateSwapChain(uint32_t sampleCount, uint32_t sampleQuality)
 {
     DXGI_MODE_DESC scBuf;
-    scBuf.Width = size.GetX();
-    scBuf.Height = size.GetY();
+    scBuf.Width = static_cast<UINT>(size.GetX());
+    scBuf.Height = static_cast<UINT>(size.GetY());
     scBuf.RefreshRate.Numerator = 60;
     scBuf.RefreshRate.Denominator = 1;
     scBuf.Format = SWAPCHAIN_BUFFER_FORMAT;
@@ -187,18 +195,18 @@ bool Windows::CreateSwapChain(int sampleCount, int sampleQuality)
 
     IDXGIAdapter* dxgiAdapter = nullptr;
     hr = dxgiDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&dxgiAdapter));
-    Util::ReleaseCOMObjects(dxgiDevice);
+    Util::ReleaseObjects(dxgiDevice);
     if (FAILED(hr))
         return false;
 
     IDXGIFactory* dxgiFactory = nullptr;
     hr = dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&dxgiFactory));
-    Util::ReleaseCOMObjects(dxgiAdapter);
+    Util::ReleaseObjects(dxgiAdapter);
     if (FAILED(hr))
         return false;
 
     hr = dxgiFactory->CreateSwapChain(device, &sc, &swapChain);
-    Util::ReleaseCOMObjects(dxgiFactory);
+    Util::ReleaseObjects(dxgiFactory);
     return SUCCEEDED(hr);
 }
 
@@ -210,19 +218,19 @@ bool Windows::CreateRenderTargetView()
         return false;
 
     hr = device->CreateRenderTargetView(buf, nullptr, &renderTargetView);
-    Util::ReleaseCOMObjects(buf);
+    Util::ReleaseObjects(buf);
     return SUCCEEDED(hr);
 }
 
-bool Windows::CreateDepthStencilBuffer(int sampleCount, int sampleQuality)
+bool Windows::CreateDepthStencilBuffer(uint32_t sampleCount, uint32_t sampleQuality)
 {
     D3D11_TEXTURE2D_DESC depthStencilBufDesc;
     depthStencilBufDesc.ArraySize = 1;
     depthStencilBufDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     depthStencilBufDesc.CPUAccessFlags = 0;
     depthStencilBufDesc.Format = DEPTHSTENCIL_BUFFER_FORMAT;
-    depthStencilBufDesc.Width = size.GetX();
-    depthStencilBufDesc.Height = size.GetY();
+    depthStencilBufDesc.Width = static_cast<UINT>(size.GetX());
+    depthStencilBufDesc.Height = static_cast<UINT>(size.GetY());
     depthStencilBufDesc.MipLevels = 1;
     depthStencilBufDesc.MiscFlags = 0;
     depthStencilBufDesc.SampleDesc.Count = sampleCount;
@@ -263,7 +271,7 @@ void Windows::DestroyWindows()
 
 void Windows::DestroyD3D()
 {
-    Util::ReleaseCOMObjects(swapChain, deviceContext,
+    Util::ReleaseObjects(swapChain, deviceContext,
         renderTargetView, depthStencilBuffer, depthStencilView);
 
 #ifdef _DEBUG
@@ -273,11 +281,11 @@ void Windows::DestroyD3D()
         HRESULT hr = device->QueryInterface<ID3D11Debug>(&debug);
         if (SUCCEEDED(hr))
             debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
-        Util:: ReleaseCOMObjects(debug);
+        Util:: ReleaseObjects(debug);
     }
 #endif
 
-    Util::ReleaseCOMObjects(device);
+    Util::ReleaseObjects(device);
 }
 
 void Windows::SetDefaultViewport(void)

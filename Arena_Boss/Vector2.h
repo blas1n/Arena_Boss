@@ -24,7 +24,8 @@ namespace Math
         Vector2(Vector2&&) noexcept = default;
 
         Vector2(POINT point)
-            : value(DirectX::XMVectorSet(point.x, point.y, 0.0f, 0.0f)) {}
+            : value(DirectX::XMVectorSet(static_cast<float>(point.x),
+                static_cast<float>(point.y), 0.0f, 0.0f)) {}
 
         explicit Vector2(float x, float y)
             : value(DirectX::XMVectorSet(x, y, 0.0f, 0.0f)) {}
@@ -39,7 +40,9 @@ namespace Math
 
         Vector2& operator=(POINT point) noexcept
         {
-            value = DirectX::XMVectorSet(point.x, point.y, 0.0f, 0.0f);
+            value = DirectX::XMVectorSet(static_cast<float>(point.x),
+                static_cast<float>(point.y), 0.0f, 0.0f);
+            return *this;
         }
 
         inline DirectX::XMVECTOR Get() const noexcept { return value; }
@@ -116,7 +119,11 @@ namespace Math
 
         inline POINT AsPoint() const noexcept
         {
-            return POINT{ DirectX::XMVectorGetX(value), DirectX::XMVectorGetY(value) };
+            return POINT
+            {
+                static_cast<LONG>(DirectX::XMVectorGetX(value)),
+                static_cast<LONG>(DirectX::XMVectorGetY(value))
+            };
         }
 
         inline operator POINT() const noexcept

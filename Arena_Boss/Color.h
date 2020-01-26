@@ -26,7 +26,8 @@ public:
 
     inline static Color FromByte(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255)
     {
-        return FromByte(Math::Vector4{ r, g, b, a });
+        return FromByte(Math::Vector4{ static_cast<float>(r),
+            static_cast<float>(g), static_cast<float>(b), static_cast<float>(a) });
     }
 
     inline static Color FromByte(uint32_t rgba)

@@ -8,8 +8,8 @@
 class Windows
 {
 public:
-	Windows(const tstring& title, int width, int height,
-		int sampleCount, int sampleQuality);
+	Windows(const tstring& title, uint32_t width, uint32_t height,
+		uint32_t sampleCount, uint32_t sampleQuality);
 
 	~Windows();
 
@@ -75,15 +75,15 @@ public:
 	}
 
 private:
-	void InitWindows(int width, int height);
-	void InitD3D(int sampleCount, int sampleQuality);
+	void InitWindows(uint32_t width, uint32_t height);
+	void InitD3D(uint32_t sampleCount, uint32_t sampleQuality);
 
 	void UpdateClientPos();
 
 	bool CreateD3DDevice();
-	bool CreateSwapChain(int sampleCount, int sampleQuality);
+	bool CreateSwapChain(uint32_t sampleCount, uint32_t sampleQuality);
 	bool CreateRenderTargetView();
-	bool CreateDepthStencilBuffer(int sampleCount, int sampleQuality);
+	bool CreateDepthStencilBuffer(uint32_t sampleCount, uint32_t sampleQuality);
 
 	void DestroyWindows();
 	void DestroyD3D();
