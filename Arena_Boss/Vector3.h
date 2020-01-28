@@ -148,9 +148,11 @@ namespace Math
 
     inline Vector3 operator*(const Vector3& lhs, const Vector3& rhs) { return Vector3{ lhs } *= rhs; }
     inline Vector3 operator*(const Vector3& lhs, const Scalar& rhs) { return Vector3{ lhs } *= rhs; }
+    inline Vector3 operator*(const Scalar& lhs, const Vector3& rhs) { return Vector3{ rhs } *= lhs; }
 
     inline Vector3 operator/(const Vector3& lhs, const Vector3& rhs) { return Vector3{ lhs } /= rhs; }
     inline Vector3 operator/(const Vector3& lhs, const Scalar& rhs) { return Vector3{ lhs } /= rhs; }
+    inline Vector3 operator*(const Scalar& lhs, const Vector3& rhs) { return Vector3{ rhs } /= lhs; }
 
     inline float operator|(const Vector3& lhs, const Vector3& rhs) { return Vector3::Dot(lhs, rhs); }
     inline Vector3 operator^(const Vector3& lhs, const Vector3& rhs) { return Vector3::Cross(lhs, rhs); }

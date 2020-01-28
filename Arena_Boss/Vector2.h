@@ -154,9 +154,11 @@ namespace Math
 
     inline Vector2 operator*(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } *= rhs; }
     inline Vector2 operator*(const Vector2& lhs, const Scalar& rhs) { return Vector2{ lhs } *= rhs; }
+    inline Vector2 operator*(const Scalar& lhs, const Vector2& rhs) { return Vector2{ rhs } *= lhs; }
 
     inline Vector2 operator/(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } /= rhs; }
     inline Vector2 operator/(const Vector2& lhs, const Scalar& rhs) { return Vector2{ lhs } /= rhs; }
+    inline Vector2 operator/(const Scalar& lhs, const Vector2& rhs) { return Vector2{ rhs } /= lhs; }
 
     inline float operator|(const Vector2& lhs, const Vector2& rhs) { return Vector2::Dot(lhs, rhs); }
 }

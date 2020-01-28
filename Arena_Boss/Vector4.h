@@ -133,9 +133,11 @@ namespace Math
 
     inline Vector4 operator*(const Vector4& lhs, const Vector4& rhs) { return Vector4{ lhs } *= rhs; }
     inline Vector4 operator*(const Vector4& lhs, const Scalar& rhs) { return Vector4{ lhs } *= rhs; }
+    inline Vector4 operator*(const Scalar& lhs, const Vector4& rhs) { return Vector4{ rhs } *= lhs; }
     
     inline Vector4 operator/(const Vector4& lhs, const Vector4& rhs) { return Vector4{ lhs } /= rhs; }
     inline Vector4 operator/(const Vector4& lhs, const Scalar& rhs) { return Vector4{ lhs } /= rhs; }
+    inline Vector4 operator/(const Scalar& lhs, const Vector4& rhs) { return Vector4{ rhs } /= lhs; }
 
     inline float operator|(const Vector4& lhs, const Vector4& rhs) { return Vector4::Dot(lhs, rhs); }
 }
