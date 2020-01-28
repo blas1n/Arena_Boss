@@ -36,7 +36,6 @@ enum class Key : byte
     X = DIK_X,
     Y = DIK_Y,
     Z = DIK_Z,
-    Z = DIK_Z,
 
     Up = DIK_UP,
     Down = DIK_DOWN,
@@ -148,7 +147,11 @@ public:
 
     inline bool Update()
     {
-        return ReadKeyboard() && ReadMouse() && ProcessInput();
+        if (!(ReadKeyboard() && ReadMouse()))
+            return false;
+
+        ProcessInput();
+        return true;
     }
 
     inline bool IsButtonDown(Key key) const noexcept
@@ -163,22 +166,30 @@ public:
 
     inline bool IsButtonPress(Key key) const noexcept
     {
-        return IsCurDown && !IsOldDown(key);
+        return IsCurDown(key) && !IsOldDown(key);
     }
 
     inline bool IsButtonRelease(Key key) const noexcept
     {
-        return !IsCurDown && IsOldDown(key);
+        return !IsCurDown(key) && IsOldDown(key);
     }
 
     inline Math::Vector2 GetMousePos() const noexcept
     {
-        return Math::Vector2{ curMouseState.lX, curMouseState.lY };
+        return Math::Vector2
+        {
+            static_cast<float>(curMouseState.lX),
+            static_cast<float>(curMouseState.lY)
+        };
     }
 
     inline Math::Vector2 GetMouseMove() const noexcept
     {
-        return Math::Vector2{ curMouseState.lX - oldMouseState.lX, curMouseState.lY - oldMouseState.lY };
+        return Math::Vector2
+        {
+            static_cast<float>(curMouseState.lX - oldMouseState.lX),
+            static_cast<float>(curMouseState.lY - oldMouseState.lY)
+        };
     }
 
     inline int GetWheelPos() const noexcept
@@ -194,7 +205,7 @@ public:
 private:
     bool ReadKeyboard();
     bool ReadMouse();
-    bool ProcessInput();
+    void ProcessInput();
 
     bool IsCurDown(Key key) const noexcept;
     bool IsOldDown(Key key) const noexcept;

@@ -97,7 +97,7 @@ bool InputSystem::ReadMouse()
 	return true;
 }
 
-bool InputSystem::ProcessInput()
+void InputSystem::ProcessInput()
 {
 	Math::Clamp(mouseX += curMouseState.lX, 0, screenWidth);
 	Math::Clamp(mouseY += curMouseState.lY, 0, screenHeight);
