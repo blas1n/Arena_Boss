@@ -16,7 +16,7 @@ public:
 
 	~Windows();
 
-	void DoEvents();
+	void ProcessEvent();
 
 	inline const Math::Vector2& GetCenterPos() const noexcept { return center; }
 	inline const Math::Vector2& GetSize() const noexcept { return size; }
@@ -37,13 +37,11 @@ private:
 	void UpdateClientPos();
 
 private:
-	tstring programPath;
-
 	HWND hWnd = nullptr;
 	HINSTANCE hInstance = nullptr;
 
-	tstring windowClassName;
 	tstring windowTitle;
+	tstring programPath;
 
 	Math::Vector2 pos;
 	Math::Vector2 size;

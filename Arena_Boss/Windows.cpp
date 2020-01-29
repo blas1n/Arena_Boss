@@ -5,9 +5,9 @@
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 Windows::Windows(const tstring& title, uint32_t width, uint32_t height)
-    : programPath(FileSystem::GetCurrentPath()),
-    hInstance(GetModuleHandle(nullptr)),
-    windowTitle(title)
+    :  hInstance(GetModuleHandle(nullptr)),
+    windowTitle(title),
+    programPath(FileSystem::GetCurrentPath())
 {
     WNDCLASSEX wc;
     wc.cbSize = sizeof(WNDCLASSEXA);
@@ -20,7 +20,7 @@ Windows::Windows(const tstring& title, uint32_t width, uint32_t height)
     wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wc.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BACKGROUND + 1);
     wc.lpszMenuName = nullptr;
-    wc.lpszClassName = windowClassName.c_str();
+    wc.lpszClassName = windowTitle.c_str();
     wc.hIconSm = nullptr;
 
     assert(RegisterClassEx(&wc));
@@ -32,7 +32,7 @@ Windows::Windows(const tstring& title, uint32_t width, uint32_t height)
     RECT winRect = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
     if (!AdjustWindowRect(&winRect, style, FALSE))
     {
-        UnregisterClass(windowClassName.c_str(), hInstance);
+        UnregisterClass(windowTitle.c_str(), hInstance);
         assert(false);
     }
 
@@ -43,12 +43,12 @@ Windows::Windows(const tstring& title, uint32_t width, uint32_t height)
     };
 
     size.SetX(static_cast<float>(winRect.right - winRect.left));
-    size.SetX(static_cast<float>(winRect.bottom - winRect.top));
+    size.SetY(static_cast<float>(winRect.bottom - winRect.top));
     pos = (resolution - size) / 2;
     center = resolution / 2;
 
     hWnd = CreateWindow(
-        windowClassName.c_str(),
+        windowTitle.c_str(),
         windowTitle.c_str(),
         style,
         static_cast<int>(pos.GetX()),
@@ -63,7 +63,7 @@ Windows::Windows(const tstring& title, uint32_t width, uint32_t height)
 
     if (!hWnd)
     {
-        UnregisterClass(windowClassName.c_str(), hInstance);
+        UnregisterClass(windowTitle.c_str(), hInstance);
         assert(false);
     }
 
@@ -80,7 +80,7 @@ Windows::~Windows()
     if (hWnd)
         DestroyWindow(hWnd);
 
-    UnregisterClass(windowClassName.c_str(), hInstance);
+    UnregisterClass(windowTitle.c_str(), hInstance);
 }
 
 void Windows::UpdateClientPos()
@@ -100,7 +100,7 @@ void Windows::UpdateClientPos()
     center = pos + (size / 2);
 }
 
-void Windows::DoEvents()
+void Windows::ProcessEvent()
 {
     MSG msg;
     
