@@ -1,13 +1,18 @@
-#include "InputSystem.h"
+#include "InputManager.h"
 #include <cassert>
 #include <memory>
 #include "MathFunctions.h"
 #include "Util.h"
+#include "Windows.h"
 
-InputSystem::InputSystem(HINSTANCE hInstance, HWND hWnd, int width, int height)
-	: screenWidth(width), screenHeight(height)
+InputManager::InputManager(const Windows& windows)
+	: curKeyState(), oldKeyState(), curMouseState(), oldMouseState(),
+	screenWidth(static_cast<uint32_t>(windows.GetSize().GetX())),
+	screenHeight(static_cast<uint32_t>(windows.GetSize().GetY()))
 {
-	auto hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION,
+	const auto hWnd = windows.GetWindowsHandle();
+
+	auto hr = DirectInput8Create(windows.GetProgramHandle(), DIRECTINPUT_VERSION,
 		IID_IDirectInput8, reinterpret_cast<void**>(&input), nullptr);
 	
 	assert(SUCCEEDED(hr));
@@ -37,7 +42,7 @@ InputSystem::InputSystem(HINSTANCE hInstance, HWND hWnd, int width, int height)
 	assert(SUCCEEDED(hr));
 }
 
-InputSystem::~InputSystem()
+InputManager::~InputManager()
 {
 	mouse->Unacquire();
 	keyboard->Unacquire();
@@ -45,7 +50,7 @@ InputSystem::~InputSystem()
 	Util::ReleaseObjects(mouse, keyboard, input);
 }
 
-bool InputSystem::IsCurDown(Key key) const noexcept
+bool InputManager::IsCurDown(Key key) const noexcept
 {
 	constexpr auto minMouse = static_cast<byte>(Key::MouseLeft);
 	const auto code = static_cast<byte>(key);
@@ -56,7 +61,7 @@ bool InputSystem::IsCurDown(Key key) const noexcept
 		return curMouseState.rgbButtons[code - minMouse] & 0x80;
 }
 
-bool InputSystem::IsOldDown(Key key) const noexcept
+bool InputManager::IsOldDown(Key key) const noexcept
 {
 	constexpr auto minMouse = static_cast<byte>(Key::MouseLeft);
 	const auto code = static_cast<byte>(key);
@@ -67,13 +72,13 @@ bool InputSystem::IsOldDown(Key key) const noexcept
 		return oldMouseState.rgbButtons[code - minMouse] & 0x80;
 }
 
-bool InputSystem::ReadKeyboard()
+bool InputManager::ReadKeyboard()
 {
 	memcpy(oldKeyState, curKeyState, 256 * sizeof(byte));
 	auto hr = keyboard->GetDeviceState(sizeof(curKeyState), reinterpret_cast<LPVOID>(&curKeyState));
 	if (FAILED(hr))
 	{
-		if ((hr == DIERR_INPUTLOST) || (hr = DIERR_NOTACQUIRED))
+		if ((hr == DIERR_INPUTLOST) || (hr == DIERR_NOTACQUIRED))
 			keyboard->Acquire();
 		else
 			return false;
@@ -82,13 +87,13 @@ bool InputSystem::ReadKeyboard()
 	return true;
 }
 
-bool InputSystem::ReadMouse()
+bool InputManager::ReadMouse()
 {
 	oldMouseState = curMouseState;
 	auto hr = mouse->GetDeviceState(sizeof(DIMOUSESTATE2), reinterpret_cast<LPVOID>(&curMouseState));
 	if (FAILED(hr))
 	{
-		if ((hr == DIERR_INPUTLOST) || (hr = DIERR_NOTACQUIRED))
+		if ((hr == DIERR_INPUTLOST) || (hr == DIERR_NOTACQUIRED))
 			mouse->Acquire();
 		else
 			return false;
@@ -97,8 +102,8 @@ bool InputSystem::ReadMouse()
 	return true;
 }
 
-void InputSystem::ProcessInput()
+void InputManager::ProcessInput()
 {
-	Math::Clamp(mouseX += curMouseState.lX, 0, screenWidth);
-	Math::Clamp(mouseY += curMouseState.lY, 0, screenHeight);
+	Math::Clamp(mouseX += curMouseState.lX, 0u, screenWidth);
+	Math::Clamp(mouseY += curMouseState.lY, 0u, screenHeight);
 }

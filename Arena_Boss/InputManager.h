@@ -134,18 +134,18 @@ enum class Key : byte
     MouseMiddle = 0xFF,
 };
 
-class InputSystem final
+class InputManager final
 {
 public:
-    InputSystem(HINSTANCE hInstance, HWND hWnd, int width, int height);
+    InputManager(const class Windows& windows);
 
-    InputSystem(const InputSystem&) = delete;
-    InputSystem(InputSystem&&) = default;
+    InputManager(const InputManager&) = delete;
+    InputManager(InputManager&&) = default;
 
-    InputSystem& operator=(const InputSystem&) = delete;
-    InputSystem& operator=(InputSystem&&) = default;
+    InputManager& operator=(const InputManager&) = delete;
+    InputManager& operator=(InputManager&&) = default;
 
-    ~InputSystem();
+    ~InputManager();
 
     inline bool Update()
     {
@@ -221,8 +221,8 @@ private:
     byte oldKeyState[256];
     DIMOUSESTATE2 curMouseState;
     DIMOUSESTATE2 oldMouseState;
-    int screenWidth = 0;
-    int screenHeight = 0;
-    int mouseX = 0;
-    int mouseY = 0;
+    uint32_t screenWidth = 0;
+    uint32_t screenHeight = 0;
+    uint32_t mouseX = 0;
+    uint32_t mouseY = 0;
 };
