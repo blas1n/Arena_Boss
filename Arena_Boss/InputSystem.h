@@ -132,7 +132,7 @@ enum class Key : byte
     MouseMiddle = 0xFF,
 };
 
-class InputSystem
+class InputSystem final
 {
 public:
     InputSystem(HINSTANCE hInstance, HWND hWnd, int width, int height);

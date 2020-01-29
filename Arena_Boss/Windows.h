@@ -5,7 +5,7 @@
 #include "Color.h"
 #include "Vector2.h"
 
-class Windows
+class Windows final
 {
 public:
 	Windows(const tstring& title, uint32_t width, uint32_t height,

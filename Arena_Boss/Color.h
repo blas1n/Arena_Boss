@@ -3,7 +3,7 @@
 #include "Vector4.h"
 #include <utility>
 
-class Color
+class Color final
 {
 public:
     Color() : value(Math::Vector4::ZERO) {}
