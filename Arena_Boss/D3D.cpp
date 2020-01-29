@@ -4,7 +4,7 @@
 
 #pragma comment(lib, "d3d11.lib")
 
-D3D::D3D(Windows* inWindows, uint32_t sampleCount, uint32_t sampleQuality)
+D3D::D3D(Windows& inWindows, uint32_t sampleCount, uint32_t sampleQuality)
     : backgroundColor(), windows(inWindows)
 {
     assert(CreateD3DDevice());
@@ -45,7 +45,7 @@ D3D::~D3D()
 
 void D3D::SetDefaultViewport()
 {
-    const auto size = windows->GetSize();
+    const auto size = windows.GetSize();
 
     D3D11_VIEWPORT vp;
     vp.TopLeftX = 0;
@@ -81,7 +81,7 @@ bool D3D::CreateD3DDevice()
 
 bool D3D::CreateSwapChain(uint32_t sampleCount, uint32_t sampleQuality)
 {
-    const auto size = windows->GetSize();
+    const auto size = windows.GetSize();
 
     DXGI_MODE_DESC scBuf;
     scBuf.Width = static_cast<UINT>(size.GetX());
@@ -96,7 +96,7 @@ bool D3D::CreateSwapChain(uint32_t sampleCount, uint32_t sampleQuality)
     sc.BufferDesc = scBuf;
     sc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     sc.BufferCount = 1;
-    sc.OutputWindow = windows->GetWindowsHandle();
+    sc.OutputWindow = windows.GetWindowsHandle();
     sc.Windowed = true;
     sc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
     sc.Flags = 0;
@@ -139,7 +139,7 @@ bool D3D::CreateRenderTargetView()
 
 bool D3D::CreateDepthStencilBuffer(uint32_t sampleCount, uint32_t sampleQuality)
 {
-    const auto size = windows->GetSize();
+    const auto size = windows.GetSize();
 
     D3D11_TEXTURE2D_DESC depthStencilBufDesc;
     depthStencilBufDesc.ArraySize = 1;

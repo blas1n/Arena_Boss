@@ -6,7 +6,7 @@
 class D3D final
 {
 public:
-	D3D(class Windows* inWindows, uint32_t sampleCount, uint32_t sampleQuality);
+	D3D(class Windows& inWindows, uint32_t sampleCount, uint32_t sampleQuality);
 
 	D3D(const D3D&) = delete;
 	D3D(D3D&&) noexcept = default;
@@ -70,7 +70,7 @@ private:
 
 	Color backgroundColor;
 
-	Windows* windows;
+	Windows& windows;
 
 	IDXGISwapChain* swapChain = nullptr;
 
