@@ -6,7 +6,7 @@
 class Color
 {
 public:
-    Color() : value(Math::Vector4::ONE) {}
+    Color() : value(Math::Vector4::ZERO) {}
     Color(const Color&) = default;
     Color(Color&&) = default;
 
