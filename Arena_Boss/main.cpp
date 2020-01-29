@@ -1,7 +1,11 @@
 #include "Common.h"
+#include "Game.h"
 
-int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPTSTR lpCmdLine,
+    _In_ int nShowCmd)
 {
-	MessageBox(nullptr, TEXT("Welcome to Arena Boss!"), TEXT("Welcome"), MB_OK);
-	return 0;
+	Game game;
+	return game.Run();
 }
