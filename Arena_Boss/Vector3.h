@@ -22,20 +22,23 @@ namespace ArenaBoss::Math
         static const Vector3 BACKWARD;
 
     public:
-        Vector3() = default;
-        Vector3(const Vector3&) = default;
+        Vector3() noexcept = default;
+        Vector3(const Vector3&) noexcept = default;
         Vector3(Vector3&&) noexcept = default;
 
-        explicit Vector3(float x, float y, float z)
+        explicit Vector3(float x, float y, float z) noexcept
             : value(DirectX::XMVectorSet(x, y, z, 0.0f)) {}
 
-        explicit Vector3(const Vector2& xy, float z = 0.0f);
-        explicit Vector3(const Scalar& s);
+        explicit Vector3(const float elems[3]) noexcept
+            : value(DirectX::XMVectorSet(elems[0], elems[1], elems[2], 0.0f)) {}
 
-        explicit Vector3(DirectX::FXMVECTOR vec)
+        explicit Vector3(const Vector2& xy, float z = 0.0f) noexcept;
+        explicit Vector3(const Scalar& s) noexcept;
+
+        explicit Vector3(DirectX::FXMVECTOR vec) noexcept
             : value(vec) {}
 
-        Vector3& operator=(const Vector3&) = default;
+        Vector3& operator=(const Vector3&) noexcept = default;
         Vector3& operator=(Vector3&&) noexcept = default;
 
         operator Vector2() const noexcept;
@@ -46,6 +49,11 @@ namespace ArenaBoss::Math
         inline void Set(float x, float y, float z) noexcept
         {
             value = DirectX::XMVectorSet(x, y, z, 0.0f);
+        }
+
+        inline void Set(const float elems[3]) noexcept
+        {
+            value = DirectX::XMVectorSet(elems[0], elems[1], elems[2], 0.0f);
         }
 
         inline float GetX() const noexcept { return DirectX::XMVectorGetX(value); }
@@ -79,6 +87,11 @@ namespace ArenaBoss::Math
         inline float operator[](size_t idx) const noexcept
         {
             return DirectX::XMVectorGetByIndex(value, idx);
+        }
+
+        inline Vector3 operator-() const noexcept
+        {
+            return Vector3{ DirectX::XMVectorNegate(value) };
         }
 
         inline Vector3& operator+=(const Vector3& other)
@@ -140,8 +153,6 @@ namespace ArenaBoss::Math
     {
         return !(lhs == rhs);
     }
-
-    inline Vector3 operator-(const Vector3& s) { return Vector3{ DirectX::XMVectorNegate(s) }; }
 
     inline Vector3 operator+(const Vector3& lhs, const Vector3& rhs) { return Vector3{ lhs } += rhs; }
     inline Vector3 operator-(const Vector3& lhs, const Vector3& rhs) { return Vector3{ lhs } -= rhs; }

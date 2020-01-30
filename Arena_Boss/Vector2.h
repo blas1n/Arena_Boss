@@ -19,20 +19,23 @@ namespace ArenaBoss::Math
         static const Vector2 LEFT;
 
     public:
-        Vector2() = default;
-        Vector2(const Vector2&) = default;
+        Vector2() noexcept = default;
+        Vector2(const Vector2&) noexcept = default;
         Vector2(Vector2&&) noexcept = default;
 
-        Vector2(POINT point)
+        Vector2(POINT point) noexcept
             : value(DirectX::XMVectorSet(static_cast<float>(point.x),
                 static_cast<float>(point.y), 0.0f, 0.0f)) {}
 
-        explicit Vector2(float x, float y)
+        explicit Vector2(float x, float y) noexcept
             : value(DirectX::XMVectorSet(x, y, 0.0f, 0.0f)) {}
 
-        explicit Vector2(const Scalar& s);
+        explicit Vector2(const float elems[2]) noexcept
+            : value(DirectX::XMVectorSet(elems[0], elems[1], 0.0f, 0.0f)) {}
+
+        explicit Vector2(const Scalar& s) noexcept;
         
-        explicit Vector2(DirectX::FXMVECTOR vec)
+        explicit Vector2(DirectX::FXMVECTOR vec) noexcept
             : value(vec) {}
 
         Vector2& operator=(const Vector2&) = default;
@@ -51,6 +54,11 @@ namespace ArenaBoss::Math
         inline void Set(float x, float y) noexcept
         {
             value = DirectX::XMVectorSet(x, y, 0.0f, 0.0f);
+        }
+
+        inline void Set(const float elems[2]) noexcept
+        {
+            value = DirectX::XMVectorSet(elems[0], elems[1], 0.0f, 0.0f);
         }
 
         inline float GetX() const noexcept { return DirectX::XMVectorGetX(value); }
@@ -82,6 +90,11 @@ namespace ArenaBoss::Math
         inline float operator[](size_t idx) const noexcept
         {
             return DirectX::XMVectorGetByIndex(value, idx);
+        }
+
+        inline Vector2 operator-() const noexcept
+        {
+            return Vector2{ DirectX::XMVectorNegate(value) };
         }
 
         inline Vector2& operator+=(const Vector2& other)
@@ -146,8 +159,6 @@ namespace ArenaBoss::Math
     {
         return !(lhs == rhs);
     }
-
-    inline Vector2 operator-(const Vector2& s) { return Vector2{ DirectX::XMVectorNegate(s) }; }
 
     inline Vector2 operator+(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } += rhs; }
     inline Vector2 operator-(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } -= rhs; }

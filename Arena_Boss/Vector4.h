@@ -18,14 +18,17 @@ namespace ArenaBoss::Math
         Vector4(const Vector4&) = default;
         Vector4(Vector4&&) noexcept = default;
 
-        explicit Vector4(float x, float y, float z, float w)
+        explicit Vector4(float x, float y, float z, float w) noexcept
             : value(DirectX::XMVectorSet(x, y, z, w)) {}
+
+        explicit Vector4(const float elems[4]) noexcept
+            : value(DirectX::XMVectorSet(elems[0], elems[1], elems[2], elems[3])) {}
 
         explicit Vector4(const Vector2& xy, float z = 0.0f, float w = 0.0f);
         explicit Vector4(const Vector3& xyz, float w = 0.0f);
         explicit Vector4(const Scalar& s);
         
-        explicit Vector4(DirectX::FXMVECTOR vec)
+        explicit Vector4(DirectX::FXMVECTOR vec) noexcept
             : value(vec) {}
 
         Vector4& operator=(const Vector4&) = default;
@@ -40,6 +43,11 @@ namespace ArenaBoss::Math
         inline void Set(float x, float y, float z, float w) noexcept
         {
             value = DirectX::XMVectorSet(x, y, z, w);
+        }
+
+        inline void Set(const float elems[4]) noexcept
+        {
+            value = DirectX::XMVectorSet(elems[0], elems[1], elems[2], elems[3]);
         }
 
         inline float GetX() const noexcept { return DirectX::XMVectorGetX(value); }
@@ -75,6 +83,11 @@ namespace ArenaBoss::Math
         inline float operator[](size_t idx) const noexcept
         {
             return DirectX::XMVectorGetByIndex(value, idx);
+        }
+
+        inline Vector4 operator-() const noexcept
+        {
+            return Vector4{ DirectX::XMVectorNegate(value) };
         }
 
         inline Vector4& operator+=(const Vector4& other)
@@ -125,8 +138,6 @@ namespace ArenaBoss::Math
     {
         return !(lhs == rhs);
     }
-
-    inline Vector4 operator-(const Vector4& s) { return Vector4{ DirectX::XMVectorNegate(s) }; }
 
     inline Vector4 operator+(const Vector4& lhs, const Vector4& rhs) { return Vector4{ lhs } += rhs; }
     inline Vector4 operator-(const Vector4& lhs, const Vector4& rhs) { return Vector4{ lhs } -= rhs; }

@@ -15,10 +15,10 @@ namespace ArenaBoss::Math
     const Vector3 Vector3::FORWARD = Vector3{ 0.0f, 0.0f, 1.0f };
     const Vector3 Vector3::BACKWARD = Vector3{ 0.0f, 0.0f, -1.0f };
 
-    Vector3::Vector3(const Vector2& xy, float z/*= 0.0f*/)
+    Vector3::Vector3(const Vector2& xy, float z/*= 0.0f*/) noexcept
         : Vector3(DirectX::XMVectorGetX(xy), DirectX::XMVectorGetY(xy), z) {}
 
-    Vector3::Vector3(const Scalar& s) : value(s) {}
+    Vector3::Vector3(const Scalar& s) noexcept : value(s) {}
 
     Vector3::operator Vector2() const noexcept
     {
