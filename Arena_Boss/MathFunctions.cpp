@@ -3,19 +3,19 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
-namespace Math
+namespace ArenaBoss::Math
 {
-	bool NearEqual(const Vector2& lhs, const Vector2& rhs, const float epsilon /*= MACHINE_EPSILON*/) noexcept
+	bool NearEqual(const Vector2& lhs, const Vector2& rhs, const float epsilon/*= MACHINE_EPSILON*/) noexcept
 	{
 		return (lhs - rhs).LengthSqrt() <= Pow(epsilon);
 	}
 
-	bool NearEqual(const Vector3& lhs, const Vector3& rhs, const float epsilon /*= MACHINE_EPSILON*/) noexcept
+	bool NearEqual(const Vector3& lhs, const Vector3& rhs, const float epsilon/*= MACHINE_EPSILON*/) noexcept
 	{
 		return (lhs - rhs).LengthSqrt() <= Pow(epsilon);
 	}
 
-	bool NearEqual(const Vector4& lhs, const Vector4& rhs, const float epsilon /*= MACHINE_EPSILON*/) noexcept
+	bool NearEqual(const Vector4& lhs, const Vector4& rhs, const float epsilon/*= MACHINE_EPSILON*/) noexcept
 	{
 		return (lhs - rhs).LengthSqrt() <= Pow(epsilon);
 	}

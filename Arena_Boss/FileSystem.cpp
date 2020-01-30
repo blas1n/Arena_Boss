@@ -3,16 +3,16 @@
 #include <fstream>
 #include <iterator>
 
-#if _UNICODE    
-using tifstream = std::wifstream;
-#else
-using tifstream = std::ifstream;
-#endif
-
-namespace fs = std::filesystem;
-
-namespace FileSystem
+namespace ArenaBoss::FileSystem
 {
+    namespace fs = std::filesystem;
+
+#   if _UNICODE    
+    using tifstream = std::wifstream;
+#   else
+    using tifstream = std::ifstream;
+#   endif
+
     tstring ReadFile(const tstring& path)
     {
         tifstream in{ path };
@@ -40,20 +40,20 @@ namespace FileSystem
 
     tstring GetCurrentPath()
     {
-    #if _UNICODE
+#   if _UNICODE
         return fs::current_path().wstring();
-    #else
+#   else
         return fs::current_path().string();
-    #endif
+#   endif
     }
 
     tstring GetFileName(const tstring& path)
     {
-    #if _UNICODE
+#   if _UNICODE
         return fs::path{ path }.filename().wstring();
-    #else
+#   else
         return fs::path{ path }.filename().string();
-    #endif
+#   endif
     }
 
     std::vector<tstring> GetFileNames(const tstring& dir)
@@ -65,11 +65,11 @@ namespace FileSystem
             auto& path = entry.path();
             if (fs::is_regular_file(path))
             {
-            #if _UNICODE
+#           if _UNICODE
                 ret.push_back(path.wstring());
-            #else
+#           else
                 ret.push_back(path.string());
-            #endif
+#           endif
             }
         }
 
@@ -84,40 +84,40 @@ namespace FileSystem
         {
             auto& path = entry.path();
 
-        #if _UNICODE
+#       if _UNICODE
             auto pathExt = path.extension().wstring();
-        #else
+#       else
             auto pathExt = path.extension().string();
-        #endif
+#       endif
 
             if (fs::is_regular_file(path) && pathExt == ext)
             {
-#if _UNICODE
+#           if _UNICODE
                 ret.push_back(path.wstring());
-#else
+#           else
                 ret.push_back(path.string());
-#endif
+#           endif
             }
         }
 
         return ret;
     }
-}
 
-bool ReadFileBinary(const std::wstring& filename, std::vector<char>& buf)
-{
-    buf.clear();
+    bool ReadFileBinary(const std::wstring& filename, std::vector<char>& buf)
+    {
+        buf.clear();
 
-    std::ifstream fin(filename, std::ios::binary);
-    if (!fin)
-        return false;
+        std::ifstream fin(filename, std::ios::binary);
+        if (!fin)
+            return false;
 
-    std::filebuf* fb = fin.rdbuf();
-    std::streampos fileSize = fb->pubseekoff(0, std::ios::end, std::ios::in);
-    fb->pubseekpos(0, std::ios::in);
+        std::filebuf* fb = fin.rdbuf();
+        std::streampos fileSize = fb->pubseekoff(0, std::ios::end, std::ios::in);
+        fb->pubseekpos(0, std::ios::in);
 
-    buf.resize(static_cast<size_t>(fileSize));
-    fb->sgetn(buf.data(), fileSize);
+        buf.resize(static_cast<size_t>(fileSize));
+        fb->sgetn(buf.data(), fileSize);
 
-    return true;
+        return true;
+    }
 }

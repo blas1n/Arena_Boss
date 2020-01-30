@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 
-namespace FileSystem
+namespace ArenaBoss::FileSystem
 {
     tstring ReadFile(const tstring& path);
     std::vector<char> ReadBinary(const tstring& path);

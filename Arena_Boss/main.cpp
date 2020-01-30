@@ -6,6 +6,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     _In_ LPTSTR lpCmdLine,
     _In_ int nShowCmd)
 {
-	Game game;
+	ArenaBoss::Game game;
 	return game.Run();
 }

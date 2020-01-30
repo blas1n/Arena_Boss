@@ -2,17 +2,20 @@
 
 #include <cassert>
 
-template <class T>
-class Accessor final
+namespace ArenaBoss
 {
-protected:
-	inline static T& Get() noexcept
+	template <class T>
+	class Accessor final
 	{
-		assert(manager != nullptr);
-		return *manager;
-	}
+	protected:
+		inline static T& Get() noexcept
+		{
+			assert(manager != nullptr);
+			return *manager;
+		}
 
-private:
-	friend class Game;
-	inline static T* manager = nullptr;
-};
+	private:
+		friend class Game;
+		inline static T* manager = nullptr;
+	};
+}

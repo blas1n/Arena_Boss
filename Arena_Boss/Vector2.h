@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include "Scalar.h"
 
-namespace Math
+namespace ArenaBoss::Math
 {
     class Vector2 final
     {

@@ -2,7 +2,7 @@
 
 #include <DirectXMath.h>
 
-namespace Math
+namespace ArenaBoss::Math
 {
     class Scalar final
     {

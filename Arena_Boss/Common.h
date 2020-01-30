@@ -5,10 +5,13 @@
 #include <tchar.h>
 #include <string>
 
-#ifdef _UNICODE
-using tstring = std::wstring;
-#else
-using tstring = std::string;
-#endif
+namespace ArenaBoss
+{
+#	ifdef _UNICODE
+	using tstring = std::wstring;
+#	else
+	using tstring = std::string;
+#	endif
 
-using byte = unsigned char;
+	using byte = unsigned char;
+}

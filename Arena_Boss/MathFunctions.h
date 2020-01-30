@@ -6,7 +6,7 @@
 #include <limits>
 #include <type_traits>
 
-namespace Math
+namespace ArenaBoss::Math
 {
 	class Vector2;
 	class Vector3;

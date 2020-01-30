@@ -2,7 +2,7 @@
 
 #include "Scalar.h"
 
-namespace Math
+namespace ArenaBoss::Math
 {
     class Vector2;
 
