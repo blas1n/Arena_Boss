@@ -17,7 +17,7 @@ namespace ArenaBoss::Math
 
 		Rotator(Rotator&&) noexcept = default;
 
-		Rotator(const class Quaternion&);
+		Rotator(const class Quaternion& quat);
 
 		explicit Rotator(const Vector3& vec)
 			: euler{ vec } {}
@@ -136,12 +136,22 @@ namespace ArenaBoss::Math
 		return Rotator{ rot } *= scale;
 	}
 
+	inline Rotator operator*(const Scalar& scale, const Rotator& rot) noexcept
+	{
+		return Rotator{ rot } *= scale;
+	}
+
 	inline Rotator operator/(const Rotator& lhs, const Rotator& rhs) noexcept
 	{
 		return Rotator{ lhs } /= rhs;
 	}
 
 	inline Rotator operator/(const Rotator& rot, const Scalar& scale) noexcept
+	{
+		return Rotator{ rot } /= scale;
+	}
+
+	inline Rotator operator/(const Scalar& scale, const Rotator& rot) noexcept
 	{
 		return Rotator{ rot } /= scale;
 	}
