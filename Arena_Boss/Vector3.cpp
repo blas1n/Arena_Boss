@@ -18,8 +18,6 @@ namespace ArenaBoss::Math
     Vector3::Vector3(const Vector2& xy, float z/*= 0.0f*/) noexcept
         : Vector3(DirectX::XMVectorGetX(xy), DirectX::XMVectorGetY(xy), z) {}
 
-    Vector3::Vector3(const Scalar& s) noexcept : value(s) {}
-
     Vector3::operator Vector2() const noexcept
     {
         return Vector2
@@ -27,17 +25,5 @@ namespace ArenaBoss::Math
             DirectX::XMVectorGetX(value),
             DirectX::XMVectorGetY(value)
         };
-    }
-
-    Vector3& Vector3::operator*=(const Scalar& other)
-    {
-        value = DirectX::XMVectorMultiply(value, other);
-        return *this;
-    }
-
-    Vector3& Vector3::operator/=(const Scalar& other)
-    {
-        value = DirectX::XMVectorDivide(value, other);
-        return *this;
     }
 }

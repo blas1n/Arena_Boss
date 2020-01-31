@@ -33,7 +33,7 @@ namespace ArenaBoss::Math
             : value(DirectX::XMVectorSet(elems[0], elems[1], elems[2], 0.0f)) {}
 
         explicit Vector3(const Vector2& xy, float z = 0.0f) noexcept;
-        explicit Vector3(const Scalar& s) noexcept;
+        explicit Vector3(const Scalar& s) noexcept : value(s) {}
 
         explicit Vector3(DirectX::FXMVECTOR vec) noexcept
             : value(vec) {}
@@ -112,7 +112,11 @@ namespace ArenaBoss::Math
             return *this;
         }
 
-        Vector3& operator*=(const Scalar& other);
+        inline Vector3& operator*=(const Scalar& other)
+        {
+            value = DirectX::XMVectorMultiply(value, other);
+            return *this;
+        }
 
         inline Vector3& operator/=(const Vector3& other)
         {
@@ -120,7 +124,11 @@ namespace ArenaBoss::Math
             return *this;
         }
 
-        Vector3& operator/=(const Scalar& other);
+        inline Vector3& operator/=(const Scalar& other)
+        {
+            value = DirectX::XMVectorDivide(value, other);
+            return *this;
+        }
 
         inline Vector3& operator^=(const Vector3& other)
         {

@@ -13,8 +13,6 @@ namespace ArenaBoss::Math
     Vector4::Vector4(const Vector3& xyz, float w/* = 0.0f*/) noexcept
         : value(DirectX::XMVectorSetW(xyz, w)) {}
 
-	Vector4::Vector4(const Scalar& s) : value(s) {}
-
     Vector4::operator Vector2() const noexcept
     {
         return Vector2
@@ -32,17 +30,5 @@ namespace ArenaBoss::Math
             DirectX::XMVectorGetY(value),
             DirectX::XMVectorGetZ(value)
         };
-    }
-
-    Vector4& Vector4::operator*=(const Scalar& other)
-    {
-        value = DirectX::XMVectorMultiply(value, other);
-        return *this;
-    }
-
-    Vector4& Vector4::operator/=(const Scalar& other)
-    {
-        value = DirectX::XMVectorDivide(value, other);
-        return *this;
     }
 }
