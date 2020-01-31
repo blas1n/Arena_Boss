@@ -8,6 +8,8 @@
 
 namespace ArenaBoss::Math
 {
+	class Quaternion;
+	class Rotator;
 	class Vector2;
 	class Vector3;
 	class Vector4;
@@ -28,10 +30,14 @@ namespace ArenaBoss::Math
 		return degrees * PI / 180.0f;
 	}
 
+	Rotator ToRadians(const Rotator& degrees) noexcept;
+
 	constexpr inline float ToDegrees(const float radians) noexcept
 	{
 		return radians * 180.0f / PI;
 	}
+
+	Rotator ToDegrees(const Rotator& radians) noexcept;
 
 	template <class T, typename = IsArithmetic<T>>
 	constexpr inline T Abs(const T& x) noexcept
@@ -91,6 +97,8 @@ namespace ArenaBoss::Math
 	bool NearEqual(const Vector2& lhs, const Vector2& rhs, float epsilon = MACHINE_EPSILON) noexcept;
 	bool NearEqual(const Vector3& lhs, const Vector3& rhs, float epsilon = MACHINE_EPSILON) noexcept;
 	bool NearEqual(const Vector4& lhs, const Vector4& rhs, float epsilon = MACHINE_EPSILON) noexcept;
+	bool NearEqual(const Rotator& lhs, const Rotator& rhs, float epsilon = MACHINE_EPSILON) noexcept;
+	bool NearEqual(const Quaternion& lhs, const Quaternion& rhs, float epsilon = MACHINE_EPSILON) noexcept;
 
 	template <class T, class = IsArithmetic<T>>
 	constexpr inline T Clamp(const T& value, const T& lower, const T& upper) noexcept
@@ -106,6 +114,11 @@ namespace ArenaBoss::Math
 	Vector2 Lerp(const Vector2& a, const Vector2& b, float delta) noexcept;
 	Vector3 Lerp(const Vector3& a, const Vector3& b, float delta) noexcept;
 	Vector4 Lerp(const Vector4& a, const Vector4& b, float delta) noexcept;
+	Rotator Lerp(const Rotator& a, const Rotator& b, float delta) noexcept;
+	Quaternion Lerp(const Quaternion& a, const Quaternion& b, float delta) noexcept;
+
+	Rotator Slerp(const Rotator& a, const Rotator& b, float delta) noexcept;
+	Quaternion Slerp(const Quaternion& a, const Quaternion& b, float delta) noexcept;
 
 	template <class T, class = IsArithmetic<T>>
 	inline T Pow(const T& x, const T& y = 2.0f) noexcept
