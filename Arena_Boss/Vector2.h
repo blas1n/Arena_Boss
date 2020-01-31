@@ -35,8 +35,7 @@ namespace ArenaBoss::Math
 
         explicit Vector2(const Scalar& s) noexcept : value(s) {}
         
-        explicit Vector2(DirectX::FXMVECTOR vec) noexcept
-            : value(vec) {}
+        Vector2(DirectX::FXMVECTOR vec) noexcept : value(vec) {}
 
         Vector2& operator=(const Vector2&) = default;
         Vector2& operator=(Vector2&&) noexcept = default;
@@ -77,9 +76,9 @@ namespace ArenaBoss::Math
             return DirectX::XMVectorGetX(DirectX::XMVector2LengthSq(value));
         }
 
-        inline static Vector2 Normalized(const Vector2& vec) noexcept
+        inline Vector2 Normalized() const noexcept
         {
-            return Vector2{ DirectX::XMVector2Normalize(vec) };
+            return DirectX::XMVector2Normalize(value);
         }
 
         inline void Normalize() noexcept
@@ -94,7 +93,7 @@ namespace ArenaBoss::Math
 
         inline Vector2 operator-() const noexcept
         {
-            return Vector2{ DirectX::XMVectorNegate(value) };
+            return DirectX::XMVectorNegate(value);
         }
 
         inline Vector2& operator+=(const Vector2& other)
