@@ -79,13 +79,6 @@ namespace ArenaBoss::Math
             value = DirectX::XMVector4Normalize(value);
         }
 
-        inline float& operator[](size_t idx) noexcept
-        {
-            float* retPtr;
-            DirectX::XMVectorGetByIndexPtr(retPtr, value, idx);
-            return *retPtr;
-        }
-
         inline float operator[](size_t idx) const noexcept
         {
             return DirectX::XMVectorGetByIndex(value, idx);
