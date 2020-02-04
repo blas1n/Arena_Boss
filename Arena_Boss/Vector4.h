@@ -24,9 +24,9 @@ namespace ArenaBoss::Math
         explicit Vector4(const float elems[4]) noexcept
             : value(DirectX::XMVectorSet(elems[0], elems[1], elems[2], elems[3])) {}
 
-        explicit Vector4(const Vector2& xy, float z = 0.0f, float w = 0.0f);
-        explicit Vector4(const Vector3& xyz, float w = 0.0f);
-        explicit Vector4(const Scalar& s) : value(s) {}
+        explicit Vector4(const Vector2& xy, float z = 0.0f, float w = 0.0f) noexcept;
+        explicit Vector4(const Vector3& xyz, float w = 0.0f) noexcept;
+        explicit Vector4(const Scalar& s) noexcept : value(s) {}
         
         Vector4(DirectX::FXMVECTOR vec) noexcept : value(vec) {}
 
