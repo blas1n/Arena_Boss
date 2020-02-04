@@ -5,13 +5,16 @@
 
 namespace ArenaBoss::FileSystem
 {
-    namespace fs = std::filesystem;
+    namespace
+    {
+        namespace fs = std::filesystem;
 
-#   if _UNICODE    
-    using tifstream = std::wifstream;
-#   else
-    using tifstream = std::ifstream;
-#   endif
+#       if _UNICODE    
+        using tifstream = std::wifstream;
+#       else
+        using tifstream = std::ifstream;
+#       endif
+    }
 
     tstring ReadFile(const tstring& path)
     {
