@@ -11,25 +11,26 @@ namespace ArenaBoss::Math
 	{
         // Source : WikiPedia
 
-        const auto sinrCosp = 2.0f * (quat.GetW() * quat.GetX() + quat.GetY() * quat.GetZ());
-        const auto cosrCosp = 1.0f - 2.0f * (quat.GetX() * quat.GetX() + quat.GetY() * quat.GetY());
-        SetRoll(Atan2(sinrCosp, cosrCosp));
+        const auto sinrCosp = 2.0f * (quat.w * quat.x + quat.y * quat.z);
+        const auto cosrCosp = 1.0f - 2.0f * (quat.x * quat.x + quat.y * quat.y);
+        roll = Atan2(sinrCosp, cosrCosp);
 
-        const auto sinp = 2.0f * (quat.GetW() * quat.GetY() + quat.GetZ() * quat.GetX());
-        SetPitch(Abs(sinp) >= 1 ? CopySign(PI / 2.0f, sinp) : Asin(sinp));
+        const auto sinp = 2.0f * (quat.w * quat.y + quat.z * quat.x);
+        pitch = Abs(sinp) >= 1 ? CopySign(PI / 2.0f, sinp) : Asin(sinp);
 
-        const auto sinyCosp = 2.0f * (quat.GetW() * quat.GetZ() + quat.GetX() * quat.GetY());
-        const auto cosyCosp = 1.0f - 2.0f * (quat.GetY() * quat.GetY() + quat.GetZ() * quat.GetZ());
-        SetYaw(Atan2(sinyCosp, cosyCosp));
+        const auto sinyCosp = 2.0f * (quat.w * quat.z + quat.x * quat.y);
+        const auto cosyCosp = 1.0f - 2.0f * (quat.y * quat.y + quat.z * quat.z);
+        yaw = Atan2(sinyCosp, cosyCosp);
 	}
 
 	Rotator::operator Quaternion() const noexcept { return AsQuaternion(); }
 
 	Quaternion Rotator::AsQuaternion() const noexcept
 	{
-		Rotator rot{ GetPitch(), GetYaw(), GetRoll() };
+		Rotator rot{ pitch, yaw, roll };
 		rot = ToRadians(rot);
-		const auto vec = DirectX::XMQuaternionRotationRollPitchYawFromVector(rot.AsVector());
+		const auto vec =
+			DirectX::XMQuaternionRotationRollPitchYawFromVector(rot.AsVector());
 		return Quaternion{ vec };
 	}
 }

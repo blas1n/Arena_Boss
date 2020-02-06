@@ -11,6 +11,18 @@ namespace ArenaBoss::Math
 		static const Rotator ZERO;
 
 	public:
+		union
+		{
+			Vector3 euler;
+			struct
+			{
+				float roll;
+				float pitch;
+				float yaw;
+			};
+		};
+
+	public:
 		Rotator() noexcept = default;
 
 		Rotator(const Rotator&) noexcept = default;
@@ -52,14 +64,6 @@ namespace ArenaBoss::Math
 			euler.Set(elems);
 		}
 
-		inline float GetRoll() const noexcept { return euler.GetX(); }
-		inline float GetPitch() const noexcept { return euler.GetY(); }
-		inline float GetYaw() const noexcept { return euler.GetZ(); }
-
-		inline void SetRoll(float roll) noexcept { euler.SetX(roll); }
-		inline void SetPitch(float pitch) noexcept { euler.SetY(pitch); }
-		inline void SetYaw(float yaw) noexcept { euler.SetZ(yaw); }
-
 		inline float operator[](size_t index) const noexcept { return euler[index]; }
 
 		inline Rotator operator-() const noexcept { return Rotator{ -euler }; }
@@ -82,7 +86,7 @@ namespace ArenaBoss::Math
 			return *this;
 		}
 
-		inline Rotator& operator*=(const Scalar& scale) noexcept
+		inline Rotator& operator*=(float scale) noexcept
 		{
 			euler *= scale;
 			return *this;
@@ -94,7 +98,7 @@ namespace ArenaBoss::Math
 			return *this;
 		}
 
-		inline Rotator& operator/=(const Scalar& scale) noexcept
+		inline Rotator& operator/=(float scale) noexcept
 		{
 			euler /= scale;
 			return *this;
@@ -102,8 +106,6 @@ namespace ArenaBoss::Math
 
 	private:
 		friend bool operator==(const Rotator& lhs, const Rotator& rhs) noexcept;
-
-		Vector3 euler;
 	};
 
 	inline bool operator==(const Rotator& lhs, const Rotator& rhs) noexcept
@@ -131,12 +133,12 @@ namespace ArenaBoss::Math
 		return Rotator{ lhs } *= rhs;
 	}
 
-	inline Rotator operator*(const Rotator& rot, const Scalar& scale) noexcept
+	inline Rotator operator*(const Rotator& rot, float scale) noexcept
 	{
 		return Rotator{ rot } *= scale;
 	}
 
-	inline Rotator operator*(const Scalar& scale, const Rotator& rot) noexcept
+	inline Rotator operator*(float scale, const Rotator& rot) noexcept
 	{
 		return Rotator{ rot } *= scale;
 	}
@@ -146,12 +148,12 @@ namespace ArenaBoss::Math
 		return Rotator{ lhs } /= rhs;
 	}
 
-	inline Rotator operator/(const Rotator& rot, const Scalar& scale) noexcept
+	inline Rotator operator/(const Rotator& rot, float scale) noexcept
 	{
 		return Rotator{ rot } /= scale;
 	}
 
-	inline Rotator operator/(const Scalar& scale, const Rotator& rot) noexcept
+	inline Rotator operator/(float scale, const Rotator& rot) noexcept
 	{
 		return Rotator{ rot } /= scale;
 	}

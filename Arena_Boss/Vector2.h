@@ -1,8 +1,6 @@
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include "Scalar.h"
+#include <DirectXMath.h>
 
 namespace ArenaBoss::Math
 {
@@ -19,117 +17,92 @@ namespace ArenaBoss::Math
         static const Vector2 LEFT;
 
     public:
+        union
+        {
+            DirectX::XMFLOAT2 value;
+            struct
+            {
+                float x;
+                float y;
+            };
+        };
+
+    public:
         Vector2() noexcept = default;
         Vector2(const Vector2&) noexcept = default;
         Vector2(Vector2&&) noexcept = default;
 
-        Vector2(POINT point) noexcept
-            : value(DirectX::XMVectorSet(static_cast<float>(point.x),
-                static_cast<float>(point.y), 0.0f, 0.0f)) {}
+        explicit Vector2(float inX, float inY) noexcept
+            : value(inX, inY) {}
 
-        explicit Vector2(float x, float y) noexcept
-            : value(DirectX::XMVectorSet(x, y, 0.0f, 0.0f)) {}
+        explicit Vector2(const float* elems) noexcept
+            : value(elems) {}
 
-        explicit Vector2(const float elems[2]) noexcept
-            : value(DirectX::XMVectorSet(elems[0], elems[1], 0.0f, 0.0f)) {}
+        Vector2(DirectX::FXMVECTOR vec) noexcept
+            : Vector2()
+        {
+            DirectX::XMStoreFloat2(&value, vec);
+        }
 
-        explicit Vector2(const Scalar& s) noexcept : value(s) {}
-        
-        Vector2(DirectX::FXMVECTOR vec) noexcept : value(vec) {}
+        Vector2(const DirectX::XMFLOAT2& vec) noexcept
+            : value(vec) {}
 
-        Vector2& operator=(const Vector2&) = default;
+        Vector2& operator=(const Vector2&) noexcept = default;
         Vector2& operator=(Vector2&&) noexcept = default;
 
-        Vector2& operator=(POINT point) noexcept
-        {
-            value = DirectX::XMVectorSet(static_cast<float>(point.x),
-                static_cast<float>(point.y), 0.0f, 0.0f);
-            return *this;
-        }
+        Vector2& operator=(DirectX::FXMVECTOR vec) noexcept;
+        Vector2& operator=(const DirectX::XMFLOAT2& vec) noexcept;
 
-        inline DirectX::XMVECTOR Get() const noexcept { return value; }
-        inline operator DirectX::XMVECTOR() const noexcept { return value; }
+        inline operator DirectX::XMVECTOR() const noexcept { return DirectX::XMLoadFloat2(&value); }
 
-        inline void Set(float x, float y) noexcept
-        {
-            value = DirectX::XMVectorSet(x, y, 0.0f, 0.0f);
-        }
+        void Set(float inX, float inY) noexcept;
+        void Set(const float* elems) noexcept;
 
-        inline void Set(const float elems[2]) noexcept
-        {
-            value = DirectX::XMVectorSet(elems[0], elems[1], 0.0f, 0.0f);
-        }
-
-        inline float GetX() const noexcept { return DirectX::XMVectorGetX(value); }
-        inline float GetY() const noexcept { return DirectX::XMVectorGetY(value); }
-
-        inline void SetX(float x) noexcept { value = DirectX::XMVectorSetX(value, x); }
-        inline void SetY(float y) noexcept { value = DirectX::XMVectorSetY(value, y); }
-
-        inline float Length() const noexcept
-        {
-            return DirectX::XMVectorGetX(DirectX::XMVector2Length(value));
-        }
-
-        inline float LengthSqrt() const noexcept
-        {
-            return DirectX::XMVectorGetX(DirectX::XMVector2LengthSq(value));
-        }
+        float Length() const noexcept;
+        float LengthSqrt() const noexcept;
 
         inline Vector2 Normalized() const noexcept
         {
-            return DirectX::XMVector2Normalize(value);
+            return DirectX::XMVector2Normalize(*this);
         }
 
         inline void Normalize() noexcept
         {
-            value = DirectX::XMVector2Normalize(value);
+            *this = DirectX::XMVector2Normalize(*this);
         }
 
-        inline float operator[](size_t idx) const noexcept
+        float operator[](size_t idx) const noexcept;
+
+        inline Vector2 operator-() const noexcept { return *this * -1.0f; }
+
+        inline Vector2& operator+=(const Vector2& other) noexcept
         {
-            return DirectX::XMVectorGetByIndex(value, idx);
+            return Calc(other, &DirectX::XMVectorAdd);
         }
 
-        inline Vector2 operator-() const noexcept
+        inline Vector2& operator-=(const Vector2& other) noexcept
         {
-            return DirectX::XMVectorNegate(value);
+            return Calc(other, &DirectX::XMVectorSubtract);
         }
 
-        inline Vector2& operator+=(const Vector2& other)
+        inline Vector2& operator*=(const Vector2& other) noexcept
         {
-            value = DirectX::XMVectorAdd(value, other);
-            return *this;
+            return Calc(other, &DirectX::XMVectorMultiply);
         }
 
-        inline Vector2& operator-=(const Vector2& other)
+        inline Vector2& operator*=(float scaler) noexcept
         {
-            value = DirectX::XMVectorSubtract(value, other);
-            return *this;
+            return Calc(scaler, &DirectX::XMVectorMultiply);
         }
 
-        inline Vector2& operator*=(const Vector2& other)
+        inline Vector2& operator/=(const Vector2& other) noexcept
         {
-            value = DirectX::XMVectorMultiply(value, other);
-            return *this;
+            return Calc(other, &DirectX::XMVectorDivide);
         }
 
-        inline Vector2& operator*=(const Scalar& other)
+        inline Vector2& operator/=(float scaler) noexcept
         {
-            value = DirectX::XMVectorMultiply(value, other);
-            return *this;
-        }
-
-        inline Vector2& operator/=(const Vector2& other)
-        {
-            value = DirectX::XMVectorDivide(value, other);
-            return *this;
-        }
-
-        inline Vector2& operator/=(const Scalar& other)
-        {
-            value = DirectX::XMVectorDivide(value, other);
-            return *this;
+            return Calc(scaler, &DirectX::XMVectorDivide);
         }
 
         inline static float Dot(const Vector2& lhs, const Vector2& rhs)
@@ -137,29 +110,18 @@ namespace ArenaBoss::Math
             return DirectX::XMVectorGetX(DirectX::XMVector2Dot(lhs, rhs));
         }
 
-        inline POINT AsPoint() const noexcept
-        {
-            return POINT
-            {
-                static_cast<LONG>(DirectX::XMVectorGetX(value)),
-                static_cast<LONG>(DirectX::XMVectorGetY(value))
-            };
-        }
-
-        inline operator POINT() const noexcept
-        {
-            return AsPoint();
-        }
-
     private:
         friend bool operator==(const Vector2& lhs, const Vector2& rhs) noexcept;
 
-        DirectX::XMVECTOR value;
+        using Operator = DirectX::XMVECTOR(__vectorcall *)(DirectX::XMVECTOR, DirectX::XMVECTOR);
+
+        Vector2& Calc(const Vector2& other, Operator oper) noexcept;
+        Vector2& Calc(float scaler, Operator oper) noexcept;
     };
 
     inline bool operator==(const Vector2& lhs, const Vector2& rhs) noexcept
     {
-        return DirectX::XMVector2Equal(lhs.value, rhs.value);
+        return DirectX::XMVector2Equal(lhs, rhs);
     }
 
     inline bool operator!=(const Vector2& lhs, const Vector2& rhs) noexcept
@@ -171,12 +133,12 @@ namespace ArenaBoss::Math
     inline Vector2 operator-(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } -= rhs; }
 
     inline Vector2 operator*(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } *= rhs; }
-    inline Vector2 operator*(const Vector2& lhs, const Scalar& rhs) { return Vector2{ lhs } *= rhs; }
-    inline Vector2 operator*(const Scalar& lhs, const Vector2& rhs) { return Vector2{ rhs } *= lhs; }
+    inline Vector2 operator*(const Vector2& lhs, float rhs) { return Vector2{ lhs } *= rhs; }
+    inline Vector2 operator*(float lhs, const Vector2& rhs) { return Vector2{ rhs } *= lhs; }
 
     inline Vector2 operator/(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } /= rhs; }
-    inline Vector2 operator/(const Vector2& lhs, const Scalar& rhs) { return Vector2{ lhs } /= rhs; }
-    inline Vector2 operator/(const Scalar& lhs, const Vector2& rhs) { return Vector2{ rhs } /= lhs; }
+    inline Vector2 operator/(const Vector2& lhs, float rhs) { return Vector2{ lhs } /= rhs; }
+    inline Vector2 operator/(float lhs, const Vector2& rhs) { return Vector2{ rhs } /= lhs; }
 
     inline float operator|(const Vector2& lhs, const Vector2& rhs) { return Vector2::Dot(lhs, rhs); }
 }

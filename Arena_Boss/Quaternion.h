@@ -10,13 +10,27 @@ namespace ArenaBoss::Math
 		static const Quaternion IDENTITY;
 
 	public:
+		union
+		{
+			Vector4 value;
+
+			struct
+			{
+				float x;
+				float y;
+				float z;
+				float w;
+			};
+		};
+
+	public:
 		Quaternion() noexcept = default;
 
 		Quaternion(const Quaternion&) noexcept = default;
 		Quaternion(Quaternion&&) noexcept = default;
 
-		explicit Quaternion(float x, float y, float z, float w) noexcept
-			: value(x, y, z, w) {}
+		explicit Quaternion(float inX, float inY, float inZ, float inW) noexcept
+			: value(inX, inY, inZ, inW) {}
 
 		explicit Quaternion(const float elems[4]) noexcept
 			: value(elems) {}
@@ -34,43 +48,28 @@ namespace ArenaBoss::Math
 		inline explicit operator Vector4() const noexcept { return value; }
 		inline Vector4 AsVector() const noexcept { return value; }
 
-		inline void Set(float x, float y, float z, float w) noexcept
-		{
-			value.Set(x, y, z, w);
-		}
-
+		inline void Set(float inX, float inY, float inZ, float inW) noexcept { value.Set(inX, inY, inZ, inW); }
 		inline void Set(const float elems[4]) noexcept { value.Set(elems); }
-
-		inline float GetX() const noexcept { return value.GetX(); }
-		inline float GetY() const noexcept { return value.GetY(); }
-		inline float GetZ() const noexcept { return value.GetZ(); }
-		inline float GetW() const noexcept { return value.GetW(); }
-
-		inline void SetX(float x) noexcept { value.SetX(x); }
-		inline void SetY(float y) noexcept { value.SetY(y); }
-		inline void SetZ(float z) noexcept { value.SetZ(z); }
-		inline void SetW(float w) noexcept { value.SetW(w); }
 
 		inline float operator[](size_t idx) const noexcept { return value[idx]; }
 
 		inline float Length() const noexcept { return value.Length(); }
 		inline float LengthSqrt() const noexcept { return value.LengthSqrt(); }
 
-		inline Quaternion Normalized() const noexcept
-		{
-			return Quaternion{ value.Normalized() };
-		}
-
+		inline Quaternion Normalized() const noexcept { return Quaternion{ value.Normalized() }; }
 		inline void Normalize() noexcept { value.Normalize(); }
 
 		inline Quaternion operator-() const noexcept
 		{
-			return Quaternion{ DirectX::XMQuaternionConjugate(value) };
+			const auto vec = DirectX::XMLoadFloat4(&value.value);
+			return Quaternion{ DirectX::XMQuaternionConjugate(vec) };
 		}
 
 		inline Quaternion& operator*=(const Quaternion& other) noexcept
 		{
-			value = DirectX::XMQuaternionMultiply(value, other.value);
+			const auto lhs = DirectX::XMLoadFloat4(&value.value);
+			const auto rhs = DirectX::XMLoadFloat4(&other.value.value);
+			value = DirectX::XMQuaternionMultiply(lhs, rhs);
 			return *this;
 		}
 
@@ -81,8 +80,6 @@ namespace ArenaBoss::Math
 
 	private:
 		friend bool operator==(const Quaternion& lhs, const Quaternion& rhs) noexcept;
-
-		Vector4 value;
 	};
 
 	inline bool operator==(const Quaternion& lhs, const Quaternion& rhs) noexcept
