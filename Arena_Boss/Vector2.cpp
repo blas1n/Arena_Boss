@@ -47,6 +47,16 @@ namespace ArenaBoss::Math
         return DirectX::XMVectorGetX(len);
     }
 
+    float& Vector2::operator[](size_t idx) noexcept
+    {
+        switch (idx)
+        {
+        case 0: return x;
+        case 1: return y;
+        default: assert(false);
+        }
+    }
+
     float Vector2::operator[](size_t idx) const noexcept
     {
         switch (idx)

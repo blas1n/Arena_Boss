@@ -71,8 +71,10 @@ namespace ArenaBoss::Math
             *this = DirectX::XMVector2Normalize(*this);
         }
 
+        float& operator[](size_t idx) noexcept;
         float operator[](size_t idx) const noexcept;
 
+        inline Vector2 operator+() const noexcept { return *this; }
         inline Vector2 operator-() const noexcept { return *this * -1.0f; }
 
         inline Vector2& operator+=(const Vector2& other) noexcept
