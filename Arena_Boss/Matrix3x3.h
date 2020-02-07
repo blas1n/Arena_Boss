@@ -2,7 +2,6 @@
 
 #include <DirectXMath.h>
 #include <optional>
-#include <utility>
 
 namespace ArenaBoss::Math
 {
@@ -14,151 +13,114 @@ namespace ArenaBoss::Math
 		static const Matrix3x3 IDENTITY;
 
 	public:
-		Matrix3x3() noexcept = default;
+		union
+		{
+			DirectX::XMFLOAT3X3 value;
+			struct
+			{
+				float m00, m01, m02;
+				float m10, m11, m12;
+				float m20, m21, m22;
+			};
+		};
 
+	public:
+		Matrix3x3() noexcept = default;
 		Matrix3x3(const Matrix3x3&) noexcept = default;
 		Matrix3x3(Matrix3x3&&) noexcept = default;
 
+		explicit Matrix3x3(
+			float inM00, float inM01, float inM02,
+			float inM10, float inM11, float inM12,
+			float inM20, float inM21, float inM22) noexcept
+			: value(
+				inM00, inM01, inM02,
+				inM10, inM11, inM12,
+				inM20, inM21, inM22) {}
+
 		explicit Matrix3x3(const float* elems) noexcept
-			: value(
-				elems[0], elems[1], elems[2], 0.0f,
-				elems[3], elems[4], elems[5], 0.0f,
-				elems[6], elems[7], elems[8], 0.0f,
-				0.0f, 0.0f, 0.0f, 0.0f) {}
+			: value(elems) {}
 
-		explicit Matrix3x3(float r0c0, float r0c1, float r0c2,
-			float r1c0, float r1c1, float r1c2,
-			float r2c0, float r2c1, float r2c2) noexcept
-			: value(
-				r0c0, r0c1, r0c2, 0.0f,
-				r1c0, r1c1, r1c2, 0.0f,
-				r2c0, r2c1, r2c2, 0.0f,
-				0.0f, 0.0f, 0.0f, 0.0f) {}
+		Matrix3x3(DirectX::FXMMATRIX mat) noexcept
+			: Matrix3x3()
+		{
+			DirectX::XMStoreFloat3x3(&value, mat);
+		}
 
-		Matrix3x3(DirectX::FXMMATRIX mat) noexcept : value(mat) {}
-
-		~Matrix3x3() = default;
+		Matrix3x3(const DirectX::XMFLOAT3X3& mat) noexcept
+			: value(mat) {}
 
 		Matrix3x3& operator=(const Matrix3x3&) noexcept = default;
 		Matrix3x3& operator=(Matrix3x3&&) noexcept = default;
 
 		inline Matrix3x3& operator=(DirectX::FXMMATRIX mat) noexcept
 		{
+			DirectX::XMStoreFloat3x3(&value, mat);
+		}
+
+		inline Matrix3x3& operator=(const DirectX::XMFLOAT3X3& mat) noexcept
+		{
 			value = mat;
-			return *this;
 		}
+	    
+		inline operator DirectX::XMMATRIX() const noexcept { return DirectX::XMLoadFloat3x3(&value); }
 
-		inline Matrix3x3& operator+=(const Matrix3x3& other) noexcept
-		{
-			value += other.value;
-			return *this;
-		}
+		void Set(float inM00, float inM01, float inM02,
+			float inM10, float inM11, float inM12,
+			float inM20, float inM21, float inM22) noexcept;
 
-		inline Matrix3x3& operator-=(const Matrix3x3& other) noexcept
-		{
-			value -= other.value;
-			return *this;
-		}
-
-		inline Matrix3x3& operator*=(float scaler) noexcept
-		{
-			value *= scaler;
-			return *this;
-		}
-
-		inline Matrix3x3& operator/=(float scaler) noexcept
-		{
-			value /= scaler;
-			return *this;
-		}
-
-		inline Matrix3x3& operator*=(const Matrix3x3& other) noexcept
-		{
-			value *= other.value;
-			return *this;
-		}
-
-		inline float operator()(size_t row, size_t column) const noexcept
-		{
-			return DirectX::XMVectorGetByIndex(value.r[row], column);
-		}
+		void Set(const float* elems) noexcept;
 
 		inline Matrix3x3 Transpose() const noexcept
 		{
-			return DirectX::XMMatrixTranspose(value);
+			return DirectX::XMMatrixTranspose(*this);
 		}
 
 		inline void Transposed() noexcept
 		{
-			value = DirectX::XMMatrixTranspose(value);
+			*this = DirectX::XMMatrixTranspose(*this);
 		}
 
-		inline std::optional<Matrix3x3> Invert() const noexcept
+		std::optional<Matrix3x3> Invert() const noexcept;
+		bool Inverted() noexcept;
+
+		inline float& operator()(size_t row, size_t column) noexcept
 		{
-			const auto invertedValue = DirectX::XMMatrixInverse(nullptr, value);
-
-			if (!DirectX::XMMatrixIsInfinite(invertedValue))
-				return invertedValue;
-			
-			return {};
+			return value(row, column);
 		}
 
-		inline bool Inverted() noexcept
+		float operator()(size_t row, size_t column) const noexcept
 		{
-			const auto invertedValue = Invert();
-
-			if (invertedValue)
-				*this = *invertedValue;;
+			return value(row, column);
 		}
+
+		inline Matrix3x3 operator+() const noexcept { return *this; }
+		inline Matrix3x3 operator-() const noexcept { return *this * -1.0f; }
+
+		Matrix3x3& operator+=(const Matrix3x3& other) noexcept;
+		Matrix3x3& operator-=(const Matrix3x3& other) noexcept;
+		Matrix3x3& operator*=(const Matrix3x3& other) noexcept;
+		Matrix3x3& operator*=(float scaler) noexcept;
+		Matrix3x3& operator/=(float scaler) noexcept;
 
 	private:
 		friend bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept;
-
-		DirectX::XMMATRIX value;
 	};
 
-	bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept
-	{
-		for (int i = 0; i < 4; ++i)
-		{
-			if (DirectX::XMVector3NotEqual(lhs.value.r[i], rhs.value.r[i]))
-				return false;
-		}
-		return true;
-	}
+	bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept;
 
 	inline bool operator!=(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept
 	{
 		return !(lhs == rhs);
 	}
 
-	inline Matrix3x3 operator+(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept
-	{
-		return Matrix3x3{ lhs } += rhs;
-	}
+	inline Matrix3x3 operator+(const Matrix3x3& lhs, const Matrix3x3& rhs) { return Matrix3x3{ lhs } += rhs; }
+	inline Matrix3x3 operator-(const Matrix3x3& lhs, const Matrix3x3& rhs) { return Matrix3x3{ lhs } -= rhs; }
 
-	inline Matrix3x3 operator-(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept
-	{
-		return Matrix3x3{ lhs } -= rhs;
-	}
+	inline Matrix3x3 operator*(const Matrix3x3& lhs, const Matrix3x3& rhs) { return Matrix3x3{ lhs } *= rhs; }
 
-	inline Matrix3x3 operator*(const Matrix3x3& mat, float scaler) noexcept
-	{
-		return Matrix3x3{ mat } *= scaler;
-	}
+	inline Matrix3x3 operator*(const Matrix3x3& lhs, float rhs) { return Matrix3x3{ lhs } *= rhs; }
+	inline Matrix3x3 operator*(float lhs, const Matrix3x3& rhs) { return Matrix3x3{ rhs } *= lhs; }
 
-	inline Matrix3x3 operator*(const float scaler, const Matrix3x3& mat) noexcept
-	{
-		return Matrix3x3{ mat } *= scaler;
-	}
-
-	inline Matrix3x3 operator/(const Matrix3x3& mat, float scaler) noexcept
-	{
-		return Matrix3x3{ mat } /= scaler;
-	}
-
-	inline Matrix3x3 operator*(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept
-	{
-		return Matrix3x3{ lhs } *= rhs;
-	}
+	inline Matrix3x3 operator/(const Matrix3x3& lhs, float rhs) { return Matrix3x3{ lhs } /= rhs; }
 }
