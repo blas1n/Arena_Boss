@@ -141,7 +141,6 @@ namespace ArenaBoss::Math
 
     inline Vector4 operator/(const Vector4& lhs, const Vector4& rhs) { return Vector4{ lhs } /= rhs; }
     inline Vector4 operator/(const Vector4& lhs, float rhs) { return Vector4{ lhs } /= rhs; }
-    inline Vector4 operator/(float lhs, const Vector4& rhs) { return Vector4{ rhs } /= lhs; }
 
     inline float operator|(const Vector4& lhs, const Vector4& rhs) { return Vector4::Dot(lhs, rhs); }
 }

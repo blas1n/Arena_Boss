@@ -140,7 +140,6 @@ namespace ArenaBoss::Math
 
     inline Vector2 operator/(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } /= rhs; }
     inline Vector2 operator/(const Vector2& lhs, float rhs) { return Vector2{ lhs } /= rhs; }
-    inline Vector2 operator/(float lhs, const Vector2& rhs) { return Vector2{ rhs } /= lhs; }
 
     inline float operator|(const Vector2& lhs, const Vector2& rhs) { return Vector2::Dot(lhs, rhs); }
 }
