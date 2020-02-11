@@ -1,4 +1,5 @@
 #include "Vector2.h"
+#include <stdexcept>
 #include "MathFunctions.h"
 
 namespace ArenaBoss::Math
@@ -47,23 +48,23 @@ namespace ArenaBoss::Math
         return DirectX::XMVectorGetX(len);
     }
 
-    float& Vector2::operator[](size_t idx) noexcept
+    float& Vector2::operator[](size_t idx)
     {
         switch (idx)
         {
         case 0: return x;
         case 1: return y;
-        default: assert(false);
+        default: throw std::out_of_range{ "Index must be less than 2" };
         }
     }
 
-    float Vector2::operator[](size_t idx) const noexcept
+    float Vector2::operator[](size_t idx) const
     {
         switch (idx)
         {
         case 0: return x;
         case 1: return y;
-        default: assert(false);
+        default: throw std::out_of_range{ "Index must be less than 2" };
         }
     }
 

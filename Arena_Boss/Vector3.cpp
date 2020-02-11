@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include <stdexcept>
 #include "MathFunctions.h"
 #include "Vector2.h"
 
@@ -16,7 +17,7 @@ namespace ArenaBoss::Math
     const Vector3 Vector3::FORWARD = Vector3{ 0.0f, 0.0f, 1.0f };
     const Vector3 Vector3::BACKWARD = Vector3{ 0.0f, 0.0f, -1.0f };
 
-    Vector3::Vector3(const Vector2& xy, float z = 0.0f) noexcept
+    Vector3::Vector3(const Vector2& xy, float z/*= 0.0f*/) noexcept
         : value(xy.x, xy.y, z) {}
 
     Vector3& Vector3::operator=(DirectX::FXMVECTOR vec) noexcept
@@ -61,25 +62,25 @@ namespace ArenaBoss::Math
         return DirectX::XMVectorGetX(len);
     }
 
-    float& Vector3::operator[](size_t idx) noexcept
+    float& Vector3::operator[](size_t idx)
     {
         switch (idx)
         {
         case 0: return x;
         case 1: return y;
         case 2: return z;
-        default: assert(false);
+        default: throw std::out_of_range{ "Index must be less than 3" };
         }
     }
 
-    float Vector3::operator[](size_t idx) const noexcept
+    float Vector3::operator[](size_t idx) const
     {
         switch (idx)
         {
         case 0: return x;
         case 1: return y;
         case 2: return z;
-        default: assert(false);
+        default: throw std::out_of_range{ "Index must be less than 3" };
         }
     }
 

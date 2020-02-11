@@ -9,8 +9,8 @@ namespace ArenaBoss
 {
 	InputManager::InputManager(const Windows& windows)
 		: curKeyState(), oldKeyState(), curMouseState(), oldMouseState(),
-		screenWidth(static_cast<uint32_t>(windows.GetSize().GetX())),
-		screenHeight(static_cast<uint32_t>(windows.GetSize().GetY()))
+		screenWidth(static_cast<uint32_t>(windows.GetSize().x)),
+		screenHeight(static_cast<uint32_t>(windows.GetSize().y))
 	{
 		const auto hWnd = windows.GetWindowsHandle();
 

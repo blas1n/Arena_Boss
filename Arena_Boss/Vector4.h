@@ -72,11 +72,8 @@ namespace ArenaBoss::Math
             *this = DirectX::XMVector4Normalize(*this);
         }
 
-        float& operator[](size_t idx) noexcept;
-        float operator[](size_t idx) const noexcept;
-
-        inline Vector4 operator+() const noexcept { return *this; }
-        inline Vector4 operator-() const noexcept { return *this * -1.0f; }
+        float& operator[](size_t idx);
+        float operator[](size_t idx) const;
 
         inline Vector4& operator+=(const Vector4& other) noexcept
         {
@@ -116,7 +113,7 @@ namespace ArenaBoss::Math
     private:
         friend bool operator==(const Vector4& lhs, const Vector4& rhs) noexcept;
 
-        using Operator = DirectX::XMVECTOR(__vectorcall*)(DirectX::XMVECTOR, DirectX::XMVECTOR);
+        using Operator = DirectX::XMVECTOR(XM_CALLCONV*)(DirectX::XMVECTOR, DirectX::XMVECTOR);
 
         Vector4& Calc(const Vector4& other, Operator oper) noexcept;
         Vector4& Calc(float scaler, Operator oper) noexcept;
@@ -143,4 +140,7 @@ namespace ArenaBoss::Math
     inline Vector4 operator/(const Vector4& lhs, float rhs) { return Vector4{ lhs } /= rhs; }
 
     inline float operator|(const Vector4& lhs, const Vector4& rhs) { return Vector4::Dot(lhs, rhs); }
+
+    inline Vector4 operator+(const Vector4& vec) noexcept { return vec; }
+    inline Vector4 operator-(const Vector4& vec) noexcept { return vec * -1.0f; }
 }

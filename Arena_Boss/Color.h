@@ -8,6 +8,19 @@ namespace ArenaBoss
     class Color final
     {
     public:
+        union
+        {
+            Math::Vector4 value;
+            struct
+            {
+                float r;
+                float g;
+                float b;
+                float a;
+            };
+        };
+
+    public:
         Color() : value(Math::Vector4::ZERO) {}
         Color(const Color&) = default;
         Color(Color&&) = default;
@@ -45,16 +58,6 @@ namespace ArenaBoss
         Color& operator=(const Color&) = default;
         Color& operator=(Color&&) = default;
 
-        inline float GetR() const noexcept { return value.GetX(); }
-        inline float GetG() const noexcept { return value.GetY(); }
-        inline float GetB() const noexcept { return value.GetZ(); }
-        inline float GetA() const noexcept { return value.GetW(); }
-
-        inline void SetR(float r) noexcept { value.SetX(r); }
-        inline void SetG(float g) noexcept { value.SetY(g); }
-        inline void SetB(float b) noexcept { value.SetZ(b); }
-        inline void SetA(float a) noexcept { value.SetW(a); }
-
         inline void AsPtr(float out[4]) const noexcept
         {
             DirectX::XMStoreFloat4(reinterpret_cast<DirectX::XMFLOAT4*>(out), value);
@@ -65,12 +68,11 @@ namespace ArenaBoss
             return value;
         }
 
-        inline float operator[](int idx) const noexcept { return value[idx]; }
+        inline float& operator[](size_t idx) noexcept { return value[idx]; }
+        inline float operator[](size_t idx) const noexcept { return value[idx]; }
 
     private:
         friend bool operator==(const Color& lhs, const Color& rhs) noexcept;
-
-        Math::Vector4 value;
     };
 
     inline bool operator==(const Color& lhs, const Color& rhs) noexcept
@@ -82,7 +84,6 @@ namespace ArenaBoss
     {
         return !(lhs == rhs);
     }
-
 
     inline Color Max(const Color& lhs, const Color& rhs)
     {
@@ -96,10 +97,12 @@ namespace ArenaBoss
 
     inline Color Clamp(const Color& x, const Color& min, const Color& max)
     {
-        return Color{
-            Math::Vector4{
-            DirectX::XMVectorClamp(x.AsVector(), min.AsVector(), max.AsVector())
-        }
+        return Color
+        {
+            Math::Vector4
+            {
+                DirectX::XMVectorClamp(x.AsVector(), min.AsVector(), max.AsVector())
+            }
         };
     }
 }

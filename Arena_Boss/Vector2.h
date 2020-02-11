@@ -1,5 +1,7 @@
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 #include <DirectXMath.h>
 
 namespace ArenaBoss::Math
@@ -38,6 +40,10 @@ namespace ArenaBoss::Math
         explicit Vector2(const float* elems) noexcept
             : value(elems) {}
 
+        explicit Vector2(POINT point) noexcept
+            : x(static_cast<float>(point.x)),
+            y(static_cast<float>(point.y)) {}
+
         Vector2(DirectX::FXMVECTOR vec) noexcept
             : Vector2()
         {
@@ -71,11 +77,8 @@ namespace ArenaBoss::Math
             *this = DirectX::XMVector2Normalize(*this);
         }
 
-        float& operator[](size_t idx) noexcept;
-        float operator[](size_t idx) const noexcept;
-
-        inline Vector2 operator+() const noexcept { return *this; }
-        inline Vector2 operator-() const noexcept { return *this * -1.0f; }
+        float& operator[](size_t idx);
+        float operator[](size_t idx) const;
 
         inline Vector2& operator+=(const Vector2& other) noexcept
         {
@@ -115,7 +118,7 @@ namespace ArenaBoss::Math
     private:
         friend bool operator==(const Vector2& lhs, const Vector2& rhs) noexcept;
 
-        using Operator = DirectX::XMVECTOR(__vectorcall *)(DirectX::XMVECTOR, DirectX::XMVECTOR);
+        using Operator = DirectX::XMVECTOR(XM_CALLCONV*)(DirectX::XMVECTOR, DirectX::XMVECTOR);
 
         Vector2& Calc(const Vector2& other, Operator oper) noexcept;
         Vector2& Calc(float scaler, Operator oper) noexcept;
@@ -142,4 +145,7 @@ namespace ArenaBoss::Math
     inline Vector2 operator/(const Vector2& lhs, float rhs) { return Vector2{ lhs } /= rhs; }
 
     inline float operator|(const Vector2& lhs, const Vector2& rhs) { return Vector2::Dot(lhs, rhs); }
+
+    inline Vector2 operator+(const Vector2& vec) noexcept { return vec; }
+    inline Vector2 operator-(const Vector2& vec) noexcept { return vec * -1.0f; }
 }

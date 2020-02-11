@@ -23,6 +23,18 @@ namespace ArenaBoss::Math
         0.0f, 0.0f, 1.0f
     };
 
+	Matrix3x3& Matrix3x3::operator=(DirectX::FXMMATRIX mat) noexcept
+	{
+		DirectX::XMStoreFloat3x3(&value, mat);
+		return *this;
+	}
+
+	Matrix3x3& Matrix3x3::operator=(const DirectX::XMFLOAT3X3& mat) noexcept
+	{
+		value = mat;
+		return *this;
+	}
+
 	void Matrix3x3::Set(float inM00, float inM01, float inM02,
 		float inM10, float inM11, float inM12,
 		float inM20, float inM21, float inM22) noexcept
@@ -67,41 +79,22 @@ namespace ArenaBoss::Math
 
 		if (invertedValue)
 			*this = *invertedValue;
+
+		return invertedValue.has_value();
 	}
 
-	Matrix3x3& Matrix3x3::operator+=(const Matrix3x3& other) noexcept
+	Matrix3x3& Matrix3x3::Calc(const Matrix3x3& other, MatrixOperator oper) noexcept
 	{
 		DirectX::XMMATRIX mat = *this;
-		mat += other;
-		*this = mat;
+		(mat.*oper)(other);
+		return *this = mat;
 	}
 
-	Matrix3x3& Matrix3x3::operator-=(const Matrix3x3& other) noexcept
+	Matrix3x3& Matrix3x3::Calc(float scaler, ScalerOperator oper) noexcept
 	{
 		DirectX::XMMATRIX mat = *this;
-		mat -= other;
-		*this = mat;
-	}
-
-	Matrix3x3& Matrix3x3::operator*=(float scaler) noexcept
-	{
-		DirectX::XMMATRIX mat = *this;
-		mat *= scaler;
-		*this = mat;
-	}
-
-	Matrix3x3& Matrix3x3::operator/=(float scaler) noexcept
-	{
-		DirectX::XMMATRIX mat = *this;
-		mat /= scaler;
-		*this = mat;
-	}
-
-	Matrix3x3& Matrix3x3::operator*=(const Matrix3x3& other) noexcept
-	{
-		DirectX::XMMATRIX mat = *this;
-		mat *= other;
-		*this = mat;
+		(mat.*oper)(scaler);
+		return *this = mat;
 	}
 
 	bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept

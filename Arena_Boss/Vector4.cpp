@@ -1,4 +1,5 @@
 #include "Vector4.h"
+#include <stdexcept>
 #include "MathFunctions.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -63,7 +64,7 @@ namespace ArenaBoss::Math
         return DirectX::XMVectorGetX(len);
     }
 
-    float& Vector4::operator[](size_t idx) noexcept
+    float& Vector4::operator[](size_t idx)
     {
         switch (idx)
         {
@@ -71,11 +72,11 @@ namespace ArenaBoss::Math
         case 1: return y;
         case 2: return z;
         case 3: return w;
-        default: assert(false);
+        default: throw std::out_of_range{ "Index must be less than 4" };
         }
     }
 
-    float Vector4::operator[](size_t idx) const noexcept
+    float Vector4::operator[](size_t idx) const
     {
         switch (idx)
         {
@@ -83,7 +84,7 @@ namespace ArenaBoss::Math
         case 1: return y;
         case 2: return z;
         case 3: return w;
-        default: assert(false);
+        default: throw std::out_of_range{ "Index must be less than 4" };
         }
     }
 

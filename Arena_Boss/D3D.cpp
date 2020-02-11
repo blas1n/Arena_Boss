@@ -52,8 +52,8 @@ namespace ArenaBoss
         D3D11_VIEWPORT vp;
         vp.TopLeftX = 0;
         vp.TopLeftY = 0;
-        vp.Width = size.GetX();
-        vp.Height = size.GetY();
+        vp.Width = size.x;
+        vp.Height = size.y;
         vp.MaxDepth = 1.0f;
         vp.MinDepth = 0.0f;
         deviceContext->RSSetViewports(1, &vp);
@@ -86,8 +86,8 @@ namespace ArenaBoss
         const auto size = windows.GetSize();
 
         DXGI_MODE_DESC scBuf;
-        scBuf.Width = static_cast<UINT>(size.GetX());
-        scBuf.Height = static_cast<UINT>(size.GetY());
+        scBuf.Width = static_cast<UINT>(size.x);
+        scBuf.Height = static_cast<UINT>(size.y);
         scBuf.RefreshRate.Numerator = 60;
         scBuf.RefreshRate.Denominator = 1;
         scBuf.Format = SWAPCHAIN_BUFFER_FORMAT;
@@ -148,8 +148,8 @@ namespace ArenaBoss
         depthStencilBufDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
         depthStencilBufDesc.CPUAccessFlags = 0;
         depthStencilBufDesc.Format = DEPTHSTENCIL_BUFFER_FORMAT;
-        depthStencilBufDesc.Width = static_cast<UINT>(size.GetX());
-        depthStencilBufDesc.Height = static_cast<UINT>(size.GetY());
+        depthStencilBufDesc.Width = static_cast<UINT>(size.x);
+        depthStencilBufDesc.Height = static_cast<UINT>(size.y);
         depthStencilBufDesc.MipLevels = 1;
         depthStencilBufDesc.MiscFlags = 0;
         depthStencilBufDesc.SampleDesc.Count = sampleCount;

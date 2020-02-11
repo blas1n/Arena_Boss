@@ -78,11 +78,8 @@ namespace ArenaBoss::Math
             *this = DirectX::XMVector3Normalize(*this);
         }
 
-        float& operator[](size_t idx) noexcept;
-        float operator[](size_t idx) const noexcept;
-
-        inline Vector3 operator+() const noexcept { return *this; }
-        inline Vector3 operator-() const noexcept { return *this * -1.0f; }
+        float& operator[](size_t idx);
+        float operator[](size_t idx) const;
 
         inline Vector3& operator+=(const Vector3& other) noexcept
         {
@@ -132,7 +129,7 @@ namespace ArenaBoss::Math
     private:
         friend bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept;
 
-        using Operator = DirectX::XMVECTOR(__vectorcall*)(DirectX::XMVECTOR, DirectX::XMVECTOR);
+        using Operator = DirectX::XMVECTOR(XM_CALLCONV*)(DirectX::XMVECTOR, DirectX::XMVECTOR);
 
         Vector3& Calc(const Vector3& other, Operator oper) noexcept;
         Vector3& Calc(float scaler, Operator oper) noexcept;
@@ -160,4 +157,7 @@ namespace ArenaBoss::Math
 
     inline float operator|(const Vector3& lhs, const Vector3& rhs) { return Vector3::Dot(lhs, rhs); }
     inline Vector3 operator^(const Vector3& lhs, const Vector3& rhs) { return Vector3::Cross(lhs, rhs); }
+
+    inline Vector3 operator+(const Vector3& vec) noexcept { return vec; }
+    inline Vector3 operator-(const Vector3& vec) noexcept { return vec * -1.0f; }
 }

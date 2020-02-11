@@ -23,7 +23,7 @@ namespace ArenaBoss
 		inline const Math::Vector2& GetCenterPos() const noexcept { return center; }
 		inline const Math::Vector2& GetSize() const noexcept { return size; }
 
-		inline float GetAspectRatio() const noexcept { return size.GetX() / size.GetY(); }
+		inline float GetAspectRatio() const noexcept { return size.x / size.y; }
 
 		inline HWND GetWindowsHandle() const noexcept { return hWnd; }
 		inline HINSTANCE GetProgramHandle() const noexcept { return hInstance; }

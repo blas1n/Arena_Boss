@@ -44,8 +44,8 @@ namespace ArenaBoss
             static_cast<float>(GetSystemMetrics(SM_CYSCREEN))
         };
 
-        size.SetX(static_cast<float>(winRect.right - winRect.left));
-        size.SetY(static_cast<float>(winRect.bottom - winRect.top));
+        size.x = static_cast<float>(winRect.right - winRect.left);
+        size.y = static_cast<float>(winRect.bottom - winRect.top);
         pos = (resolution - size) / 2;
         center = resolution / 2;
 
@@ -53,10 +53,10 @@ namespace ArenaBoss
             windowTitle.c_str(),
             windowTitle.c_str(),
             style,
-            static_cast<int>(pos.GetX()),
-            static_cast<int>(pos.GetY()),
-            static_cast<int>(size.GetX()),
-            static_cast<int>(size.GetY()),
+            static_cast<int>(pos.x),
+            static_cast<int>(pos.y),
+            static_cast<int>(size.x),
+            static_cast<int>(size.y),
             nullptr,
             nullptr,
             hInstance,
@@ -96,9 +96,9 @@ namespace ArenaBoss
         ClientToScreen(hWnd, &LT);
         ClientToScreen(hWnd, &RB);
 
-        pos = LT;
-        size = RB;
-        size -= LT;
+        pos = Math::Vector2{ LT };
+        size = Math::Vector2{ RB };
+        size -= Math::Vector2{ LT };
         center = pos + (size / 2);
     }
 

@@ -53,15 +53,8 @@ namespace ArenaBoss::Math
 		Matrix3x3& operator=(const Matrix3x3&) noexcept = default;
 		Matrix3x3& operator=(Matrix3x3&&) noexcept = default;
 
-		inline Matrix3x3& operator=(DirectX::FXMMATRIX mat) noexcept
-		{
-			DirectX::XMStoreFloat3x3(&value, mat);
-		}
-
-		inline Matrix3x3& operator=(const DirectX::XMFLOAT3X3& mat) noexcept
-		{
-			value = mat;
-		}
+		Matrix3x3& operator=(DirectX::FXMMATRIX mat) noexcept;
+		Matrix3x3& operator=(const DirectX::XMFLOAT3X3& mat) noexcept;
 	    
 		inline operator DirectX::XMMATRIX() const noexcept { return DirectX::XMLoadFloat3x3(&value); }
 
@@ -89,22 +82,44 @@ namespace ArenaBoss::Math
 			return value(row, column);
 		}
 
-		float operator()(size_t row, size_t column) const noexcept
+		inline float operator()(size_t row, size_t column) const noexcept
 		{
 			return value(row, column);
 		}
 
-		inline Matrix3x3 operator+() const noexcept { return *this; }
-		inline Matrix3x3 operator-() const noexcept { return *this * -1.0f; }
+		inline Matrix3x3& operator+=(const Matrix3x3& other) noexcept
+		{
+			return Calc(other, &DirectX::XMMATRIX::operator+=);
+		}
 
-		Matrix3x3& operator+=(const Matrix3x3& other) noexcept;
-		Matrix3x3& operator-=(const Matrix3x3& other) noexcept;
-		Matrix3x3& operator*=(const Matrix3x3& other) noexcept;
-		Matrix3x3& operator*=(float scaler) noexcept;
-		Matrix3x3& operator/=(float scaler) noexcept;
+		inline Matrix3x3& operator-=(const Matrix3x3& other) noexcept
+		{
+			return Calc(other, &DirectX::XMMATRIX::operator-=);
+		}
+
+		inline Matrix3x3& operator*=(const Matrix3x3& other) noexcept
+		{
+			return Calc(other, &DirectX::XMMATRIX::operator*=);
+		}
+
+		inline Matrix3x3& operator*=(float scaler) noexcept
+		{
+			return Calc(scaler, &DirectX::XMMATRIX::operator*=);
+		}
+
+		inline Matrix3x3& operator/=(float scaler) noexcept
+		{
+			return Calc(scaler, &DirectX::XMMATRIX::operator/=);
+		}
 
 	private:
 		friend bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept;
+
+		using MatrixOperator = DirectX::XMMATRIX&(XM_CALLCONV DirectX::XMMATRIX::*)(DirectX::XMMATRIX);
+		using ScalerOperator = DirectX::XMMATRIX&(DirectX::XMMATRIX::*)(float);
+
+		Matrix3x3& Calc(const Matrix3x3& other, MatrixOperator oper) noexcept;
+		Matrix3x3& Calc(float scaler, ScalerOperator oper) noexcept;
 	};
 
 	bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept;
@@ -123,4 +138,7 @@ namespace ArenaBoss::Math
 	inline Matrix3x3 operator*(float lhs, const Matrix3x3& rhs) { return Matrix3x3{ rhs } *= lhs; }
 
 	inline Matrix3x3 operator/(const Matrix3x3& lhs, float rhs) { return Matrix3x3{ lhs } /= rhs; }
+
+	inline Matrix3x3 operator+(const Matrix3x3& vec) noexcept { return vec; }
+	inline Matrix3x3 operator-(const Matrix3x3& vec) noexcept { return vec * -1.0f; }
 }
