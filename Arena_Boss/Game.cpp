@@ -7,7 +7,7 @@
 namespace ArenaBoss
 {
 	Game::Game()
-		: windows(new Windows{ TEXT("Arena Boss"), 1920, 1080 }),
+		: windows(new Windows{ "Arena Boss", 1920, 1080 }),
 		d3d(new D3D{ *windows, 1, 0 })
 	{
 		Accessor<InputManager>::manager = new InputManager{ *windows };
@@ -15,7 +15,7 @@ namespace ArenaBoss
 
 	Game::~Game()
 	{
-		delete& Accessor<InputManager>::Get();
+		delete &Accessor<InputManager>::Get();
 	}
 
 	int Game::Run()

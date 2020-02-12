@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common.h"
+#include <string>
 #include "Vector2.h"
 
 namespace ArenaBoss
@@ -8,7 +8,7 @@ namespace ArenaBoss
 	class Windows final
 	{
 	public:
-		Windows(const tstring& title, uint32_t width, uint32_t height);
+		Windows(const std::string& title, uint32_t width, uint32_t height);
 
 		Windows(const Windows&) = delete;
 		Windows(Windows&&) = default;
@@ -28,11 +28,11 @@ namespace ArenaBoss
 		inline HWND GetWindowsHandle() const noexcept { return hWnd; }
 		inline HINSTANCE GetProgramHandle() const noexcept { return hInstance; }
 
-		const tstring& GetProgramPath() const noexcept { return programPath; }
+		const std::string& GetProgramPath() const noexcept { return programPath; }
 
-		void ShowErrorBox(const tstring& errMsg)
+		void ShowErrorBox(const std::string& errMsg)
 		{
-			MessageBox(hWnd, errMsg.c_str(), TEXT("Error"), MB_ICONERROR | MB_OK);
+			MessageBoxA(hWnd, errMsg.c_str(), "Error", MB_ICONERROR | MB_OK);
 		}
 
 	private:
@@ -42,8 +42,8 @@ namespace ArenaBoss
 		HWND hWnd = nullptr;
 		HINSTANCE hInstance = nullptr;
 
-		tstring windowTitle;
-		tstring programPath;
+		std::string windowTitle;
+		std::string programPath;
 
 		Math::Vector2 pos;
 		Math::Vector2 size;

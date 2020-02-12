@@ -1,19 +1,10 @@
 #pragma once
 
-#include "Common.h"
 #include <map>
+#include <string>
 
 namespace ArenaBoss
 {
-    namespace
-    {
-#       if _UNICODE    
-        using tifstream = std::wifstream;
-#       else
-        using tifstream = std::ifstream;
-#       endif
-    }
-
     class ConfigSection
     {
     public:
@@ -23,24 +14,24 @@ namespace ArenaBoss
         ConfigSection& operator=(const ConfigSection&) = default;
         ConfigSection& operator=(ConfigSection&&) noexcept = default;
 
-        const tstring* operator[](const tstring& key) const;
+        const std::string* operator[](const std::string& key) const;
 
-        const std::map<tstring, tstring>& GetData() const { return data; }
+        const std::map<std::string, std::string>& GetData() const { return data; }
 
     private:
         friend class ConfigFile;
 
-        ConfigSection(const std::map<tstring, tstring>& inData)
+        ConfigSection(const std::map<std::string, std::string>& inData)
             : data(inData) {}
 
-        std::map<tstring, tstring> data;
+        std::map<std::string, std::string> data;
     };
 
     class ConfigFile
     {
     public:
         ConfigFile() = default;
-        ConfigFile(const tstring& fileName)
+        ConfigFile(const std::string& fileName)
             : ConfigFile() { LoadFromFile(fileName); }
 
         ConfigFile(const ConfigFile&) = default;
@@ -51,20 +42,20 @@ namespace ArenaBoss
         ConfigFile& operator=(const ConfigFile&) = default;
         ConfigFile& operator=(ConfigFile&&) noexcept = default;
 
-        bool LoadFromFile(const tstring& filename);
+        bool LoadFromFile(const std::string& filename);
         void Clear();
 
         inline bool IsAvailable() const { return state == State::Available; }
 
         inline operator bool() const { return IsAvailable(); }
 
-        inline bool IsExistSection(const tstring& section) const
+        inline bool IsExistSection(const std::string& section) const
         {
             return map.find(section) != map.cend();
         }
 
-        const tstring* operator()(const tstring& sectionName, const tstring& keyName) const;
-        const ConfigSection* GetSection(const tstring& section) const;
+        const std::string* operator()(const std::string& sectionName, const std::string& keyName) const;
+        const ConfigSection* GetSection(const std::string& section) const;
 
     private:
         enum class State
@@ -74,6 +65,6 @@ namespace ArenaBoss
             Error
         } state = State::Uninitialized;
 
-        std::map<tstring, ConfigSection> map;
+        std::map<std::string, ConfigSection> map;
     };
 }

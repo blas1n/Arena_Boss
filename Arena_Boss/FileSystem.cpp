@@ -8,25 +8,19 @@ namespace ArenaBoss::FileSystem
     namespace
     {
         namespace fs = std::filesystem;
-
-#       if _UNICODE    
-        using tifstream = std::wifstream;
-#       else
-        using tifstream = std::ifstream;
-#       endif
     }
 
-    tstring ReadFile(const tstring& path)
+    std::string ReadFile(const std::string& path)
     {
-        tifstream in{ path };
+        std::ifstream in{ path };
         if (!in)
             throw "Cannot open file.";
 
-        return tstring{ std::istreambuf_iterator<TCHAR>{ in },
-            std::istreambuf_iterator<TCHAR>{} };
+        return std::string{ std::istreambuf_iterator<char>{ in },
+            std::istreambuf_iterator<char>{} };
     }
 
-    std::vector<char> ReadBinary(const tstring& path)
+    std::vector<char> ReadBinary(const std::string& path)
     {
         std::ifstream in{ path, std::ios::binary };
         if (!in)
@@ -41,66 +35,42 @@ namespace ArenaBoss::FileSystem
         return ret;
     }
 
-    tstring GetCurrentPath()
+    std::string GetCurrentPath()
     {
-#   if _UNICODE
-        return fs::current_path().wstring();
-#   else
         return fs::current_path().string();
-#   endif
     }
 
-    tstring GetFileName(const tstring& path)
+    std::string GetFileName(const std::string& path)
     {
-#   if _UNICODE
-        return fs::path{ path }.filename().wstring();
-#   else
         return fs::path{ path }.filename().string();
-#   endif
     }
 
-    std::vector<tstring> GetFileNames(const tstring& dir)
+    std::vector<std::string> GetFileNames(const std::string& dir)
     {
-        std::vector<tstring> ret;
+        std::vector<std::string> ret;
 
         for (auto&& entry : fs::directory_iterator{ dir })
         {
             auto& path = entry.path();
             if (fs::is_regular_file(path))
-            {
-#           if _UNICODE
-                ret.push_back(path.wstring());
-#           else
                 ret.push_back(path.string());
-#           endif
-            }
         }
 
         return ret;
     }
 
-    std::vector<tstring> GetFileNames(const tstring& dir, const tstring& ext)
+    std::vector<std::string> GetFileNames(const std::string& dir, const std::string& ext)
     {
-        std::vector<tstring> ret;
+        std::vector<std::string> ret;
 
         for (auto&& entry : fs::directory_iterator{ dir })
         {
             auto& path = entry.path();
 
-#       if _UNICODE
-            auto pathExt = path.extension().wstring();
-#       else
             auto pathExt = path.extension().string();
-#       endif
 
             if (fs::is_regular_file(path) && pathExt == ext)
-            {
-#           if _UNICODE
-                ret.push_back(path.wstring());
-#           else
                 ret.push_back(path.string());
-#           endif
-            }
         }
 
         return ret;

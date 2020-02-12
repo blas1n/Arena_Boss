@@ -6,12 +6,12 @@ namespace ArenaBoss
 {
     LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-    Windows::Windows(const tstring& title, uint32_t width, uint32_t height)
+    Windows::Windows(const std::string& title, uint32_t width, uint32_t height)
         : hInstance(GetModuleHandle(nullptr)),
         windowTitle(title),
         programPath(FileSystem::GetCurrentPath())
     {
-        WNDCLASSEX wc;
+        WNDCLASSEXA wc;
         wc.cbSize = sizeof(WNDCLASSEXA);
         wc.style = CS_HREDRAW | CS_VREDRAW | CS_NOCLOSE;
         wc.lpfnWndProc = WndProc;
@@ -25,7 +25,7 @@ namespace ArenaBoss
         wc.lpszClassName = windowTitle.c_str();
         wc.hIconSm = nullptr;
 
-        assert(RegisterClassEx(&wc));
+        assert(RegisterClassExA(&wc));
 
         DWORD style = 0;
         style |= WS_VISIBLE;
@@ -34,7 +34,7 @@ namespace ArenaBoss
         RECT winRect = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
         if (!AdjustWindowRect(&winRect, style, FALSE))
         {
-            UnregisterClass(windowTitle.c_str(), hInstance);
+            UnregisterClassA(windowTitle.c_str(), hInstance);
             assert(false);
         }
 
@@ -49,7 +49,7 @@ namespace ArenaBoss
         pos = (resolution - size) / 2;
         center = resolution / 2;
 
-        hWnd = CreateWindow(
+        hWnd = CreateWindowA(
             windowTitle.c_str(),
             windowTitle.c_str(),
             style,
@@ -65,7 +65,7 @@ namespace ArenaBoss
 
         if (!hWnd)
         {
-            UnregisterClass(windowTitle.c_str(), hInstance);
+            UnregisterClassA(windowTitle.c_str(), hInstance);
             assert(false);
         }
 
@@ -82,7 +82,7 @@ namespace ArenaBoss
         if (hWnd)
             DestroyWindow(hWnd);
 
-        UnregisterClass(windowTitle.c_str(), hInstance);
+        UnregisterClassA(windowTitle.c_str(), hInstance);
     }
 
     void Windows::UpdateClientPos()

@@ -2,7 +2,6 @@
 
 #define DIRECTINPUT_VERSION  0x0800
 
-#include "Common.h"
 #include <dinput.h>
 #include <memory>
 #include "Vector2.h"

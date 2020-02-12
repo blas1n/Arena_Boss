@@ -1,17 +1,17 @@
 #pragma once
 
-#include "Common.h"
 #include <map>
+#include <string>
 #include <vector>
 
 namespace ArenaBoss::FileSystem
 {
-    tstring ReadFile(const tstring& path);
-    std::vector<char> ReadBinary(const tstring& path);
+    std::string ReadFile(const std::string& path);
+    std::vector<char> ReadBinary(const std::string& path);
 
-    tstring GetCurrentPath();
+    std::string GetCurrentPath();
 
-    tstring GetFileName(const tstring& path);
-    std::vector<tstring> GetFileNames(const tstring& dir);
-    std::vector<tstring> GetFileNames(const tstring& dir, const tstring& ext);
+    std::string GetFileName(const std::string& path);
+    std::vector<std::string> GetFileNames(const std::string& dir);
+    std::vector<std::string> GetFileNames(const std::string& dir, const std::string& ext);
 }

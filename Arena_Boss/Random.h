@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Common.h"
 #include <random>
 
 namespace ArenaBoss::Math

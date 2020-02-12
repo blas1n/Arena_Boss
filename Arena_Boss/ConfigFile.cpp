@@ -5,7 +5,7 @@
 
 namespace ArenaBoss
 {
-    const tstring* ConfigSection::operator[](const tstring& key) const
+    const std::string* ConfigSection::operator[](const std::string& key) const
     {
         const auto it = data.find(key);
         if (it != data.cend())
@@ -15,38 +15,38 @@ namespace ArenaBoss
 
     namespace
     {
-        tstring TrimInline(const tstring& s)
+        std::string TrimInline(const std::string& s)
         {
-            auto begin = s.find_first_not_of(TEXT(" \t"));
-            auto end = s.find_last_not_of(TEXT(" \t"));
-            if (begin == tstring::npos || end == tstring::npos || begin > end)
-                return TEXT("");
+            auto begin = s.find_first_not_of(" \t");
+            auto end = s.find_last_not_of(" \t");
+            if (begin == std::string::npos || end == std::string::npos || begin > end)
+                return "";
             return s.substr(begin, end - begin + 1);
         }
     }
 
-    bool ConfigFile::LoadFromFile(const tstring& fileName)
+    bool ConfigFile::LoadFromFile(const std::string& fileName)
     {
         assert(state == State::Uninitialized);
 
         try
         {
-            tifstream fin{ fileName };
+            std::ifstream fin{ fileName };
             if (!fin) throw;
 
-            tstring section = TEXT("Global");
-            std::map<tstring, tstring> sectionMap;
-            tstring line;
+            std::string section{ "Global" };
+            std::map<std::string, std::string> sectionMap;
+            std::string line;
 
             while (std::getline(fin, line))
             {
                 if ((line = TrimInline(line)).empty() || line[0] == '#')
                     continue;
 
-                if (line[0] == TEXT('['))
+                if (line[0] == '[')
                 {
                     const auto end = line.rfind(']');
-                    if (end == tstring::npos || end == 1)
+                    if (end == std::string::npos || end == 1)
                         throw;
 
                     map.emplace(std::make_pair(section, ConfigSection{ sectionMap }));
@@ -55,7 +55,7 @@ namespace ArenaBoss
                 else
                 {
                     const auto eq = line.find('=');
-                    if (eq == tstring::npos || eq == 0 || eq == line.length() - 1)
+                    if (eq == std::string::npos || eq == 0 || eq == line.length() - 1)
                         throw;
 
                     const auto left = TrimInline(line.substr(0, eq));
@@ -85,14 +85,14 @@ namespace ArenaBoss
         state = State::Uninitialized;
     }
 
-    const tstring* ConfigFile::operator()(const tstring& sectionName, const tstring& keyName) const
+    const std::string* ConfigFile::operator()(const std::string& sectionName, const std::string& keyName) const
     {
         const auto section = GetSection(sectionName);
         if (!section) return nullptr;
         return (*section)[keyName];
     }
 
-    const ConfigSection* ConfigFile::GetSection(const tstring& section) const
+    const ConfigSection* ConfigFile::GetSection(const std::string& section) const
     {
         const auto it = map.find(section);
         if (it != map.cend())
