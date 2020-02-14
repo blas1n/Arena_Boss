@@ -1,35 +1,41 @@
 #include "Game.h"
+#include <exception>
+#include <SDL2/SDL.h>
 #include "Accessor.h"
-#include "D3D.h"
 #include "InputManager.h"
-#include "Windows.h"
+#include "Log.h"
+#include "Util.h"
 
 namespace ArenaBoss
 {
 	Game::Game()
-		: windows(new Windows{ "Arena Boss", 1920, 1080 }),
-		d3d(new D3D{ *windows, 1, 0 })
 	{
-		Accessor<InputManager>::manager = new InputManager{ *windows };
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
+		{
+			Log("Unable to initialize SDL: %s", SDL_GetError());
+		}
+
+		try
+		{
+			Accessor<InputManager>::manager = new InputManager{};
+		}
+		catch (std::exception& e)
+		{
+			Log(e.what());
+		}
 	}
 
 	Game::~Game()
 	{
-		delete &Accessor<InputManager>::Get();
+		Util::DeleteObjects(&Accessor<InputManager>::Get());
+		SDL_Quit();
 	}
 
 	int Game::Run()
 	{
 		while (true)
 		{
-			windows->ProcessEvent();
-			Accessor<InputManager>::Get().Update();
-			d3d->ClearRenderTarget();
-			d3d->ClearDepthStencil();
-
 			// Game update code
-
-			d3d->Present();
 		}
 
 		return 0;

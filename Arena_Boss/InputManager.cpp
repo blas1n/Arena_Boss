@@ -7,106 +7,67 @@
 
 namespace ArenaBoss
 {
-	InputManager::InputManager(const Windows& windows)
-		: curKeyState(), oldKeyState(), curMouseState(), oldMouseState(),
-		screenWidth(static_cast<uint32_t>(windows.GetSize().x)),
-		screenHeight(static_cast<uint32_t>(windows.GetSize().y))
+	InputManager::InputManager()
 	{
-		const auto hWnd = windows.GetWindowsHandle();
-
-		auto hr = DirectInput8Create(windows.GetProgramHandle(), DIRECTINPUT_VERSION,
-			IID_IDirectInput8, reinterpret_cast<void**>(&input), nullptr);
-
-		assert(SUCCEEDED(hr));
-
-		hr = input->CreateDevice(GUID_SysKeyboard, &keyboard, nullptr);
-		assert(SUCCEEDED(hr));
-
-		hr = keyboard->SetDataFormat(&c_dfDIKeyboard);
-		assert(SUCCEEDED(hr));
-
-		hr = keyboard->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
-		assert(SUCCEEDED(hr));
-
-		hr = keyboard->Acquire();
-		assert(SUCCEEDED(hr));
-
-		hr = input->CreateDevice(GUID_SysMouse, &mouse, nullptr);
-		assert(SUCCEEDED(hr));
-
-		hr = mouse->SetDataFormat(&c_dfDIMouse);
-		assert(SUCCEEDED(hr));
-
-		hr = mouse->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
-		assert(SUCCEEDED(hr));
-
-		hr = mouse->Acquire();
-		assert(SUCCEEDED(hr));
-	}
-
-	InputManager::~InputManager()
-	{
-		mouse->Unacquire();
-		keyboard->Unacquire();
-
-		Util::ReleaseObjects(mouse, keyboard, input);
+		curKeyState = SDL_GetKeyboardState(nullptr);
+		memset(oldKeyState, 0, SDL_NUM_SCANCODES);
 	}
 
 	bool InputManager::IsCurDown(Key key) const noexcept
 	{
-		constexpr auto minMouse = static_cast<byte>(Key::MouseLeft);
-		const auto code = static_cast<byte>(key);
+		const auto code = static_cast<int>(key);
 
-		if (code < minMouse)
-			return curKeyState[code] & 0x80;
+		if (code < NUM_MIN_MOUSE)
+			return curKeyState[static_cast<SDL_Scancode>(key)];
 		else
-			return curMouseState.rgbButtons[code - minMouse] & 0x80;
+			return curButtonState & SDL_BUTTON(code - NUM_MIN_MOUSE);
 	}
 
 	bool InputManager::IsOldDown(Key key) const noexcept
 	{
-		constexpr auto minMouse = static_cast<byte>(Key::MouseLeft);
-		const auto code = static_cast<byte>(key);
+		const auto code = static_cast<int>(key);
 
-		if (code < minMouse)
-			return oldKeyState[code] & 0x80;
+		if (code < NUM_MIN_MOUSE)
+			return oldKeyState[static_cast<SDL_Scancode>(key)];
 		else
-			return oldMouseState.rgbButtons[code - minMouse] & 0x80;
+			return oldButtonState & SDL_BUTTON(code - NUM_MIN_MOUSE);
 	}
 
-	bool InputManager::ReadKeyboard()
+	bool InputManager::Update()
 	{
-		memcpy(oldKeyState, curKeyState, 256 * sizeof(byte));
-		auto hr = keyboard->GetDeviceState(sizeof(curKeyState), reinterpret_cast<LPVOID>(&curKeyState));
-		if (FAILED(hr))
-		{
-			if ((hr == DIERR_INPUTLOST) || (hr == DIERR_NOTACQUIRED))
-				keyboard->Acquire();
-			else
-				return false;
-		}
+		memcpy(oldKeyState, curKeyState, SDL_NUM_SCANCODES);
+		oldButtonState = curButtonState;
+		wheelMove = 0;
 
+		SDL_Event event;
+		while (SDL_PollEvent(&event))
+		{
+			switch (event.type)
+			{
+			case SDL_QUIT:
+				return false;
+
+			case SDL_MOUSEWHEEL:
+				wheelMove = event.wheel.y;
+				break;
+			}
+		}
+		
+		int x = 0, y = 0;
+
+		if (isRelative)
+			curButtonState = SDL_GetRelativeMouseState(&x, &y);
+		else
+			curButtonState = SDL_GetMouseState(&x, &y);
+
+		mousePos.Set(static_cast<float>(x), static_cast<float>(y));
 		return true;
 	}
 
-	bool InputManager::ReadMouse()
+	void InputManager::SetRelativeMouseMode(bool value)
 	{
-		oldMouseState = curMouseState;
-		auto hr = mouse->GetDeviceState(sizeof(DIMOUSESTATE2), reinterpret_cast<LPVOID>(&curMouseState));
-		if (FAILED(hr))
-		{
-			if ((hr == DIERR_INPUTLOST) || (hr == DIERR_NOTACQUIRED))
-				mouse->Acquire();
-			else
-				return false;
-		}
-
-		return true;
-	}
-
-	void InputManager::ProcessInput()
-	{
-		Math::Clamp(mouseX += curMouseState.lX, 0u, screenWidth);
-		Math::Clamp(mouseY += curMouseState.lY, 0u, screenHeight);
+		SDL_SetRelativeMouseMode(value ? SDL_TRUE : SDL_FALSE);
+		SDL_GetRelativeMouseState(nullptr, nullptr);
+		isRelative = value;
 	}
 }

@@ -1,144 +1,143 @@
 #pragma once
 
-#define DIRECTINPUT_VERSION  0x0800
-
-#include <dinput.h>
-#include <memory>
+#include <SDL2/SDL.h>
 #include "Vector2.h"
-
-#pragma comment(lib, "dinput8.lib")
-#pragma comment(lib, "dxguid.lib")
 
 namespace ArenaBoss
 {
-    enum class Key : byte
+    enum class Key
     {
-        A = DIK_A,
-        B = DIK_B,
-        C = DIK_C,
-        D = DIK_D,
-        E = DIK_E,
-        F = DIK_F,
-        G = DIK_G,
-        H = DIK_H,
-        I = DIK_I,
-        J = DIK_J,
-        K = DIK_K,
-        L = DIK_L,
-        M = DIK_M,
-        N = DIK_N,
-        O = DIK_O,
-        P = DIK_P,
-        Q = DIK_Q,
-        R = DIK_R,
-        S = DIK_S,
-        T = DIK_T,
-        U = DIK_U,
-        V = DIK_V,
-        W = DIK_W,
-        X = DIK_X,
-        Y = DIK_Y,
-        Z = DIK_Z,
+        A = SDL_SCANCODE_A,
+        B = SDL_SCANCODE_B,
+        C = SDL_SCANCODE_C,
+        D = SDL_SCANCODE_D,
+        E = SDL_SCANCODE_E,
+        F = SDL_SCANCODE_F,
+        G = SDL_SCANCODE_G,
+        H = SDL_SCANCODE_H,
+        I = SDL_SCANCODE_I,
+        J = SDL_SCANCODE_J,
+        K = SDL_SCANCODE_K,
+        L = SDL_SCANCODE_L,
+        M = SDL_SCANCODE_M,
+        N = SDL_SCANCODE_N,
+        O = SDL_SCANCODE_O,
+        P = SDL_SCANCODE_P,
+        Q = SDL_SCANCODE_Q,
+        R = SDL_SCANCODE_R,
+        S = SDL_SCANCODE_S,
+        T = SDL_SCANCODE_T,
+        U = SDL_SCANCODE_U,
+        V = SDL_SCANCODE_V,
+        W = SDL_SCANCODE_W,
+        X = SDL_SCANCODE_X,
+        Y = SDL_SCANCODE_Y,
+        Z = SDL_SCANCODE_Z,
 
-        Up = DIK_UP,
-        Down = DIK_DOWN,
-        Left = DIK_LEFT,
-        Right = DIK_RIGHT,
+        Up = SDL_SCANCODE_UP,
+        Down = SDL_SCANCODE_DOWN,
+        Left = SDL_SCANCODE_LEFT,
+        Right = SDL_SCANCODE_RIGHT,
 
-        Num0 = DIK_0,
-        Num1 = DIK_1,
-        Num2 = DIK_2,
-        Num3 = DIK_3,
-        Num4 = DIK_4,
-        Num5 = DIK_5,
-        Num6 = DIK_6,
-        Num7 = DIK_7,
-        Num8 = DIK_8,
-        Num9 = DIK_9,
+        Num0 = SDL_SCANCODE_0,
+        Num1 = SDL_SCANCODE_1,
+        Num2 = SDL_SCANCODE_2,
+        Num3 = SDL_SCANCODE_3,
+        Num4 = SDL_SCANCODE_4,
+        Num5 = SDL_SCANCODE_5,
+        Num6 = SDL_SCANCODE_6,
+        Num7 = SDL_SCANCODE_7,
+        Num8 = SDL_SCANCODE_8,
+        Num9 = SDL_SCANCODE_9,
 
-        F1 = DIK_F1,
-        F2 = DIK_F2,
-        F3 = DIK_F3,
-        F4 = DIK_F4,
-        F5 = DIK_F5,
-        F6 = DIK_F6,
-        F7 = DIK_F7,
-        F8 = DIK_F8,
-        F9 = DIK_F9,
-        F10 = DIK_F10,
-        F11 = DIK_F11,
-        F12 = DIK_F12,
+        F1 = SDL_SCANCODE_F1,
+        F2 = SDL_SCANCODE_F2,
+        F3 = SDL_SCANCODE_F3,
+        F4 = SDL_SCANCODE_F4,
+        F5 = SDL_SCANCODE_F5,
+        F6 = SDL_SCANCODE_F6,
+        F7 = SDL_SCANCODE_F7,
+        F8 = SDL_SCANCODE_F8,
+        F9 = SDL_SCANCODE_F9,
+        F10 = SDL_SCANCODE_F10,
+        F11 = SDL_SCANCODE_F11,
+        F12 = SDL_SCANCODE_F12,
 
-        Numpad0 = DIK_NUMPAD0,
-        Numpad1 = DIK_NUMPAD1,
-        Numpad2 = DIK_NUMPAD2,
-        Numpad3 = DIK_NUMPAD3,
-        Numpad4 = DIK_NUMPAD4,
-        Numpad5 = DIK_NUMPAD5,
-        Numpad6 = DIK_NUMPAD6,
-        Numpad7 = DIK_NUMPAD7,
-        Numpad8 = DIK_NUMPAD8,
-        Numpad9 = DIK_NUMPAD9,
+        Numpad0 = SDL_SCANCODE_KP_0,
+        Numpad1 = SDL_SCANCODE_KP_1,
+        Numpad2 = SDL_SCANCODE_KP_2,
+        Numpad3 = SDL_SCANCODE_KP_3,
+        Numpad4 = SDL_SCANCODE_KP_4,
+        Numpad5 = SDL_SCANCODE_KP_5,
+        Numpad6 = SDL_SCANCODE_KP_6,
+        Numpad7 = SDL_SCANCODE_KP_7,
+        Numpad8 = SDL_SCANCODE_KP_8,
+        Numpad9 = SDL_SCANCODE_KP_9,
 
-        Plus = DIK_ADD,
-        Minus = DIK_SUBTRACT,
-        Multiply = DIK_MULTIPLY,
-        Divide = DIK_DIVIDE,
-        Decimal = DIK_DECIMAL,
+        NumpadPlus = SDL_SCANCODE_KP_PLUS,
+        NumpadMinus = SDL_SCANCODE_KP_MINUS,
+        NumpadMultiply = SDL_SCANCODE_KP_MULTIPLY,
+        NumpadDivide = SDL_SCANCODE_KP_DIVIDE,
+        NumpadDecimal = SDL_SCANCODE_KP_DECIMAL,
 
-        NumpadEnter = DIK_NUMPADENTER,
+        NumpadEnter = SDL_SCANCODE_KP_ENTER,
 
-        Esc = DIK_ESCAPE,
-        Enter = DIK_RETURN,
-        Space = DIK_SPACE,
-        BackSpace = DIK_BACK,
-        Tab = DIK_TAB,
-        Menu = DIK_APPS,
-        CapsLock = DIK_CAPITAL,
-        NumLock = DIK_NUMLOCK,
-        ScrollLock = DIK_SCROLL,
-        LeftCtrl = DIK_LCONTROL,
-        RightCtrl = DIK_RCONTROL,
-        LeftShift = DIK_LSHIFT,
-        RightShift = DIK_RSHIFT,
-        LeftAlt = DIK_LMENU,
-        RightAlt = DIK_RMENU,
-        LeftWindows = DIK_LWIN,
-        RightWindows = DIK_RWIN,
+        Esc = SDL_SCANCODE_ESCAPE,
+        Enter = SDL_SCANCODE_RETURN,
+        Space = SDL_SCANCODE_SPACE,
+        BackSpace = SDL_SCANCODE_BACKSPACE,
+        Tab = SDL_SCANCODE_TAB,
+        Menu = SDL_SCANCODE_MENU,
+        CapsLock = SDL_SCANCODE_CAPSLOCK,
+        NumLock = SDL_SCANCODE_NUMLOCKCLEAR,
+        ScrollLock = SDL_SCANCODE_SCROLLLOCK,
+        LeftCtrl = SDL_SCANCODE_LCTRL,
+        RightCtrl = SDL_SCANCODE_RCTRL,
+        LeftShift = SDL_SCANCODE_LSHIFT,
+        RightShift = SDL_SCANCODE_RSHIFT,
+        LeftAlt = SDL_SCANCODE_LALT,
+        RightAlt = SDL_SCANCODE_RALT,
+        LeftWindows = SDL_SCANCODE_LGUI,
+        RightWindows = SDL_SCANCODE_RGUI,
 
-        LeftBracket = DIK_LBRACKET,
-        RightBracket = DIK_RBRACKET,
+        LeftBracket = SDL_SCANCODE_LEFTBRACKET,
+        RightBracket = SDL_SCANCODE_RIGHTBRACKET,
 
-        Dash = DIK_MINUS,
-        Equals = DIK_EQUALS,
+        Dash = SDL_SCANCODE_MINUS,
+        Equals = SDL_SCANCODE_EQUALS,
 
-        Slash = DIK_SLASH,
-        BackSlash = DIK_BACKSLASH,
-        Peroid = DIK_PERIOD,
-        Comma = DIK_COMMA,
-        Semicolon = DIK_SEMICOLON,
-        Apostrophe = DIK_APOSTROPHE,
-        Grave = DIK_GRAVE,
+        Slash = SDL_SCANCODE_SLASH,
+        BackSlash = SDL_SCANCODE_BACKSLASH,
+        Peroid = SDL_SCANCODE_PERIOD,
+        Comma = SDL_SCANCODE_COMMA,
+        Semicolon = SDL_SCANCODE_SEMICOLON,
+        Apostrophe = SDL_SCANCODE_APOSTROPHE,
+        Grave = SDL_SCANCODE_GRAVE,
 
-        Print = DIK_SYSRQ,
-        Pause = DIK_PAUSE,
+        Print = SDL_SCANCODE_PRINTSCREEN,
+        Pause = SDL_SCANCODE_PAUSE,
 
-        Insert = DIK_INSERT,
-        Delete = DIK_DELETE,
-        Home = DIK_HOME,
-        End = DIK_END,
-        PageUp = DIK_PRIOR,
-        PageDown = DIK_NEXT,
+        Insert = SDL_SCANCODE_INSERT,
+        Delete = SDL_SCANCODE_DELETE,
+        Home = SDL_SCANCODE_HOME,
+        End = SDL_SCANCODE_END,
+        PageUp = SDL_SCANCODE_PAGEUP,
+        PageDown = SDL_SCANCODE_PAGEDOWN,
 
-        MouseLeft = 0xFD,
-        MouseRight = 0xFE,
-        MouseMiddle = 0xFF,
+        MouseLeft = SDL_NUM_SCANCODES - 5,
+        MouseRight = SDL_NUM_SCANCODES - 4,
+        MouseMiddle = SDL_NUM_SCANCODES - 3,
+        MouseButton1 = SDL_NUM_SCANCODES - 2,
+        MouseButton2 = SDL_NUM_SCANCODES - 1
     };
+
+    constexpr auto NUM_MIN_MOUSE = static_cast<int>(Key::MouseLeft);
+    constexpr auto NUM_KEY = SDL_NUM_SCANCODES;
 
     class InputManager final
     {
     public:
-        InputManager(const class Windows& windows);
+        InputManager();
 
         InputManager(const InputManager&) = delete;
         InputManager(InputManager&&) = default;
@@ -146,16 +145,16 @@ namespace ArenaBoss
         InputManager& operator=(const InputManager&) = delete;
         InputManager& operator=(InputManager&&) = default;
 
-        ~InputManager();
+        ~InputManager() = default;
 
-        inline bool Update()
+        bool Update();
+
+        inline bool IsRelativeMove() const noexcept
         {
-            if (!(ReadKeyboard() && ReadMouse()))
-                return false;
-
-            ProcessInput();
-            return true;
+            return isRelative;
         }
+
+        void SetRelativeMouseMode(bool value);
 
         inline bool IsButtonDown(Key key) const noexcept
         {
@@ -179,52 +178,28 @@ namespace ArenaBoss
 
         inline Math::Vector2 GetMousePos() const noexcept
         {
-            return Math::Vector2
-            {
-                static_cast<float>(curMouseState.lX),
-                static_cast<float>(curMouseState.lY)
-            };
+            return mousePos;
         }
 
-        inline Math::Vector2 GetMouseMove() const noexcept
+        inline int32_t GetWheelMove() const noexcept
         {
-            return Math::Vector2
-            {
-                static_cast<float>(curMouseState.lX - oldMouseState.lX),
-                static_cast<float>(curMouseState.lY - oldMouseState.lY)
-            };
-        }
-
-        inline int GetWheelPos() const noexcept
-        {
-            return curMouseState.lZ;
-        }
-
-        inline int GetWheelMove() const noexcept
-        {
-            return curMouseState.lZ - oldMouseState.lZ;
+            return wheelMove;
         }
 
     private:
-        bool ReadKeyboard();
-        bool ReadMouse();
-        void ProcessInput();
-
         bool IsCurDown(Key key) const noexcept;
         bool IsOldDown(Key key) const noexcept;
 
     private:
-        IDirectInput8* input = nullptr;
-        IDirectInputDevice8* keyboard = nullptr;
-        IDirectInputDevice8* mouse = nullptr;
+        const uint8_t* curKeyState;
+        uint8_t oldKeyState[SDL_NUM_SCANCODES];
 
-        byte curKeyState[256];
-        byte oldKeyState[256];
-        DIMOUSESTATE2 curMouseState;
-        DIMOUSESTATE2 oldMouseState;
-        uint32_t screenWidth = 0;
-        uint32_t screenHeight = 0;
-        uint32_t mouseX = 0;
-        uint32_t mouseY = 0;
+        uint32_t curButtonState;
+        uint32_t oldButtonState;
+
+        Math::Vector2 mousePos;
+        int32_t wheelMove;
+
+        bool isRelative;
     };
 }
