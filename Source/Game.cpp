@@ -50,7 +50,8 @@ namespace ArenaBoss
 
 	Game::~Game()
 	{
-		Util::DeleteObjects(&Accessor<InputManager>::Get());
+		Util::DeleteObjects(Accessor<InputManager>::manager);
+		Util::DeleteObjects(Accessor<WindowManager>::manager);
 		SDL_Quit();
 	}
 
@@ -58,7 +59,8 @@ namespace ArenaBoss
 	{
 		while (true)
 		{
-			// Game update code
+			if (!Accessor<InputManager>::manager->Update())
+				break;
 		}
 
 		return 0;

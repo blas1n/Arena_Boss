@@ -8,10 +8,13 @@
 namespace ArenaBoss
 {
 	InputManager::InputManager()
-	{
-		curKeyState = SDL_GetKeyboardState(nullptr);
-		memset(oldKeyState, 0, SDL_NUM_SCANCODES);
-	}
+		: curKeyState(SDL_GetKeyboardState(nullptr)),
+		oldKeyState(),
+		curButtonState(),
+		oldButtonState(),
+		mousePos(),
+		wheelMove(),
+		isRelative(false) {}
 
 	bool InputManager::IsCurDown(Key key) const noexcept
 	{
