@@ -5,12 +5,17 @@
 #include "ConfigFile.h"
 #include "InputManager.h"
 #include "Log.h"
-#include "Util.h"
+#include "MathFunctions.h"
+#include "RenderManager.h"
 #include "WindowManager.h"
 
 namespace ArenaBoss
 {
 	Game::Game()
+		: windowManager(nullptr),
+		renderManager(nullptr),
+		inputManager(nullptr),
+		ticksCount(0u)
 	{
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 		{
@@ -21,7 +26,7 @@ namespace ArenaBoss
 		{
 			ConfigFile config{ "Config.txt" };
 
-			std::string name = *config("Common", "Name");
+			const char* name = config("Common", "Name")->c_str();
 			uint32_t width = std::stoi(*config("Common", "Width"));
 			uint32_t height = std::stoi(*config("Common", "Height"));
 			std::string screenStr = *config("Common", "ScreenMode");
@@ -32,15 +37,14 @@ namespace ArenaBoss
 			else if (screenStr == "Borderless")
 				screenMode = ScreenMode::Borderless;
 
-		
-			Accessor<WindowManager>::manager = new WindowManager
-			{
-				name.c_str(),
-				width, height,
-				screenMode
-			};
+			windowManager = new WindowManager{ name, width, height, screenMode };
+			Accessor<WindowManager>::manager = windowManager;
 
-			Accessor<InputManager>::manager = new InputManager{};
+			renderManager = new RenderManager{};
+			Accessor<RenderManager>::manager = renderManager;
+
+			inputManager = new InputManager{};
+			Accessor<InputManager>::manager = inputManager;
 		}
 		catch (std::exception& e)
 		{
@@ -50,17 +54,24 @@ namespace ArenaBoss
 
 	Game::~Game()
 	{
-		Util::DeleteObjects(Accessor<InputManager>::manager);
-		Util::DeleteObjects(Accessor<WindowManager>::manager);
+		delete inputManager;
+		delete renderManager;
+		delete windowManager;
 		SDL_Quit();
 	}
 
 	int Game::Run()
 	{
-		while (true)
+		bool isRun = true;
+
+		while (isRun)
 		{
-			if (!Accessor<InputManager>::manager->Update())
-				break;
+			while (!SDL_TICKS_PASSED(SDL_GetTicks(), ticksCount + 16));
+			const auto deltaTime = Math::Min(static_cast<float>(SDL_GetTicks() - ticksCount) / 1000.0f, 0.05f);
+			ticksCount = SDL_GetTicks();
+
+			isRun = isRun && inputManager->Update();
+			isRun = isRun && renderManager->Update();
 		}
 
 		return 0;

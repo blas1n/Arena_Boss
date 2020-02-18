@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace ArenaBoss
 {
 	class Game final
@@ -16,5 +18,12 @@ namespace ArenaBoss
 		~Game();
 
 		int Run();
+
+	private:
+		class WindowManager* windowManager;
+		class RenderManager* renderManager;
+		class InputManager* inputManager;
+
+		uint32_t ticksCount;
 	};
 }
