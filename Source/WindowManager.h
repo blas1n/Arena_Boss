@@ -21,6 +21,11 @@ namespace ArenaBoss
 
 		~WindowManager();
 
+		inline SDL_Window* GetWindow() noexcept
+		{
+			return window;
+		}
+
 		inline const char* GetTitle() const noexcept
 		{
 			return title;
