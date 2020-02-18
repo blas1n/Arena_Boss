@@ -5,10 +5,10 @@
 namespace ArenaBoss
 {
 	template <class T>
-	class Accessor final
+	class Accessor
 	{
 	protected:
-		inline static T& Get() noexcept
+		inline static T& GetManager() noexcept
 		{
 			assert(manager != nullptr);
 			return *manager;
