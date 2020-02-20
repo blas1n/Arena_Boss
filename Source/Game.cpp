@@ -7,6 +7,7 @@
 #include "Log.h"
 #include "MathFunctions.h"
 #include "RenderManager.h"
+#include "SceneManager.h"
 #include "WindowManager.h"
 
 namespace ArenaBoss
@@ -45,6 +46,9 @@ namespace ArenaBoss
 
 			inputManager = new InputManager{};
 			Accessor<InputManager>::manager = inputManager;
+
+			sceneManager = new SceneManager{};
+			Accessor<SceneManager>::manager = sceneManager;
 		}
 		catch (std::exception& e)
 		{
@@ -54,6 +58,7 @@ namespace ArenaBoss
 
 	Game::~Game()
 	{
+		delete sceneManager;
 		delete inputManager;
 		delete renderManager;
 		delete windowManager;
@@ -71,6 +76,7 @@ namespace ArenaBoss
 			ticksCount = SDL_GetTicks();
 
 			isRun = isRun && inputManager->Update();
+			isRun = isRun && sceneManager->Update();
 			isRun = isRun && renderManager->Update();
 		}
 

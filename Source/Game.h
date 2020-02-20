@@ -23,6 +23,7 @@ namespace ArenaBoss
 		class WindowManager* windowManager;
 		class RenderManager* renderManager;
 		class InputManager* inputManager;
+		class SceneManager* sceneManager;
 
 		uint32_t ticksCount;
 	};
