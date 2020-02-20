@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace ArenaBoss
 {
@@ -35,6 +36,7 @@ namespace ArenaBoss
 		Scene(const std::string& inName);
 
 		std::string name;
+		std::vector<class Entity> entities;
 	};
 
 	inline bool operator==(const Scene& lhs, const std::string& rhs) { return lhs.name == rhs; }
