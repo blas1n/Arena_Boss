@@ -5,6 +5,5 @@
 
 int main(int argc, char** argv)
 {
-	ArenaBoss::Game game;
-	return game.Run();
+	return ArenaBoss::Game{}.Run();
 }
