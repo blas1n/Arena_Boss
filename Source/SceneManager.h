@@ -14,7 +14,7 @@ namespace ArenaBoss
 		void ReserveScene(const std::string& name);
 
 		Scene& GetCurrentScene();
-		bool Update();
+		void Update();
 
 	private:
 		Scene* curScene;

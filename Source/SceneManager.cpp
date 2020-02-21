@@ -36,7 +36,7 @@ namespace ArenaBoss
 		return *curScene;
 	}
 
-	bool SceneManager::Update()
+	void SceneManager::Update()
 	{
 		if (reservedScene)
 		{

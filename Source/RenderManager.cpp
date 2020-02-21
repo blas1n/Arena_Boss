@@ -36,12 +36,11 @@ namespace ArenaBoss
 		SDL_GL_DeleteContext(context);
 	}
 
-	bool RenderManager::Update()
+	void RenderManager::Update()
 	{
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		SDL_GL_SwapWindow(window);
-		return true;
 	}
 }

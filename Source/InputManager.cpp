@@ -1,6 +1,7 @@
 #include "InputManager.h"
 #include <cassert>
 #include <memory>
+#include "Game.h"
 #include "MathFunctions.h"
 #include "Util.h"
 #include "Windows.h"
@@ -36,7 +37,7 @@ namespace ArenaBoss
 			return oldButtonState & SDL_BUTTON(code - NUM_MIN_MOUSE);
 	}
 
-	bool InputManager::Update()
+	void InputManager::Update()
 	{
 		memcpy(oldKeyState, curKeyState, SDL_NUM_SCANCODES);
 		oldButtonState = curButtonState;
@@ -48,7 +49,7 @@ namespace ArenaBoss
 			switch (event.type)
 			{
 			case SDL_QUIT:
-				return false;
+				Game::Exit();
 
 			case SDL_MOUSEWHEEL:
 				wheelMove = event.wheel.y;
@@ -64,7 +65,6 @@ namespace ArenaBoss
 			curButtonState = SDL_GetMouseState(&x, &y);
 
 		mousePos.Set(static_cast<float>(x), static_cast<float>(y));
-		return true;
 	}
 
 	void InputManager::SetRelativeMouseMode(bool value)

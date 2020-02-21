@@ -19,7 +19,11 @@ namespace ArenaBoss
 
 		int Run();
 
+		inline static void Exit() noexcept { isRun = false; }
+
 	private:
+		inline static bool isRun = true;
+
 		class WindowManager* windowManager;
 		class RenderManager* renderManager;
 		class InputManager* inputManager;

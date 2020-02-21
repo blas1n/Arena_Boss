@@ -147,7 +147,7 @@ namespace ArenaBoss
 
         ~InputManager() = default;
 
-        bool Update();
+        void Update();
 
         inline bool IsRelativeMove() const noexcept
         {

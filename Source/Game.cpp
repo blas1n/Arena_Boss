@@ -67,17 +67,15 @@ namespace ArenaBoss
 
 	int Game::Run()
 	{
-		bool isRun = true;
-
 		while (isRun)
 		{
 			while (!SDL_TICKS_PASSED(SDL_GetTicks(), ticksCount + 16));
 			const auto deltaTime = Math::Min(static_cast<float>(SDL_GetTicks() - ticksCount) / 1000.0f, 0.05f);
 			ticksCount = SDL_GetTicks();
 
-			isRun = isRun && inputManager->Update();
-			isRun = isRun && sceneManager->Update();
-			isRun = isRun && renderManager->Update();
+			inputManager->Update();
+			sceneManager->Update();
+			renderManager->Update();
 		}
 
 		return 0;
