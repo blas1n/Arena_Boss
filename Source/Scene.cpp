@@ -9,16 +9,6 @@ namespace ArenaBoss
 			entity.Init();
 	}
 
-	bool Scene::Update()
-	{
-		bool ret = true;
-
-		for (auto& entity : entities)
-			ret = ret && entity.Update();
-
-		return ret;
-	}
-
 	void Scene::Release()
 	{
 		for (auto& entity : entities)

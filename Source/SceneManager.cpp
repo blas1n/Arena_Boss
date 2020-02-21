@@ -46,10 +46,5 @@ namespace ArenaBoss
 			reservedScene->Init();
 			curScene = std::exchange(reservedScene, nullptr);
 		}
-
-		if (curScene)
-			return curScene->Update();
-
-		return true;
 	}
 }

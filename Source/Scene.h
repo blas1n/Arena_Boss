@@ -19,7 +19,6 @@ namespace ArenaBoss
 		~Scene() = default;
 
 		void Init();
-		bool Update();
 		void Release();
 
 	private:

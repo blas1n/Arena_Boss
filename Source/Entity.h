@@ -6,7 +6,6 @@ namespace ArenaBoss
 	{
 	public:
 		void Init();
-		bool Update();
 		void Release();
 	};
 }
