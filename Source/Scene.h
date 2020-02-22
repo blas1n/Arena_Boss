@@ -5,6 +5,8 @@
 
 namespace ArenaBoss
 {
+	class Entity;
+
 	class Scene
 	{
 	public:
@@ -22,6 +24,7 @@ namespace ArenaBoss
 		void Release();
 
 		inline const std::string& GetName() const noexcept { return name; }
+
 	private:
 		friend bool operator==(const Scene& lhs, const Scene& rhs);
 		friend bool operator<(const Scene& lhs, const Scene& rhs);
@@ -36,7 +39,7 @@ namespace ArenaBoss
 		Scene(const std::string& inName);
 
 		std::string name;
-		std::vector<class Entity> entities;
+		std::vector<Entity*> entities;
 	};
 
 	inline bool operator==(const Scene& lhs, const std::string& rhs) { return lhs.name == rhs; }

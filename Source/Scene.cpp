@@ -6,13 +6,13 @@ namespace ArenaBoss
 	void Scene::Init()
 	{
 		for (auto& entity : entities)
-			entity.Init();
+			entity->Init();
 	}
 
 	void Scene::Release()
 	{
 		for (auto& entity : entities)
-			entity.Release();
+			entity->Release();
 	}
 
 	Scene::Scene(const std::string& inName)
