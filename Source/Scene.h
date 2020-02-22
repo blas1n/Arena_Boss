@@ -21,6 +21,7 @@ namespace ArenaBoss
 		void Init();
 		void Release();
 
+		inline const std::string& GetName() const noexcept { return name; }
 	private:
 		friend bool operator==(const Scene& lhs, const Scene& rhs);
 		friend bool operator<(const Scene& lhs, const Scene& rhs);
