@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "Scene.h"
 
 namespace ArenaBoss
 {
