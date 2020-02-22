@@ -13,10 +13,6 @@
 namespace ArenaBoss
 {
 	Game::Game()
-		: windowManager(nullptr),
-		renderManager(nullptr),
-		inputManager(nullptr),
-		ticksCount(0u)
 	{
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 		{

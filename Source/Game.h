@@ -24,11 +24,11 @@ namespace ArenaBoss
 	private:
 		inline static bool isRun = true;
 
-		class WindowManager* windowManager;
-		class RenderManager* renderManager;
-		class InputManager* inputManager;
-		class SceneManager* sceneManager;
+		class WindowManager* windowManager = nullptr;
+		class RenderManager* renderManager = nullptr;
+		class InputManager* inputManager = nullptr;
+		class SceneManager* sceneManager = nullptr;
 
-		uint32_t ticksCount;
+		uint32_t ticksCount = 0u;
 	};
 }
