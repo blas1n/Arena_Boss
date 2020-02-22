@@ -28,6 +28,7 @@ namespace ArenaBoss
 		class RenderManager* renderManager = nullptr;
 		class InputManager* inputManager = nullptr;
 		class SceneManager* sceneManager = nullptr;
+		class ComponentManager* componentManager = nullptr;
 
 		uint32_t ticksCount = 0u;
 	};

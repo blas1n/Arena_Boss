@@ -2,6 +2,7 @@
 #include <exception>
 #include <SDL2/SDL.h>
 #include "Accessor.h"
+#include "ComponentManager.h"
 #include "ConfigFile.h"
 #include "InputManager.h"
 #include "Log.h"
@@ -45,6 +46,9 @@ namespace ArenaBoss
 
 			sceneManager = new SceneManager{};
 			Accessor<SceneManager>::manager = sceneManager;
+
+			componentManager = new ComponentManager{};
+			Accessor<ComponentManager>::manager = componentManager;
 		}
 		catch (std::exception& e)
 		{
@@ -54,6 +58,7 @@ namespace ArenaBoss
 
 	Game::~Game()
 	{
+		delete componentManager;
 		delete sceneManager;
 		delete inputManager;
 		delete renderManager;
@@ -71,6 +76,7 @@ namespace ArenaBoss
 
 			inputManager->Update();
 			sceneManager->Update();
+			componentManager->Update();
 			renderManager->Update();
 		}
 
