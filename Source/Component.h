@@ -48,3 +48,21 @@ namespace ArenaBoss
 		Entity* entity;
 	};
 }
+
+#define GENERATE_COMPONENT(name, tag) \
+public: \
+	inline ComponentTag GetTag() const noexcept override \
+	{ \
+		return tag; \
+	} \
+\
+	inline static const std::string& StaticName() noexcept \
+	{ \
+		static const std::string name{ #name }; \
+		return name; \
+	} \
+\
+	inline const std::string& Name() const noexcept override \
+	{ \
+		return name::StaticName(); \
+	}
