@@ -7,16 +7,40 @@ namespace ArenaBoss
 {
 	namespace
 	{
-		template <bool IsFindSame>
-		decltype(auto) FindIterByName(std::vector<Scene>& scenes, const std::string& name)
+		decltype(auto) SceneLowerBound(std::vector<Scene*>& scenes, const std::string& name)
 		{
-			const auto iter = std::lower_bound(scenes.begin(), scenes.end(), name);
+			auto begin = scenes.begin();
+			auto count = scenes.size();
+			
+			while (count > 0)
+			{
+				auto halfCount = count / 2;
+				auto mid = std::next(begin, halfCount);
+
+				if (**mid < name)
+				{
+					begin = mid + 1;
+					count = halfCount + 1;
+				}
+				else
+				{
+					count = halfCount;
+				}
+			}
+
+			return begin;
+		}
+
+		template <bool IsFindSame>
+		decltype(auto) FindIterByName(std::vector<Scene*>& scenes, const std::string& name)
+		{
+			const auto iter = SceneLowerBound(scenes, name);
 
 			if constexpr (IsFindSame)
-				if (name != *iter)
+				if (name != **iter)
 					throw std::exception{ "No scene of that name exists" };
 			else
-				if (name == *iter)
+				if (name == **iter)
 					throw std::exception{ "Scene with the same name already exists" };
 
 			return iter;
@@ -27,16 +51,15 @@ namespace ArenaBoss
 	{
 		const auto iter = FindIterByName<false>(scenes, name);
 
-		Scene scene{ name };
-		scenes.emplace_back(std::move(scene));
+		scenes.emplace_back(new Scene{ name });
 		std::rotate(scenes.rbegin(), scenes.rbegin() + 1, std::reverse_iterator{ iter });
-		return *iter;
+		return **iter;
 	}
 
 	void SceneManager::ReserveScene(const std::string& name)
 	{
 		const auto iter = FindIterByName<true>(scenes, name);
-		reservedScene = std::addressof(*iter);
+		reservedScene = *iter;
 	}
 
 	void SceneManager::RemoveScene(const std::string& name)

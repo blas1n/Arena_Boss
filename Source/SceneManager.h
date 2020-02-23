@@ -2,7 +2,6 @@
 
 #include <string>
 #include <vector>
-#include "Scene.h"
 
 namespace ArenaBoss
 {
@@ -21,6 +20,6 @@ namespace ArenaBoss
 	private:
 		Scene* curScene;
 		Scene* reservedScene;
-		std::vector<Scene> scenes;
+		std::vector<Scene*> scenes;
 	};
 }
