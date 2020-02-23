@@ -6,11 +6,12 @@ namespace ArenaBoss
 {
 	class Entity;
 
-	enum class ComponentKind
+	enum class ComponentTag
 	{
 		None,
 		Updatable,
-		Input
+		Input,
+		Render
 	};
 
 	class Component
@@ -27,7 +28,7 @@ namespace ArenaBoss
 		virtual ~Component() = default;
 
 		virtual void Update() = 0;
-		virtual ComponentKind GetKind() const noexcept = 0;
+		virtual ComponentTag GetTag() const noexcept = 0;
 
 		inline static const std::string& StaticName() noexcept
 		{
