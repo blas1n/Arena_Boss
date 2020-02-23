@@ -16,7 +16,15 @@ namespace ArenaBoss
 	class Component
 	{
 	public:
-		~Component() = default;
+		Component() = default;
+
+		Component(const Component&) = delete;
+		Component(Component&&) = delete;
+
+		Component& operator=(const Component&) = delete;
+		Component& operator=(Component&&) = delete;
+
+		virtual ~Component() = default;
 
 		virtual void Update() = 0;
 		virtual ComponentKind GetKind() const noexcept = 0;
