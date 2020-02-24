@@ -13,11 +13,11 @@ namespace ArenaBoss
 
 	void ComponentManager::DeleteComponent(Component* component)
 	{
-		switch (component->GetKind())
+		switch (component->GetTag())
 		{
-		case ComponentKind::None: break;
-		case ComponentKind::Input: break;
-		case ComponentKind::Updatable:
+		case ComponentTag::None: break;
+		case ComponentTag::Input: break;
+		case ComponentTag::Updatable:
 		{
 			const auto iter = std::find(updatableComponents.begin(), updatableComponents.end(), component);
 			updatableComponents.erase(iter);
@@ -33,11 +33,11 @@ namespace ArenaBoss
 
 	void ComponentManager::RegisterComponent(Component* component)
 	{
-		switch (component->GetKind())
+		switch (component->GetTag())
 		{
-		case ComponentKind::None: break;
-		case ComponentKind::Input: break;
-		case ComponentKind::Updatable:
+		case ComponentTag::None: break;
+		case ComponentTag::Input: break;
+		case ComponentTag::Updatable:
 			updatableComponents.push_back(component);
 			break;
 
