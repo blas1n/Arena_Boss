@@ -6,19 +6,9 @@ namespace ArenaBoss
 {
 	class Entity;
 
-	enum class ComponentTag
-	{
-		None,
-		Updatable,
-		Input,
-		Render
-	};
-
 	class Component
 	{
 	public:
-		Component() = default;
-
 		Component(const Component&) = delete;
 		Component(Component&&) = delete;
 
@@ -26,9 +16,6 @@ namespace ArenaBoss
 		Component& operator=(Component&&) = delete;
 
 		virtual ~Component() = default;
-
-		virtual void Update() = 0;
-		virtual ComponentTag GetTag() const noexcept = 0;
 
 		inline static const std::string& StaticName() noexcept
 		{
@@ -45,21 +32,19 @@ namespace ArenaBoss
 		void SetEntity(Entity* inEntity) noexcept { entity = inEntity; }
 
 	private:
+		friend class ComponentManager;
+		Component() = default;
+
 		Entity* entity;
 	};
 }
 
-#define GENERATE_COMPONENT(name, tag) \
+#define GENERATE_COMPONENT(name) \
 public: \
-	inline ComponentTag GetTag() const noexcept override \
-	{ \
-		return tag; \
-	} \
-\
 	inline static const std::string& StaticName() noexcept \
 	{ \
-		static const std::string name{ #name }; \
-		return name; \
+		static const std::string componentName{ #name }; \
+		return componentName; \
 	} \
 \
 	inline const std::string& Name() const noexcept override \

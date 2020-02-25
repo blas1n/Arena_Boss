@@ -5,6 +5,8 @@
 namespace ArenaBoss
 {
 	class Component;
+	class DrawableComponent;
+	class UpdatableComponent;
 
 	class ComponentManager
 	{
@@ -20,11 +22,18 @@ namespace ArenaBoss
 		}
 		
 		void DeleteComponent(Component* component);
+		void DeleteComponent(DrawableComponent* component);
+		void DeleteComponent(UpdatableComponent* component);
 
 	private:
-		void RegisterComponent(Component* component);
+		inline void RegisterComponent(Component* component) {}
+
+		void RegisterComponent(DrawableComponent* component);
+
+		inline void RegisterComponent(UpdatableComponent* component)
+			{ updatableComponents.push_back(component); }
 
 	private:
-		std::vector<Component*> updatableComponents;
+		std::vector<UpdatableComponent*> updatableComponents;
 	};
 }
