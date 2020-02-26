@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "Accessor.h"
 
 namespace ArenaBoss
 {
@@ -8,7 +9,7 @@ namespace ArenaBoss
 	class DrawableComponent;
 	class UpdatableComponent;
 
-	class ComponentManager
+	class ComponentManager : private Accessor<class RenderManager>
 	{
 	public:
 		void Update();

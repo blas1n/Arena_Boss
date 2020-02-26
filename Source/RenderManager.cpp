@@ -1,6 +1,9 @@
 #include "RenderManager.h"
+#include <algorithm>
 #include <exception>
 #include <GL/glew.h>
+#include "DrawableComponent.h"
+#include "Game.h"
 #include "Log.h"
 #include "WindowManager.h"
 
@@ -53,5 +56,39 @@ namespace ArenaBoss
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
 		SDL_GL_SwapWindow(window);
+	}
+
+	void RenderManager::RegisterComponent(DrawableComponent* component)
+	{
+		switch (component->GetKind())
+		{
+		case DrawKind::Mesh:
+			meshComponents.emplace_back(std::move(component));
+			break;
+		case DrawKind::Sprite:
+			spriteComponents.emplace_back(std::move(component));
+			break;
+		}
+	}
+
+	void RenderManager::UnregisterComponent(DrawableComponent* component)
+	{
+		std::vector<DrawableComponent*>* components = nullptr;
+
+		switch (component->GetKind())
+		{
+		case DrawKind::Mesh:
+			components = &meshComponents;
+			break;
+		case DrawKind::Sprite:
+			components = &spriteComponents;
+			break;
+		default:
+			return;
+		}
+
+		const auto iter = std::find(components->begin(),
+			components->end(), component);
+		components->erase(iter);
 	}
 }
