@@ -57,6 +57,8 @@ namespace ArenaBoss::Math
 		Matrix3x3& operator=(const DirectX::XMFLOAT3X3& mat) noexcept;
 	    
 		inline operator DirectX::XMMATRIX() const noexcept { return DirectX::XMLoadFloat3x3(&value); }
+		inline operator float*() noexcept { return value.m[0]; }
+		inline operator const float*() const noexcept { return value.m[0]; }
 
 		void Set(float inM00, float inM01, float inM02,
 			float inM10, float inM11, float inM12,

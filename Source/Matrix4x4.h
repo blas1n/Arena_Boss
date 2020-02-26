@@ -60,6 +60,8 @@ namespace ArenaBoss::Math
 		Matrix4x4& operator=(const DirectX::XMFLOAT4X4& mat) noexcept;
 
 		inline operator DirectX::XMMATRIX() const noexcept { return DirectX::XMLoadFloat4x4(&value); }
+		inline operator float*() noexcept { return value.m[0]; }
+		inline operator const float*() const noexcept { return value.m[0]; }
 
 		void Set(float inM00, float inM01, float inM02, float inM03,
 			float inM10, float inM11, float inM12, float inM13,

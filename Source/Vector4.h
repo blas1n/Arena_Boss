@@ -53,6 +53,8 @@ namespace ArenaBoss::Math
         Vector4& operator=(const DirectX::XMFLOAT4& vec) noexcept;
 
         inline operator DirectX::XMVECTOR() const noexcept { return DirectX::XMLoadFloat4(&value); }
+        inline operator float*() noexcept { return &value.x; }
+        inline operator const float*() const noexcept { return &value.x; }
         operator Vector2() const noexcept;
         operator Vector3() const noexcept;
 

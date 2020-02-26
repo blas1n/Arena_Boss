@@ -60,6 +60,8 @@ namespace ArenaBoss::Math
         Vector3& operator=(const DirectX::XMFLOAT3& vec) noexcept;
 
         inline operator DirectX::XMVECTOR() const noexcept { return DirectX::XMLoadFloat3(&value); }
+        inline operator float*() noexcept { return &value.x; }
+        inline operator const float*() const noexcept { return &value.x; }
         operator Vector2() const noexcept;
 
         void Set(float inX, float inY, float inZ) noexcept;
