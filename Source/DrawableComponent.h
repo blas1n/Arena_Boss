@@ -1,30 +1,43 @@
 #pragma once
 
+#include "Accessor.h"
 #include "Component.h"
 
 namespace ArenaBoss
 {
-	enum class DrawKind { Sprite, Mesh };
+	class Shader;
 
 	class DrawableComponent : public Component
 	{
 		GENERATE_COMPONENT(DrawableComponent)
 
 	public:
-		virtual void Draw(class Shader* shader) = 0;
-		virtual DrawKind GetKind() const noexcept = 0;
+		virtual void Draw() = 0;
+		
+		inline Shader* GetShader() noexcept { return shader; }
+		inline const Shader* GetShader() const noexcept { return shader; }
+		inline virtual void SetShader(Shader* inShader) noexcept { shader = inShader; }
+
+		inline bool HaveShader() const noexcept { return shader != nullptr; }
+		inline void ClearShader() noexcept { SetShader(nullptr); }
 
 		inline bool IsVisible() const noexcept { return visible; }
 		inline void SetVisible(bool inVisible) noexcept { visible = inVisible; }
 
 	private:
+		Shader* shader;
 		bool visible = true;
 	};
 
-#define GENERATE_DRAWABLE_COMPONENT(name, kind) \
-GENERATE_COMPONENT(name) \
-	inline DrawKind GetKind() const noexcept override \
-	{ \
-		return kind; \
-	}
+	class MeshDrawableComponent : public DrawableComponent, private Accessor<class RenderManager>
+	{
+		GENERATE_COMPONENT(MeshDrawableComponent)
+
+		void SetShader(Shader* inShader) noexcept override;
+	};
+
+	class SpriteDrawableComponent : public DrawableComponent
+	{
+		GENERATE_COMPONENT(SpriteDrawableComponent)
+	};
 }

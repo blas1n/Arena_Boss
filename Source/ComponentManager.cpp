@@ -18,7 +18,13 @@ namespace ArenaBoss
 		delete component;
 	}
 
-	void ComponentManager::DeleteComponent(DrawableComponent* component)
+	void ComponentManager::DeleteComponent(MeshDrawableComponent* component)
+	{
+		Accessor<RenderManager>::GetManager().UnregisterComponent(component);
+		delete component;
+	}
+
+	void ComponentManager::DeleteComponent(SpriteDrawableComponent* component)
 	{
 		Accessor<RenderManager>::GetManager().UnregisterComponent(component);
 		delete component;
@@ -31,7 +37,12 @@ namespace ArenaBoss
 		delete component;
 	}
 
-	void ComponentManager::RegisterComponent(DrawableComponent* component)
+	void ComponentManager::RegisterComponent(MeshDrawableComponent* component)
+	{
+		Accessor<RenderManager>::GetManager().RegisterComponent(component);
+	}
+
+	void ComponentManager::RegisterComponent(SpriteDrawableComponent* component)
 	{
 		Accessor<RenderManager>::GetManager().RegisterComponent(component);
 	}

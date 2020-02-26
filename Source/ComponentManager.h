@@ -6,7 +6,8 @@
 namespace ArenaBoss
 {
 	class Component;
-	class DrawableComponent;
+	class MeshDrawableComponent;
+	class SpriteDrawableComponent;
 	class UpdatableComponent;
 
 	class ComponentManager : private Accessor<class RenderManager>
@@ -33,13 +34,15 @@ namespace ArenaBoss
 		}
 		
 		void DeleteComponent(Component* component);
-		void DeleteComponent(DrawableComponent* component);
+		void DeleteComponent(MeshDrawableComponent* component);
+		void DeleteComponent(SpriteDrawableComponent* component);
 		void DeleteComponent(UpdatableComponent* component);
 
 	private:
 		inline void RegisterComponent(Component* component) {}
 
-		void RegisterComponent(DrawableComponent* component);
+		void RegisterComponent(MeshDrawableComponent* component);
+		void RegisterComponent(SpriteDrawableComponent* component);
 
 		inline void RegisterComponent(UpdatableComponent* component)
 			{ updatableComponents.push_back(component); }
