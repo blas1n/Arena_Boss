@@ -8,8 +8,10 @@
 
 namespace ArenaBoss
 {
-	Shader::Shader(const std::string& vertName, const std::string& fragName)
-		: vertexShader(0u), fragShader(0u), shaderProgram(0u)
+	Shader::Shader(const std::string& name,
+		const std::string& vertName,
+		const std::string& fragName)
+		: Resource(name)
 	{
 		Load(vertName, fragName);
 	}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GL/glew.h"
-#include <string>
+#include "Resource.h"
 
 namespace ArenaBoss
 {
@@ -11,11 +11,14 @@ namespace ArenaBoss
 		class Matrix4x4;
 	}
 
-	class Shader
+	class Shader : public Resource
 	{
 	public:
-		Shader() = default;
-		Shader(const std::string& vertName, const std::string& fragName);
+		Shader(const std::string& name) : Resource(name) {}
+
+		Shader(const std::string& name,
+			const std::string& vertName,
+			const std::string& fragName);
 
 		Shader(const Shader&) = delete;
 		Shader(Shader&&) = default;
@@ -23,7 +26,7 @@ namespace ArenaBoss
 		Shader& operator=(const Shader&) = delete;
 		Shader& operator=(Shader&&) = default;
 
-		~Shader();
+		~Shader() override;
 
 		bool Load(const std::string& vertName, const std::string& fragName);
 		void Unload();
@@ -41,8 +44,8 @@ namespace ArenaBoss
 		bool IsValidProgram();
 
 	private:
-		GLuint vertexShader;
-		GLuint fragShader;
-		GLuint shaderProgram;
+		GLuint vertexShader = 0u;
+		GLuint fragShader = 0u;
+		GLuint shaderProgram = 0u;
 	};
 }
