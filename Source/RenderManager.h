@@ -11,7 +11,7 @@ namespace ArenaBoss
 		RenderManager();
 		~RenderManager();
 
-		void Update();
+		void Draw();
 
 	private:
 		SDL_Window* window;

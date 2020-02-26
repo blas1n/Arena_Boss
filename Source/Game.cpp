@@ -77,7 +77,7 @@ namespace ArenaBoss
 			inputManager->Update();
 			sceneManager->Update();
 			componentManager->Update();
-			renderManager->Update();
+			renderManager->Draw();
 		}
 
 		return 0;

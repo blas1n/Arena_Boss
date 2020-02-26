@@ -36,7 +36,7 @@ namespace ArenaBoss
 		SDL_GL_DeleteContext(context);
 	}
 
-	void RenderManager::Update()
+	void RenderManager::Draw()
 	{
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
