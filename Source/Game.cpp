@@ -8,6 +8,7 @@
 #include "Log.h"
 #include "MathFunctions.h"
 #include "RenderManager.h"
+#include "ResourceManager.h"
 #include "SceneManager.h"
 #include "WindowManager.h"
 
@@ -37,6 +38,9 @@ namespace ArenaBoss
 
 			windowManager = new WindowManager{ name, width, height, screenMode };
 			Accessor<WindowManager>::manager = windowManager;
+
+			resourceManager = new ResourceManager{};
+			Accessor<ResourceManager>::manager = resourceManager;
 
 			renderManager = new RenderManager{};
 			Accessor<RenderManager>::manager = renderManager;
