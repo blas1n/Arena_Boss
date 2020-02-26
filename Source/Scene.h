@@ -42,6 +42,13 @@ namespace ArenaBoss
 		std::vector<Entity*> entities;
 	};
 
+	inline bool operator==(const Scene& lhs, const Scene& rhs) { return lhs.name == rhs.name; }
+	inline bool operator!=(const Scene& lhs, const Scene& rhs) { return !(lhs == rhs); }
+	inline bool operator<(const Scene& lhs, const Scene& rhs) { return lhs.name < rhs.name; }
+	inline bool operator>(const Scene& lhs, const Scene& rhs) { return rhs < lhs; }
+	inline bool operator<=(const Scene& lhs, const Scene& rhs) { return !(rhs < lhs); }
+	inline bool operator>=(const Scene& lhs, const Scene& rhs) { return !(lhs < rhs); }
+
 	inline bool operator==(const Scene& lhs, const std::string& rhs) { return lhs.name == rhs; }
 	inline bool operator!=(const Scene& lhs, const std::string& rhs) { return !(lhs == rhs); }
 	inline bool operator<(const Scene& lhs, const std::string& rhs) { return lhs.name < rhs; }
@@ -55,11 +62,4 @@ namespace ArenaBoss
 	inline bool operator>(const std::string& lhs, const Scene& rhs) { return rhs < lhs; }
 	inline bool operator<=(const std::string& lhs, const Scene& rhs) { return !(rhs < lhs); }
 	inline bool operator>=(const std::string& lhs, const Scene& rhs) { return !(lhs < rhs); }
-
-	inline bool operator==(const Scene& lhs, const Scene& rhs) { return lhs.name == rhs.name; }
-	inline bool operator!=(const Scene& lhs, const Scene& rhs) { return !(lhs == rhs); }
-	inline bool operator<(const Scene& lhs, const Scene& rhs) { return lhs.name < rhs.name; }
-	inline bool operator>(const Scene& lhs, const Scene& rhs) { return rhs < lhs; }
-	inline bool operator<=(const Scene& lhs, const Scene& rhs) { return !(rhs < lhs); }
-	inline bool operator>=(const Scene& lhs, const Scene& rhs) { return !(lhs < rhs); }
 }
