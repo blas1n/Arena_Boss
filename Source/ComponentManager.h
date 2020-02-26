@@ -12,6 +12,16 @@ namespace ArenaBoss
 	class ComponentManager : private Accessor<class RenderManager>
 	{
 	public:
+		ComponentManager() = default;
+
+		ComponentManager(const ComponentManager&) = delete;
+		ComponentManager(ComponentManager&&) = delete;
+
+		ComponentManager& operator=(const ComponentManager&) = delete;
+		ComponentManager& operator=(ComponentManager&&) = delete;
+
+		~ComponentManager() = default;
+
 		void Update();
 
 		template <class ComponentType>

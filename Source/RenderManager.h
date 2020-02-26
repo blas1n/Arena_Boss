@@ -12,6 +12,13 @@ namespace ArenaBoss
 	{
 	public:
 		RenderManager();
+
+		RenderManager(const RenderManager&) = delete;
+		RenderManager(RenderManager&&) = delete;
+
+		RenderManager& operator=(const RenderManager&) = delete;
+		RenderManager& operator=(RenderManager&&) = delete;
+
 		~RenderManager();
 
 		void Draw();

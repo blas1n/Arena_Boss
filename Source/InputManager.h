@@ -140,10 +140,10 @@ namespace ArenaBoss
         InputManager();
 
         InputManager(const InputManager&) = delete;
-        InputManager(InputManager&&) = default;
+        InputManager(InputManager&&) = delete;
 
         InputManager& operator=(const InputManager&) = delete;
-        InputManager& operator=(InputManager&&) = default;
+        InputManager& operator=(InputManager&&) = delete;
 
         ~InputManager() = default;
 

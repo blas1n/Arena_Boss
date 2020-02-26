@@ -19,6 +19,12 @@ namespace ArenaBoss
 		WindowManager(const char* inTitle, uint32_t inWidth,
 			uint32_t inHeight, ScreenMode inScreenMode);
 
+		WindowManager(const WindowManager&) = delete;
+		WindowManager(WindowManager&&) = delete;
+
+		WindowManager& operator=(const WindowManager&) = delete;
+		WindowManager& operator=(WindowManager&&) = delete;
+
 		~WindowManager();
 
 		inline SDL_Window* GetWindow() noexcept
