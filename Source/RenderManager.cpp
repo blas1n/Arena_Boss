@@ -53,7 +53,7 @@ namespace ArenaBoss
 		glDisable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);
 
-		renderTree->Draw();
+		renderTree->Draw([](auto& shader) {});
 
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);

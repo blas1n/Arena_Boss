@@ -51,11 +51,12 @@ namespace ArenaBoss
 		}
 	}
 
-	void RenderTree::Draw()
+	void RenderTree::Draw(std::function<void(Shader&)> fn)
 	{
 		for (auto& node : nodes)
 		{
 			node.shader->Activate();
+			fn(*node.shader);
 
 			for (auto component : node.components)
 				if (component->IsVisible())

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <vector>
 
 namespace ArenaBoss
@@ -20,7 +21,7 @@ namespace ArenaBoss
 		};
 
 	public:
-		void Draw();
+		void Draw(std::function<void(Shader&)> fn);
 
 		void RegisterShader(Shader* shader);
 		void UnregisterShader(Shader* shader);
