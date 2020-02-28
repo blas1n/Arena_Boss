@@ -1,15 +1,15 @@
 #pragma once
 
-#include <cassert>
-#include <type_traits>
+#include <string>
 #include <vector>
 #include "Accessor.h"
-#include "Component.h"
 #include "ComponentManager.h"
+#include "Game.h"
 #include "Log.h"
 
 namespace ArenaBoss
 {
+	class Component;
 	class Transform;
 
 	class Entity : private Accessor<ComponentManager>
@@ -21,19 +21,15 @@ namespace ArenaBoss
 		template <class ComponentType>
 		ComponentType& GetComponent() 
 		{
-			static_assert(std::is_base_of<Component, ComponentType>::value,
-				"ComponentType is not Component");
-
-			return *(static_cast<ComponentType*>(FindComponent()));
+			const auto component = FindComponent(ComponentType::StaticClassName());
+			return *(static_cast<ComponentType*>(component));
 		}
 
 		template <class ComponentType>
 		const ComponentType& GetComponent() const
 		{
-			static_assert(std::is_base_of<Component, ComponentType>::value,
-				"ComponentType is not Component");
-
-			return *(static_cast<ComponentType*>(FindComponent()));
+			const auto component = FindComponent(ComponentType::StaticClassName());
+			return *(static_cast<ComponentType*>(component));
 		}
 
 		template <>
@@ -45,9 +41,6 @@ namespace ArenaBoss
 		template <class ComponentType>
 		ComponentType& AddComponent()
 		{
-			static_assert(std::is_base_of<Component, ComponentType>::value,
-				"ComponentType is not Component");
-
 			auto* component = GetManager().CreateComponent<ComponentType>();
 			components.push_back(component);
 			return component;
@@ -57,7 +50,7 @@ namespace ArenaBoss
 		Transform& AddComponent<Transform>() noexcept
 		{
 			Log("Transform cannot be added.");
-			std::abort();
+			Game::Exit();
 		}
 
 	private:
