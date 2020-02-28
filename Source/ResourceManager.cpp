@@ -1,4 +1,5 @@
 #include "ResourceManager.h"
+#include <exception>
 #include "IteratorFinder.h"
 #include "Resource.h"
 
@@ -21,8 +22,12 @@ namespace ArenaBoss
 			std::reverse_iterator{ iter });
 	}
 
-	Resource* ResourceManager::GetResourceImpl(const std::string& name)
+	Resource* ResourceManager::FindResource(const std::string& name, const std::string& resourceName)
 	{
-		return *IteratorFinder::FindSameIterator(resources, name);
+		const auto resource = *IteratorFinder::FindSameIterator(resources, name);
+		if (resource->ClassName() != resourceName)
+			throw std::exception{ "No corresponding resource exists." };
+
+		return resource;
 	}
 }

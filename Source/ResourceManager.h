@@ -33,12 +33,13 @@ namespace ArenaBoss
 		template <class ResourceType>
 		ResourceType* GetResource(const std::string& name)
 		{
-			return static_cast<ResourceType*>(GetResourceImpl(name));
+			const auto resource = FindResource(name, ResourceType::StaticClassName());
+			return static_cast<ResourceType*>(resource);
 		}
 
 	private:
 		void RegisterResource(Resource* name);
-		Resource* GetResourceImpl(const std::string& name);
+		Resource* FindResource(const std::string& name, const std::string& resourceName);
 
 	private:
 		std::vector<Resource*> resources;

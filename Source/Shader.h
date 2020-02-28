@@ -13,6 +13,8 @@ namespace ArenaBoss
 
 	class Shader : public Resource
 	{
+		GENERATE_RESOURCE(Shader)
+
 	public:
 		Shader(const std::string& name) : Resource(name) {}
 
