@@ -7,7 +7,7 @@ namespace ArenaBoss
 {
 	class Entity;
 
-	class Scene
+	class Scene final
 	{
 	public:
 		Scene() = delete;

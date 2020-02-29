@@ -5,7 +5,7 @@
 
 namespace ArenaBoss
 {
-    class ConfigSection
+    class ConfigSection final
     {
     public:
         ConfigSection(const ConfigSection&) = default;
@@ -27,7 +27,7 @@ namespace ArenaBoss
         std::map<std::string, std::string> data;
     };
 
-    class ConfigFile
+    class ConfigFile final
     {
     public:
         ConfigFile() = default;

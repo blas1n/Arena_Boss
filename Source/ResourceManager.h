@@ -7,7 +7,7 @@ namespace ArenaBoss
 {
 	class Resource;
 
-	class ResourceManager
+	class ResourceManager final
 	{
 	public:
 		ResourceManager() = default;

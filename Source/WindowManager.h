@@ -13,7 +13,7 @@ namespace ArenaBoss
 		Borderless
 	};
 
-	class WindowManager
+	class WindowManager final
 	{
 	public:
 		WindowManager(const char* inTitle, uint32_t inWidth,

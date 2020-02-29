@@ -10,7 +10,7 @@ namespace ArenaBoss
 	class SpriteDrawableComponent;
 	class UpdatableComponent;
 
-	class ComponentManager : private Accessor<class RenderManager>
+	class ComponentManager final : private Accessor<class RenderManager>
 	{
 	public:
 		ComponentManager() = default;

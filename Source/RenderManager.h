@@ -10,7 +10,7 @@ namespace ArenaBoss
 	class SpriteDrawableComponent;
 	class RenderTree;
 
-	class RenderManager : Accessor<class WindowManager>, Accessor<class ResourceManager>
+	class RenderManager final : Accessor<class WindowManager>, Accessor<class ResourceManager>
 	{
 	public:
 		RenderManager();

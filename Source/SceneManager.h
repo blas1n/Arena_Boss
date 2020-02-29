@@ -7,7 +7,7 @@ namespace ArenaBoss
 {
 	class Scene;
 
-	class SceneManager
+	class SceneManager final
 	{
 	public:
 		SceneManager() = default;

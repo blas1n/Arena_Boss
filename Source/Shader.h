@@ -11,7 +11,7 @@ namespace ArenaBoss
 		class Matrix4x4;
 	}
 
-	class Shader : public Resource
+	class Shader final : public Resource
 	{
 		GENERATE_RESOURCE(Shader)
 

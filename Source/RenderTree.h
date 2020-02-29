@@ -8,7 +8,7 @@ namespace ArenaBoss
 	class Shader;
 	class MeshDrawableComponent;
 	
-	class RenderTree
+	class RenderTree final
 	{
 	public:
 		struct RenderNode

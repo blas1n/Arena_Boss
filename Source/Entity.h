@@ -12,7 +12,7 @@ namespace ArenaBoss
 	class Component;
 	class Transform;
 
-	class Entity : private Accessor<ComponentManager>
+	class Entity final : private Accessor<ComponentManager>
 	{
 	public:
 		void Init();
