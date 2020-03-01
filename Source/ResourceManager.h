@@ -20,10 +20,10 @@ namespace ArenaBoss
 
 		~ResourceManager() = default;
 
-		template <class ResourceType>
-		ResourceType* CreateResource(const std::string& name)
+		template <class ResourceType, class... Args>
+		ResourceType* CreateResource(const std::string& name, Args&&... args)
 		{
-			auto* resource = new ResourceType{ name };
+			auto* resource = new ResourceType{ name, std::forward<Args>(args)... };
 			RegisterResource(resource);
 			return resource;
 		}
