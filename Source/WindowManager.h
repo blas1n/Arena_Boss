@@ -47,13 +47,9 @@ namespace ArenaBoss
 			return height;
 		}
 
-		inline Math::Vector2 GetSize() const noexcept
+		inline Math::UintVector2 GetSize() const noexcept
 		{
-			return Math::Vector2
-			{
-				static_cast<float>(width),
-				static_cast<float>(height)
-			};
+			return Math::UintVector2{ width, height };
 		}
 
 		inline ScreenMode GetScreenMode() const noexcept

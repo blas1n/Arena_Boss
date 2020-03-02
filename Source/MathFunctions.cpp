@@ -1,9 +1,6 @@
 #include "MathFunctions.h"
 #include "Quaternion.h"
 #include "Rotator.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
 
 namespace ArenaBoss::Math
 {
@@ -17,21 +14,6 @@ namespace ArenaBoss::Math
 		return radians * 180.0f / PI;
 	}
 
-	bool NearEqual(const Vector2& lhs, const Vector2& rhs, float epsilon/*= MACHINE_EPSILON*/) noexcept
-	{
-		return (lhs - rhs).LengthSqrt() <= Pow(epsilon);
-	}
-
-	bool NearEqual(const Vector3& lhs, const Vector3& rhs, float epsilon/*= MACHINE_EPSILON*/) noexcept
-	{
-		return (lhs - rhs).LengthSqrt() <= Pow(epsilon);
-	}
-
-	bool NearEqual(const Vector4& lhs, const Vector4& rhs, float epsilon/*= MACHINE_EPSILON*/) noexcept
-	{
-		return (lhs - rhs).LengthSqrt() <= Pow(epsilon);
-	}
-
 	bool NearEqual(const Rotator& lhs, const Rotator& rhs, float epsilon/*= MACHINE_EPSILON*/) noexcept
 	{
 		return (lhs - rhs).AsVector().LengthSqrt() <= Pow(epsilon);
@@ -40,21 +22,6 @@ namespace ArenaBoss::Math
 	bool NearEqual(const Quaternion& lhs, const Quaternion& rhs, float epsilon/*= MACHINE_EPSILON*/) noexcept
 	{
 		return NearEqual(lhs.AsVector(), rhs.AsVector(), epsilon);
-	}
-
-	Vector2 Lerp(const Vector2& a, const Vector2& b, float delta) noexcept
-	{
-		return a + delta * (b - a);
-	}
-
-	Vector3 Lerp(const Vector3& a, const Vector3& b, float delta) noexcept
-	{
-		return a + delta * (b - a);
-	}
-
-	Vector4 Lerp(const Vector4& a, const Vector4& b, float delta) noexcept
-	{
-		return a + delta * (b - a);
 	}
 
 	Rotator Lerp(const Rotator& a, const Rotator& b, float delta) noexcept
