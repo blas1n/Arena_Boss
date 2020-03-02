@@ -1,153 +1,167 @@
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <DirectXMath.h>
+#include <glm/vec2.hpp>
+#include <glm/glm.hpp>
 
 namespace ArenaBoss::Math
 {
-    class Vector2 final
+    template <class T, class P>
+    class TVector2 final
     {
     public:
-        static const Vector2 ONE;
-        static const Vector2 ZERO;
+        static const TVector2 ONE;
+        static const TVector2 ZERO;
 
-        static const Vector2 UP;
-        static const Vector2 DOWN;
+        static const TVector2 UP;
+        static const TVector2 DOWN;
 
-        static const Vector2 RIGHT;
-        static const Vector2 LEFT;
+        static const TVector2 RIGHT;
+        static const TVector2 LEFT;
 
     public:
         union
         {
-            DirectX::XMFLOAT2 value;
+            P value;
+
             struct
             {
-                float x;
-                float y;
+                T x;
+                T y;
             };
         };
 
     public:
-        Vector2() noexcept = default;
-        Vector2(const Vector2&) noexcept = default;
-        Vector2(Vector2&&) noexcept = default;
+        constexpr TVector2() noexcept : value() {}
+        constexpr TVector2(const TVector2&) noexcept = default;
+        constexpr TVector2(TVector2&&) noexcept = default;
 
-        explicit Vector2(float inX, float inY) noexcept
+        explicit constexpr TVector2(T inX, T inY) noexcept
             : value(inX, inY) {}
 
-        explicit Vector2(const float* elems) noexcept
-            : value(elems) {}
+        explicit constexpr TVector2(const T* elems) noexcept
+            : value(elems[0], elems[1]) {}
 
-        explicit Vector2(POINT point) noexcept
-            : x(static_cast<float>(point.x)),
-            y(static_cast<float>(point.y)) {}
-
-        Vector2(DirectX::FXMVECTOR vec) noexcept
-            : Vector2()
-        {
-            DirectX::XMStoreFloat2(&value, vec);
-        }
-
-        Vector2(const DirectX::XMFLOAT2& vec) noexcept
+        constexpr TVector2(const P& vec) noexcept
             : value(vec) {}
 
-        Vector2& operator=(const Vector2&) noexcept = default;
-        Vector2& operator=(Vector2&&) noexcept = default;
+        constexpr TVector2& operator=(const TVector2&) noexcept = default;
+        constexpr TVector2& operator=(TVector2&&) noexcept = default;
 
-        Vector2& operator=(DirectX::FXMVECTOR vec) noexcept;
-        Vector2& operator=(const DirectX::XMFLOAT2& vec) noexcept;
+        constexpr TVector2& operator=(const P& vec) noexcept { value = vec; }
 
-        inline operator DirectX::XMVECTOR() const noexcept { return DirectX::XMLoadFloat2(&value); }
-        inline operator float*() noexcept { return &value.x; }
-        inline operator const float*() const noexcept { return &value.x; }
+        constexpr operator P& () noexcept { return value; }
+        constexpr operator const P& () const noexcept { return value; }
+
+        constexpr operator float* () noexcept { return &x; }
+        constexpr operator const float* () const noexcept { return &x; }
 
         void Set(float inX, float inY) noexcept;
         void Set(const float* elems) noexcept;
 
-        float Length() const noexcept;
-        float LengthSqrt() const noexcept;
+        inline float Length() const noexcept { glm::sqrt(LengthSqrt()); }
+        inline float LengthSqrt() const noexcept { Dot(value, value); }
 
-        inline Vector2 Normalized() const noexcept
+        inline TVector2 Normalized() const noexcept
         {
-            return DirectX::XMVector2Normalize(*this);
+            return glm::normalize(value);
         }
 
         inline void Normalize() noexcept
         {
-            *this = DirectX::XMVector2Normalize(*this);
+            *this = Normalized();
         }
 
-        float& operator[](size_t idx);
-        float operator[](size_t idx) const;
+        inline float& operator[](size_t idx) { return value[idx]; }
+        inline float operator[](size_t idx) const { return value[idx]; }
 
-        inline Vector2& operator+=(const Vector2& other) noexcept
+        constexpr TVector2& operator+=(const TVector2& other) noexcept
         {
-            return Calc(other, &DirectX::XMVectorAdd);
+            value += other.value;
+            return *this;
         }
 
-        inline Vector2& operator-=(const Vector2& other) noexcept
+        constexpr TVector2& operator-=(const TVector2& other) noexcept
         {
-            return Calc(other, &DirectX::XMVectorSubtract);
+            value -= other.value;
+            return *this;
         }
 
-        inline Vector2& operator*=(const Vector2& other) noexcept
+        constexpr TVector2& operator*=(const TVector2& other) noexcept
         {
-            return Calc(other, &DirectX::XMVectorMultiply);
+            value *= other.value;
+            return *this;
         }
 
-        inline Vector2& operator*=(float scaler) noexcept
+        constexpr TVector2& operator*=(float scaler) noexcept
         {
-            return Calc(scaler, &DirectX::XMVectorMultiply);
+            value *= scaler;
+            return *this;
         }
 
-        inline Vector2& operator/=(const Vector2& other) noexcept
+        constexpr TVector2& operator/=(const TVector2& other) noexcept
         {
-            return Calc(other, &DirectX::XMVectorDivide);
+            value /= other.value;
+            return *this;
         }
 
-        inline Vector2& operator/=(float scaler) noexcept
+        constexpr TVector2& operator/=(float scaler) noexcept
         {
-            return Calc(scaler, &DirectX::XMVectorDivide);
+            value /= scaler;
+            return *this;
         }
 
-        inline static float Dot(const Vector2& lhs, const Vector2& rhs)
+        inline static float Dot(const TVector2& lhs, const TVector2& rhs)
         {
-            return DirectX::XMVectorGetX(DirectX::XMVector2Dot(lhs, rhs));
+            return glm::dot(lhs.value, rhs.value);
         }
 
     private:
-        friend bool operator==(const Vector2& lhs, const Vector2& rhs) noexcept;
-
-        using Operator = DirectX::XMVECTOR(XM_CALLCONV*)(DirectX::XMVECTOR, DirectX::XMVECTOR);
-
-        Vector2& Calc(const Vector2& other, Operator oper) noexcept;
-        Vector2& Calc(float scaler, Operator oper) noexcept;
+        friend bool operator==(const TVector2& lhs, const TVector2& rhs) noexcept;
     };
 
-    inline bool operator==(const Vector2& lhs, const Vector2& rhs) noexcept
+    template <class T, class P>
+    constexpr bool operator==(const TVector2<T, P>& lhs, const TVector2<T, P>& rhs) noexcept
     {
-        return DirectX::XMVector2Equal(lhs, rhs);
+        return lhs.value == rhs.value;
     }
 
-    inline bool operator!=(const Vector2& lhs, const Vector2& rhs) noexcept
+    template <class T, class P>
+    constexpr bool operator!=(const TVector2<T, P>& lhs, const TVector2<T, P>& rhs) noexcept
     {
         return !(lhs == rhs);
     }
 
-    inline Vector2 operator+(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } += rhs; }
-    inline Vector2 operator-(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } -= rhs; }
+    template <class T, class P>
+    inline TVector2<T, P> operator+(const TVector2<T, P>& lhs, const TVector2<T, P>& rhs) { return TVector2{ lhs } += rhs; }
 
-    inline Vector2 operator*(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } *= rhs; }
-    inline Vector2 operator*(const Vector2& lhs, float rhs) { return Vector2{ lhs } *= rhs; }
-    inline Vector2 operator*(float lhs, const Vector2& rhs) { return Vector2{ rhs } *= lhs; }
+    template <class T, class P>
+    inline TVector2<T, P> operator-(const TVector2<T, P>& lhs, const TVector2<T, P>& rhs) { return TVector2{ lhs } -= rhs; }
 
-    inline Vector2 operator/(const Vector2& lhs, const Vector2& rhs) { return Vector2{ lhs } /= rhs; }
-    inline Vector2 operator/(const Vector2& lhs, float rhs) { return Vector2{ lhs } /= rhs; }
+    template <class T, class P>
+    inline TVector2<T, P> operator*(const TVector2<T, P>& lhs, const TVector2<T, P>& rhs) { return TVector2{ lhs } *= rhs; }
 
-    inline float operator|(const Vector2& lhs, const Vector2& rhs) { return Vector2::Dot(lhs, rhs); }
+    template <class T, class P>
+    inline TVector2<T, P> operator*(const TVector2<T, P>& lhs, float rhs) { return TVector2{ lhs } *= rhs; }
 
-    inline Vector2 operator+(const Vector2& vec) noexcept { return vec; }
-    inline Vector2 operator-(const Vector2& vec) noexcept { return vec * -1.0f; }
+    template <class T, class P>
+    inline TVector2<T, P> operator*(float lhs, const TVector2<T, P>& rhs) { return TVector2{ rhs } *= lhs; }
+
+    template <class T, class P>
+    inline TVector2<T, P> operator/(const TVector2<T, P>& lhs, const TVector2<T, P>& rhs) { return TVector2{ lhs } /= rhs; }
+
+    template <class T, class P>
+    inline TVector2<T, P> operator/(const TVector2<T, P>& lhs, float rhs) { return TVector2{ lhs } /= rhs; }
+
+    template <class T, class P>
+    inline float operator|(const TVector2<T, P>& lhs, const TVector2<T, P>& rhs) { return TVector2::Dot(lhs, rhs); }
+
+    template <class T, class P>
+    inline TVector2<T, P> operator+(const TVector2<T, P>& vec) noexcept { return vec; }
+
+    template <class T, class P>
+    inline TVector2<T, P> operator-(const TVector2<T, P>& vec) noexcept { return vec * -1.0f; }
+
+    using Vector2 = TVector2<float, glm::vec2>;
+    using IntVector2 = TVector2<int32_t, glm::i32vec2>;
+    using UintVector2 = TVector2<uint32_t, glm::u32vec2>;
 }

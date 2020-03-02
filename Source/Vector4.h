@@ -1,148 +1,175 @@
 #pragma once
 
-#include <DirectXMath.h>
+#include <glm/vec4.hpp>
+#include <glm/glm.hpp>
 
 namespace ArenaBoss::Math
 {
-    class Vector4 final
+    template <class T, class P>
+    class TVector2;
+
+    template <class T, class P>
+    class TVector3;
+
+    template <class T, class P>
+    class TVector4 final
     {
     public:
-        static const Vector4 ONE;
-        static const Vector4 ZERO;
+        static const TVector4 ONE;
+        static const TVector4 ZERO;
 
     public:
         union
         {
-            DirectX::XMFLOAT4 value;
+            P value;
+
             struct
             {
-                float x;
-                float y;
-                float z;
-                float w;
+                T x;
+                T y;
+                T z;
+                T w;
             };
         };
 
     public:
-        Vector4() noexcept = default;
-        Vector4(const Vector4&) noexcept = default;
-        Vector4(Vector4&&) noexcept = default;
+        constexpr TVector4() noexcept : value() {}
+        constexpr TVector4(const TVector4&) noexcept = default;
+        constexpr TVector4(TVector4&&) noexcept = default;
 
-        explicit Vector4(float inX, float inY, float inZ, float inW) noexcept
+        explicit constexpr TVector4(T inX, T inY, T inZ, T inW) noexcept
             : value(inX, inY, inZ, inW) {}
 
-        explicit Vector4(const float* elems) noexcept
-            : value(elems) {}
+        explicit constexpr TVector4(const T* elems) noexcept
+            : value(elems[0], elems[1], elems[2], elems[3]) {}
 
-        Vector4(const class Vector2& xy, float z = 0.0f, float w = 0.0f) noexcept;
-        Vector4(const class Vector3& xyz, float w = 0.0f) noexcept;
+        TVector4(const TVector2<T, P>& xy, float z = 0.0f, float w = 0.0f) noexcept;
+        TVector4(const TVector3<T, P>& xyz, float w = 0.0f) noexcept;
 
-        Vector4(DirectX::FXMVECTOR vec) noexcept
-            : Vector4()
-        {
-            DirectX::XMStoreFloat4(&value, vec);
-        }
-
-        Vector4(const DirectX::XMFLOAT4& vec) noexcept
+        constexpr TVector4(const P& vec) noexcept
             : value(vec) {}
 
-        Vector4& operator=(const Vector4&) noexcept = default;
-        Vector4& operator=(Vector4&&) noexcept = default;
+        constexpr TVector4& operator=(const TVector4&) noexcept = default;
+        constexpr TVector4& operator=(TVector4&&) noexcept = default;
 
-        Vector4& operator=(DirectX::FXMVECTOR vec) noexcept;
-        Vector4& operator=(const DirectX::XMFLOAT4& vec) noexcept;
+        constexpr TVector4& operator=(const P& vec) noexcept { value = vec; }
 
-        inline operator DirectX::XMVECTOR() const noexcept { return DirectX::XMLoadFloat4(&value); }
-        inline operator float*() noexcept { return &value.x; }
-        inline operator const float*() const noexcept { return &value.x; }
-        operator Vector2() const noexcept;
-        operator Vector3() const noexcept;
+        constexpr operator P& () noexcept { return value; }
+        constexpr operator const P& () const noexcept { return value; }
+
+        constexpr operator float* () noexcept { return &x; }
+        constexpr operator const float* () const noexcept { return &x; }
+
+        operator TVector2<T, P>() const noexcept;
+        operator TVector3<T, P>() const noexcept;
 
         void Set(float inX, float inY, float inZ, float inW) noexcept;
         void Set(const float* elems) noexcept;
 
-        float Length() const noexcept;
-        float LengthSqrt() const noexcept;
+        inline float Length() const noexcept { glm::sqrt(LengthSqrt()); }
+        inline float LengthSqrt() const noexcept { Dot(value, value); }
 
-        inline Vector4 Normalized() const noexcept
+        inline TVector4 Normalized() const noexcept
         {
-            return DirectX::XMVector4Normalize(*this);
+            return glm::normalize(value);
         }
 
         inline void Normalize() noexcept
         {
-            *this = DirectX::XMVector4Normalize(*this);
+            *this = Normalized();
         }
 
-        float& operator[](size_t idx);
-        float operator[](size_t idx) const;
+        inline float& operator[](size_t idx) { return value[idx]; }
+        inline float operator[](size_t idx) const { return value[idx]; }
 
-        inline Vector4& operator+=(const Vector4& other) noexcept
+        constexpr TVector4& operator+=(const TVector4& other) noexcept
         {
-            return Calc(other, &DirectX::XMVectorAdd);
+            value += other.value;
+            return *this;
         }
 
-        inline Vector4& operator-=(const Vector4& other) noexcept
+        constexpr TVector4& operator-=(const TVector4& other) noexcept
         {
-            return Calc(other, &DirectX::XMVectorSubtract);
+            value -= other.value;
+            return *this;
         }
 
-        inline Vector4& operator*=(const Vector4& other) noexcept
+        constexpr TVector4& operator*=(const TVector4& other) noexcept
         {
-            return Calc(other, &DirectX::XMVectorMultiply);
+            value *= other.value;
+            return *this;
         }
 
-        inline Vector4& operator*=(float scaler) noexcept
+        constexpr TVector4& operator*=(float scaler) noexcept
         {
-            return Calc(scaler, &DirectX::XMVectorMultiply);
+            value *= scaler;
+            return *this;
         }
 
-        inline Vector4& operator/=(const Vector4& other) noexcept
+        constexpr TVector4& operator/=(const TVector4& other) noexcept
         {
-            return Calc(other, &DirectX::XMVectorDivide);
+            value /= other.value;
+            return *this;
         }
 
-        inline Vector4& operator/=(float scaler) noexcept
+        constexpr TVector4& operator/=(float scaler) noexcept
         {
-            return Calc(scaler, &DirectX::XMVectorDivide);
+            value /= scaler;
+            return *this;
         }
 
-        inline static float Dot(const Vector4& lhs, const Vector4& rhs)
+        inline static float Dot(const TVector4& lhs, const TVector4& rhs)
         {
-            return DirectX::XMVectorGetX(DirectX::XMVector4Dot(lhs, rhs));
+            return glm::dot(lhs.value, rhs.value);
         }
 
     private:
-        friend bool operator==(const Vector4& lhs, const Vector4& rhs) noexcept;
-
-        using Operator = DirectX::XMVECTOR(XM_CALLCONV*)(DirectX::XMVECTOR, DirectX::XMVECTOR);
-
-        Vector4& Calc(const Vector4& other, Operator oper) noexcept;
-        Vector4& Calc(float scaler, Operator oper) noexcept;
+        friend bool operator==(const TVector4& lhs, const TVector4& rhs) noexcept;
     };
 
-    inline bool operator==(const Vector4& lhs, const Vector4& rhs) noexcept
+    template <class T, class P>
+    constexpr bool operator==(const TVector4<T, P>& lhs, const TVector4<T, P>& rhs) noexcept
     {
-        return DirectX::XMVector4Equal(lhs, rhs);
+        return lhs.value == rhs.value;
     }
 
-    inline bool operator!=(const Vector4& lhs, const Vector4& rhs) noexcept
+    template <class T, class P>
+    constexpr bool operator!=(const TVector4<T, P>& lhs, const TVector4<T, P>& rhs) noexcept
     {
         return !(lhs == rhs);
     }
 
-    inline Vector4 operator+(const Vector4& lhs, const Vector4& rhs) { return Vector4{ lhs } += rhs; }
-    inline Vector4 operator-(const Vector4& lhs, const Vector4& rhs) { return Vector4{ lhs } -= rhs; }
+    template <class T, class P>
+    inline TVector4<T, P> operator+(const TVector4<T, P>& lhs, const TVector4<T, P>& rhs) { return TVector4{ lhs } += rhs; }
 
-    inline Vector4 operator*(const Vector4& lhs, const Vector4& rhs) { return Vector4{ lhs } *= rhs; }
-    inline Vector4 operator*(const Vector4& lhs, float rhs) { return Vector4{ lhs } *= rhs; }
-    inline Vector4 operator*(float lhs, const Vector4& rhs) { return Vector4{ rhs } *= lhs; }
+    template <class T, class P>
+    inline TVector4<T, P> operator-(const TVector4<T, P>& lhs, const TVector4<T, P>& rhs) { return TVector4{ lhs } -= rhs; }
 
-    inline Vector4 operator/(const Vector4& lhs, const Vector4& rhs) { return Vector4{ lhs } /= rhs; }
-    inline Vector4 operator/(const Vector4& lhs, float rhs) { return Vector4{ lhs } /= rhs; }
+    template <class T, class P>
+    inline TVector4<T, P> operator*(const TVector4<T, P>& lhs, const TVector4<T, P>& rhs) { return TVector4{ lhs } *= rhs; }
 
-    inline float operator|(const Vector4& lhs, const Vector4& rhs) { return Vector4::Dot(lhs, rhs); }
+    template <class T, class P>
+    inline TVector4<T, P> operator*(const TVector4<T, P>& lhs, float rhs) { return TVector4{ lhs } *= rhs; }
 
-    inline Vector4 operator+(const Vector4& vec) noexcept { return vec; }
-    inline Vector4 operator-(const Vector4& vec) noexcept { return vec * -1.0f; }
+    template <class T, class P>
+    inline TVector4<T, P> operator*(float lhs, const TVector4<T, P>& rhs) { return TVector4{ rhs } *= lhs; }
+
+    template <class T, class P>
+    inline TVector4<T, P> operator/(const TVector4<T, P>& lhs, const TVector4<T, P>& rhs) { return TVector4{ lhs } /= rhs; }
+
+    template <class T, class P>
+    inline TVector4<T, P> operator/(const TVector4<T, P>& lhs, float rhs) { return TVector4{ lhs } /= rhs; }
+
+    template <class T, class P>
+    inline float operator|(const TVector4<T, P>& lhs, const TVector4<T, P>& rhs) { return TVector4::Dot(lhs, rhs); }
+
+    template <class T, class P>
+    inline TVector4<T, P> operator+(const TVector4<T, P>& vec) noexcept { return vec; }
+
+    template <class T, class P>
+    inline TVector4<T, P> operator-(const TVector4<T, P>& vec) noexcept { return vec * -1.0f; }
+
+    using Vector4 = TVector4<float, glm::vec4>;
+    using IntVector4 = TVector4<int32_t, glm::i32vec4>;
+    using UintVector4 = TVector4<uint32_t, glm::u32vec4>;
 }

@@ -1,99 +1,55 @@
 #include "Vector3.h"
-#include <stdexcept>
-#include "MathFunctions.h"
 #include "Vector2.h"
 
 namespace ArenaBoss::Math
 {
-    const Vector3 Vector3::ONE = Vector3{ 1.0f, 1.0f, 1.0f };
-    const Vector3 Vector3::ZERO = Vector3{ 0.0f, 0.0f, 0.0f };
+    template <class T, class P>
+    const TVector3<T, P> TVector3<T, P>::ONE = TVector3<T, P>{ T{ 1 }, T{ 1 }, T{ 1 } };
 
-    const Vector3 Vector3::UP = Vector3{ 0.0f, 1.0f, 0.0f };
-    const Vector3 Vector3::DOWN = Vector3{ 0.0f, -1.0f, 0.0f };
+    template <class T, class P>
+    const TVector3<T, P> TVector3<T, P>::ZERO = TVector3<T, P>{ T{ 0 }, T{ 0 }, T{ 0 } };
 
-    const Vector3 Vector3::LEFT = Vector3{ -1.0f, 0.0f, 0.0f };
-    const Vector3 Vector3::RIGHT = Vector3{ 1.0f, 0.0f, 0.0f };
+    template <class T, class P>
+    const TVector3<T, P> TVector3<T, P>::UP = TVector3<T, P>{ T{ 0 }, T{ 1 }, T{ 0 } };
 
-    const Vector3 Vector3::FORWARD = Vector3{ 0.0f, 0.0f, 1.0f };
-    const Vector3 Vector3::BACKWARD = Vector3{ 0.0f, 0.0f, -1.0f };
+    template <class T, class P>
+    const TVector3<T, P> TVector3<T, P>::DOWN = TVector3<T, P>{ T{ 0 }, T{ -1 }, T{ 0 } };
 
-    Vector3::Vector3(const Vector2& xy, float z/*= 0.0f*/) noexcept
+    template <class T, class P>
+    const TVector3<T, P> TVector3<T, P>::LEFT = TVector3<T, P>{ T{ -1 }, T{ 0 }, T{ 0 } };
+
+    template <class T, class P>
+    const TVector3<T, P> TVector3<T, P>::RIGHT = TVector3<T, P>{ T{ 1 }, T{ 0 }, T{ 0 } };
+
+    template <class T, class P>
+    const TVector3<T, P> TVector3<T, P>::FORWARD = TVector3<T, P>{ T{ 0 }, T{ 0 }, T{ 1 } };
+
+    template <class T, class P>
+    const TVector3<T, P> TVector3<T, P>::BACKWARD = TVector3<T, P>{ T{ 0 }, T{ 0 }, T{ -1 } };
+
+    template <class T, class P>
+    TVector3<T, P>::TVector3(const TVector2<T, P>& xy, float z/*= 0.0f*/) noexcept
         : value(xy.x, xy.y, z) {}
 
-    Vector3& Vector3::operator=(DirectX::FXMVECTOR vec) noexcept
+    template <class T, class P>
+    TVector3<T, P>::operator TVector2<T, P>() const noexcept
     {
-        DirectX::XMStoreFloat3(&value, vec);
-        return *this;
+        return TVector2<T, P>{ x, y };
     }
 
-    Vector3& Vector3::operator=(const DirectX::XMFLOAT3& vec) noexcept
-    {
-        value = vec;
-        return *this;
-    }
-
-    Vector3::operator Vector2() const noexcept
-    {
-        return Vector2{ x, y };
-    }
-
-    void Vector3::Set(float inX, float inY, float inZ) noexcept
+    template <class T, class P>
+    void TVector3<T, P>::Set(float inX, float inY, float inZ) noexcept
     {
         x = inX;
         y = inY;
         z = inZ;
     }
 
-    void Vector3::Set(const float* elems) noexcept
+    template <class T, class P>
+    void TVector3<T, P>::Set(const float* elems) noexcept
     {
         x = elems[0];
         y = elems[1];
         z = elems[2];
-    }
-
-    float Vector3::Length() const noexcept
-    {
-        return Sqrt(LengthSqrt());
-    }
-
-    float Vector3::LengthSqrt() const noexcept
-    {
-        const auto len = DirectX::XMVector3LengthSq(*this);
-        return DirectX::XMVectorGetX(len);
-    }
-
-    float& Vector3::operator[](size_t idx)
-    {
-        switch (idx)
-        {
-        case 0: return x;
-        case 1: return y;
-        case 2: return z;
-        default: throw std::out_of_range{ "Index must be less than 3" };
-        }
-    }
-
-    float Vector3::operator[](size_t idx) const
-    {
-        switch (idx)
-        {
-        case 0: return x;
-        case 1: return y;
-        case 2: return z;
-        default: throw std::out_of_range{ "Index must be less than 3" };
-        }
-    }
-
-    Vector3& Vector3::Calc(const Vector3& other, Operator oper) noexcept
-    {
-        *this = oper(*this, other);
-        return *this;
-    }
-
-    Vector3& Vector3::Calc(float scaler, Operator oper) noexcept
-    {
-        const auto other = DirectX::XMVectorReplicate(scaler);
-        *this = oper(*this, other);
-        return *this;
     }
 }
