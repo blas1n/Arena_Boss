@@ -57,7 +57,7 @@ namespace ArenaBoss
 
 	void Shader::SetUniformValue(const std::string& name, const Math::Vector3& value) {
 		const auto loc = glGetUniformLocation(shaderProgram, name.c_str());
-		glUniform3fv(loc, 1, &value.x);
+		glUniform3fv(loc, 1, static_cast<const GLfloat*>(value));
 	}
 
 	void Shader::SetUniformValue(const std::string& name, const float value) {

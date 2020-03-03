@@ -1,6 +1,9 @@
 #pragma once
 
 #include <random>
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
 
 namespace ArenaBoss::Math
 {
@@ -46,9 +49,9 @@ namespace ArenaBoss::Math
 			return dist(generator);
 		}
 
-		class Vector2 GetRange(const Vector2& min, const Vector2& max) noexcept;
-		class Vector3 GetRange(const Vector3& min, const Vector3& max) noexcept;
-		class Vector4 GetRange(const Vector4& min, const Vector4& max) noexcept;
+		Vector2 GetRange(const Vector2& min, const Vector2& max) noexcept;
+		Vector3 GetRange(const Vector3& min, const Vector3& max) noexcept;
+		Vector4 GetRange(const Vector4& min, const Vector4& max) noexcept;
 		class Rotator GetRange(const Rotator& min, const Rotator& max) noexcept;
 
 	private:

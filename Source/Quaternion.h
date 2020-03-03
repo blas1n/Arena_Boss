@@ -1,18 +1,29 @@
 #pragma once
 
-#include "Vector4.h"
+#include <glm/gtc/quaternion.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 namespace ArenaBoss::Math
 {
+	template <class T, class P>
+	class TVector3;
+
+	template <class T, class P>
+	class TVector4;
+
+	using Vector3 = TVector3<float, glm::vec3>;
+	using Vector4 = TVector4<float, glm::vec4>;
+
 	class Quaternion final
 	{
 	public:
 		static const Quaternion IDENTITY;
-
+		
 	public:
 		union
 		{
-			Vector4 value;
+			glm::quat value;
 
 			struct
 			{
@@ -24,58 +35,65 @@ namespace ArenaBoss::Math
 		};
 
 	public:
-		Quaternion() noexcept = default;
+		constexpr Quaternion() noexcept : value() {}
 
-		Quaternion(const Quaternion&) noexcept = default;
-		Quaternion(Quaternion&&) noexcept = default;
+		constexpr Quaternion(const Quaternion&) noexcept = default;
+		constexpr Quaternion(Quaternion&&) noexcept = default;
 
-		explicit Quaternion(float inX, float inY, float inZ, float inW) noexcept
-			: value(inX, inY, inZ, inW) {}
+		explicit constexpr Quaternion(float inX, float inY, float inZ, float inW) noexcept
+			: value(inW, inX, inY, inZ) {}
 
-		explicit Quaternion(const float elems[4]) noexcept
-			: value(elems) {}
+		explicit constexpr Quaternion(const float* elems) noexcept
+			: value(elems[3], elems[0], elems[1], elems[2]) {}
 
-		explicit Quaternion(const Vector4& v) noexcept
-			: value(v) {}
+		constexpr Quaternion(const glm::quat& quat)
+			: value(quat) {}
 
-		explicit Quaternion(const class Vector3& axis, float angle) noexcept;
+		constexpr Quaternion(glm::quat&& quat)
+			: value(std::move(quat)) {}
+
+		explicit Quaternion(const Vector4& v) noexcept;
+
+		explicit Quaternion(const Vector3& axis, float angle) noexcept;
 
 		~Quaternion() = default;
 
-		Quaternion& operator=(const Quaternion&) noexcept = default;
-		Quaternion& operator=(Quaternion&&) noexcept = default;
+		constexpr Quaternion& operator=(const Quaternion&) noexcept = default;
+		constexpr Quaternion& operator=(Quaternion&&) noexcept = default;
 
-		inline explicit operator Vector4() const noexcept { return value; }
-		inline Vector4 AsVector() const noexcept { return value; }
+		explicit operator Vector4() const noexcept;
+		Vector4 AsVector() const noexcept;
 
-		inline void Set(float inX, float inY, float inZ, float inW) noexcept { value.Set(inX, inY, inZ, inW); }
-		inline void Set(const float elems[4]) noexcept { value.Set(elems); }
+		void Set(float inX, float inY, float inZ, float inW) noexcept;
+		
+		inline void Set(const float* elems) noexcept
+		{
+			Set(elems[0], elems[1], elems[2], elems[3]);
+		}
 
+		inline float& operator[](size_t idx) noexcept { return value[idx]; }
 		inline float operator[](size_t idx) const noexcept { return value[idx]; }
 
-		inline float Length() const noexcept { return value.Length(); }
-		inline float LengthSqrt() const noexcept { return value.LengthSqrt(); }
+		inline float Length() const noexcept { return glm::length(value); }
+		inline float LengthSqrt() const noexcept { return Dot(*this, *this); }
 
-		inline Quaternion Normalized() const noexcept { return Quaternion{ value.Normalized() }; }
-		inline void Normalize() noexcept { value.Normalize(); }
+		inline Quaternion Normalized() const noexcept { return Quaternion{ glm::normalize(value) }; }
+		inline void Normalize() noexcept { *this = Normalized(); }
 
 		inline Quaternion operator-() const noexcept
 		{
-			const auto vec = DirectX::XMLoadFloat4(&value.value);
-			return Quaternion{ DirectX::XMQuaternionConjugate(vec) };
+			return Quaternion{ glm::conjugate(value) };
 		}
 
 		inline Quaternion& operator*=(const Quaternion& other) noexcept
 		{
-			const auto lhs = DirectX::XMLoadFloat4(&value.value);
-			const auto rhs = DirectX::XMLoadFloat4(&other.value.value);
-			value = DirectX::XMQuaternionMultiply(lhs, rhs);
+			value *= other.value;
 			return *this;
 		}
 
 		inline static float Dot(const Quaternion& lhs, const Quaternion& rhs)
 		{
-			return Vector4::Dot(lhs.value, rhs.value);
+			return glm::dot(lhs.value, rhs.value);
 		}
 
 	private:

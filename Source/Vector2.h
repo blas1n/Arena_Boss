@@ -44,22 +44,29 @@ namespace ArenaBoss::Math
         constexpr TVector2(const P& vec) noexcept
             : value(vec) {}
 
+        constexpr TVector2(P&& vec) noexcept
+            : value(std::move(vec)) {}
+
         constexpr TVector2& operator=(const TVector2&) noexcept = default;
         constexpr TVector2& operator=(TVector2&&) noexcept = default;
 
         constexpr TVector2& operator=(const P& vec) noexcept { value = vec; }
 
-        constexpr operator P& () noexcept { return value; }
-        constexpr operator const P& () const noexcept { return value; }
+        constexpr operator P&() noexcept { return value; }
+        constexpr operator const P&() const noexcept { return value; }
 
-        constexpr operator float* () noexcept { return &x; }
-        constexpr operator const float* () const noexcept { return &x; }
+        constexpr operator T*() noexcept { return &x; }
+        constexpr operator const T*() const noexcept { return &x; }
 
-        void Set(float inX, float inY) noexcept;
-        void Set(const float* elems) noexcept;
+        void Set(T inX, T inY) noexcept;
+        
+        inline void Set(const T* elems) noexcept
+        {
+            Set(elems[0], elems[1]);
+        }
 
-        inline float Length() const noexcept { glm::sqrt(LengthSqrt()); }
-        inline float LengthSqrt() const noexcept { Dot(value, value); }
+        inline float Length() const noexcept { return glm::sqrt(LengthSqrt()); }
+        inline float LengthSqrt() const noexcept { return Dot(value, value); }
 
         inline TVector2 Normalized() const noexcept
         {

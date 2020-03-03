@@ -2,12 +2,12 @@
 
 #include "GL/glew.h"
 #include "Resource.h"
+#include "Vector3.h"
 
 namespace ArenaBoss
 {
 	namespace Math
 	{
-		class Vector3;
 		class Matrix4x4;
 	}
 

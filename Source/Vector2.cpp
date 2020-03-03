@@ -21,16 +21,9 @@ namespace ArenaBoss::Math
     const TVector2<T, P> TVector2<T, P>::RIGHT = TVector2<T, P>{ T{ 1 }, T{ 0 } };
 
     template <class T, class P>
-    void TVector2<T, P>::Set(float inX, float inY) noexcept
+    void TVector2<T, P>::Set(T inX, T inY) noexcept
     {
         x = inX;
         y = inY;
-    }
-
-    template <class T, class P>
-    void TVector2<T, P>::Set(const float* elems) noexcept
-    {
-        x = elems[0];
-        y = elems[1];
     }
 }

@@ -9,28 +9,20 @@ namespace ArenaBoss::Math
 	Rotator::Rotator(const Quaternion& quat)
 		: euler()
 	{
-        // Source : WikiPedia
-
-        const auto sinrCosp = 2.0f * (quat.w * quat.x + quat.y * quat.z);
-        const auto cosrCosp = 1.0f - 2.0f * (quat.x * quat.x + quat.y * quat.y);
-        roll = Atan2(sinrCosp, cosrCosp);
-
-        const auto sinp = 2.0f * (quat.w * quat.y + quat.z * quat.x);
-        pitch = Abs(sinp) >= 1 ? CopySign(PI / 2.0f, sinp) : Asin(sinp);
-
-        const auto sinyCosp = 2.0f * (quat.w * quat.z + quat.x * quat.y);
-        const auto cosyCosp = 1.0f - 2.0f * (quat.y * quat.y + quat.z * quat.z);
-        yaw = Atan2(sinyCosp, cosyCosp);
+		const auto vec = glm::eulerAngles(quat.value);
+		pitch = vec.x;
+		yaw = vec.y;
+		roll = vec.z;
 	}
 
-	Rotator::operator Quaternion() const noexcept { return AsQuaternion(); }
+	Rotator::operator Quaternion() const noexcept
+	{
+		return AsQuaternion();
+	}
 
 	Quaternion Rotator::AsQuaternion() const noexcept
 	{
-		Rotator rot{ pitch, yaw, roll };
-		rot = ToRadians(rot);
-		const auto vec =
-			DirectX::XMQuaternionRotationRollPitchYawFromVector(rot.AsVector());
-		return Quaternion{ vec };
+		const auto rot = ToRadians(Rotator{ pitch, yaw, roll });
+		return Quaternion{ glm::quat(rot.AsVector()) };
 	}
 }

@@ -42,6 +42,6 @@ namespace ArenaBoss::Math
 
 	Quaternion Slerp(const Quaternion& a, const Quaternion& b, float delta) noexcept
 	{
-		return Quaternion{ DirectX::XMQuaternionSlerp(a.AsVector(), b.AsVector(), delta) };
+		return Quaternion{ glm::mix(a.value, b.value, delta) };
 	}
 }

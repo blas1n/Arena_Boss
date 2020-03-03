@@ -64,7 +64,7 @@ namespace ArenaBoss
 		else
 			curButtonState = SDL_GetMouseState(&x, &y);
 
-		mousePos.Set(static_cast<float>(x), static_cast<float>(y));
+		mousePos.Set(x, y);
 	}
 
 	void InputManager::SetRelativeMouseMode(bool value)

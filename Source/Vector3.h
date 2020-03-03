@@ -53,6 +53,9 @@ namespace ArenaBoss::Math
         constexpr TVector3(const P& vec) noexcept
             : value(vec) {}
 
+        constexpr TVector3(P&& vec) noexcept
+            : value(std::move(vec)) {}
+
         constexpr TVector3& operator=(const TVector3&) noexcept = default;
         constexpr TVector3& operator=(TVector3&&) noexcept = default;
 
@@ -67,10 +70,14 @@ namespace ArenaBoss::Math
         operator TVector2<T, P>() const noexcept;
 
         void Set(float inX, float inY, float inZ) noexcept;
-        void Set(const float* elems) noexcept;
 
-        inline float Length() const noexcept { glm::sqrt(LengthSqrt()); }
-        inline float LengthSqrt() const noexcept { Dot(value, value); }
+        inline void Set(const float* elems) noexcept
+        {
+            Set(elems[0], elems[1], elems[2]);
+        }
+
+        inline float Length() const noexcept { return glm::sqrt(LengthSqrt()); }
+        inline float LengthSqrt() const noexcept { return Dot(value, value); }
 
         inline TVector3 Normalized() const noexcept
         {

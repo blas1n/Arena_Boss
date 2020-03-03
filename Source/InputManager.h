@@ -176,7 +176,7 @@ namespace ArenaBoss
             return !IsCurDown(key) && IsOldDown(key);
         }
 
-        inline Math::Vector2 GetMousePos() const noexcept
+        inline Math::IntVector2 GetMousePos() const noexcept
         {
             return mousePos;
         }
@@ -197,7 +197,7 @@ namespace ArenaBoss
         uint32_t curButtonState;
         uint32_t oldButtonState;
 
-        Math::Vector2 mousePos;
+        Math::IntVector2 mousePos;
         int32_t wheelMove;
 
         bool isRelative;

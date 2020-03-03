@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Vector3.h"
-#include <utility>
 
 namespace ArenaBoss::Math
 {
@@ -14,6 +13,7 @@ namespace ArenaBoss::Math
 		union
 		{
 			Vector3 euler;
+
 			struct
 			{
 				float roll;
@@ -23,30 +23,28 @@ namespace ArenaBoss::Math
 		};
 
 	public:
-		Rotator() noexcept = default;
-
-		Rotator(const Rotator&) noexcept = default;
-
-		Rotator(Rotator&&) noexcept = default;
+		constexpr Rotator() noexcept : euler() {}
+		constexpr Rotator(const Rotator&) noexcept = default;
+		constexpr Rotator(Rotator&&) noexcept = default;
 
 		Rotator(const class Quaternion& quat);
 
-		explicit Rotator(const Vector3& vec)
-			: euler{ vec } {}
+		explicit constexpr Rotator(const Vector3& vec)
+			: euler(vec) {}
 
-		explicit Rotator(Vector3&& vec) noexcept
-			: euler{ std::move(vec) } {}
+		explicit constexpr Rotator(Vector3&& vec) noexcept
+			: euler(std::move(vec)) {}
 
-		explicit Rotator(float x, float y, float z) noexcept
+		explicit constexpr Rotator(float x, float y, float z) noexcept
 			: euler(x, y, z) {}
 
-		explicit Rotator(const float elems[3]) noexcept
+		explicit constexpr Rotator(const float* elems) noexcept
 			: euler(elems) {}
 
 		~Rotator() = default;
 
-		Rotator& operator=(const Rotator&) noexcept = default;
-		Rotator& operator=(Rotator&&) noexcept = default;
+		constexpr Rotator& operator=(const Rotator&) noexcept = default;
+		constexpr Rotator& operator=(Rotator&&) noexcept = default;
 
 		inline explicit operator Vector3() const noexcept { return euler; }
 		operator Quaternion() const noexcept;
@@ -59,11 +57,12 @@ namespace ArenaBoss::Math
 			euler.Set(x, y, z);
 		}
 
-		inline void Set(const float elems[3]) noexcept
+		inline void Set(const float* elems) noexcept
 		{
 			euler.Set(elems);
 		}
 
+		inline float& operator[](size_t index) noexcept { return euler[index]; }
 		inline float operator[](size_t index) const noexcept { return euler[index]; }
 
 		inline Rotator operator-() const noexcept { return Rotator{ -euler }; }

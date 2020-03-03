@@ -38,13 +38,4 @@ namespace ArenaBoss::Math
         z = inZ;
         w = inW;
     }
-
-    template <class T, class P>
-    void TVector4<T, P>::Set(const float* elems) noexcept
-    {
-        x = elems[0];
-        y = elems[1];
-        z = elems[4];
-        w = elems[3];
-    }
 }
