@@ -1,3 +1,6 @@
+#ifndef __VECTOR4_H__
+#define __VECTOR4_H__
+
 #pragma once
 
 #include <glm/vec4.hpp>
@@ -15,8 +18,8 @@ namespace ArenaBoss::Math
     class TVector4 final
     {
     public:
-        static const TVector4 ONE;
-        static const TVector4 ZERO;
+        constexpr static const TVector4& ONE();
+        constexpr static const TVector4& ZERO();
 
     public:
         union
@@ -86,8 +89,8 @@ namespace ArenaBoss::Math
             *this = Normalized();
         }
 
-        inline float& operator[](size_t idx) { return value[idx]; }
-        inline float operator[](size_t idx) const { return value[idx]; }
+        inline float& operator[](glm::length_t idx) { return value[idx]; }
+        inline float operator[](glm::length_t idx) const { return value[idx]; }
 
         constexpr TVector4& operator+=(const TVector4& other) noexcept
         {
@@ -180,3 +183,7 @@ namespace ArenaBoss::Math
     using IntVector4 = TVector4<int32_t, glm::i32vec4>;
     using UintVector4 = TVector4<uint32_t, glm::u32vec4>;
 }
+
+#include "Vector4.hpp"
+
+#endif

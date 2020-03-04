@@ -1,3 +1,8 @@
+#ifndef __VECTOR4_HPP__
+#define __VECTOR4_HPP__
+
+#pragma once
+
 #include "Vector4.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -5,10 +10,18 @@
 namespace ArenaBoss::Math
 {
     template <class T, class P>
-    const TVector4<T, P> TVector4<T, P>::ONE = TVector4<T, P>{ T{ 1 }, T{ 1 }, T{ 1 }, T{ 1 } };
+    constexpr const TVector4<T, P>& TVector4<T, P>::ONE()
+    {
+        constexpr static auto vec = TVector4<T, P>{ T{ 1 }, T{ 1 }, T{ 1 }, T{ 1 } };
+        return vec;
+    }
 
     template <class T, class P>
-    const TVector4<T, P> TVector4<T, P>::ZERO = TVector4<T, P>{ T{ 0 }, T{ 0 }, T{ 0 }, T{ 0 } };
+    constexpr const TVector4<T, P>& TVector4<T, P>::ZERO()
+    {
+        constexpr static auto vec = TVector4<T, P>{ T{ 0 }, T{ 0 }, T{ 0 }, T{ 0 } };
+        return vec;
+    }
 
     template <class T, class P>
     TVector4<T, P>::TVector4(const TVector2<T, P>& xy, float z/*= 0.0f*/, float w/*= 0.0f*/) noexcept
@@ -39,3 +52,5 @@ namespace ArenaBoss::Math
         w = inW;
     }
 }
+
+#endif

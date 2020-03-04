@@ -1,3 +1,6 @@
+#ifndef __VECTOR3_H__
+#define __VECTOR3_H__
+
 #pragma once
 
 #include <glm/vec3.hpp>
@@ -12,17 +15,17 @@ namespace ArenaBoss::Math
     class TVector3 final
     {
     public:
-        static const TVector3 ONE;
-        static const TVector3 ZERO;
+        constexpr static const TVector3& ONE();
+        constexpr static const TVector3& ZERO();
 
-        static const TVector3 UP;
-        static const TVector3 DOWN;
+        constexpr static const TVector3& UP();
+        constexpr static const TVector3& DOWN();
 
-        static const TVector3 RIGHT;
-        static const TVector3 LEFT;
+        constexpr static const TVector3& RIGHT();
+        constexpr static const TVector3& LEFT();
 
-        static const TVector3 FORWARD;
-        static const TVector3 BACKWARD;
+        constexpr static const TVector3& FORWARD();
+        constexpr static const TVector3& BACKWARD();
 
     public:
         union
@@ -88,9 +91,9 @@ namespace ArenaBoss::Math
         {
             *this = Normalized();
         }
-
-        inline float& operator[](size_t idx) { return value[idx]; }
-        inline float operator[](size_t idx) const { return value[idx]; }
+        
+        inline float& operator[](glm::length_t idx) { return value[idx]; }
+        inline float operator[](glm::length_t idx) const { return value[idx]; }
 
         constexpr TVector3& operator+=(const TVector3& other) noexcept
         {
@@ -197,3 +200,7 @@ namespace ArenaBoss::Math
     using IntVector3 = TVector3<int32_t, glm::i32vec3>;
     using UintVector3 = TVector3<uint32_t, glm::u32vec3>;
 }
+
+#include "Vector3.hpp"
+
+#endif

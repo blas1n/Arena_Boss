@@ -4,7 +4,7 @@
 
 namespace ArenaBoss::Math
 {
-	const Rotator Rotator::ZERO = Rotator{ Vector3::ZERO };
+	const Rotator Rotator::ZERO = Rotator{ Vector3::ZERO() };
 
 	Rotator::Rotator(const Quaternion& quat)
 		: euler()

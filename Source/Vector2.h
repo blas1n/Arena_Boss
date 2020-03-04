@@ -1,3 +1,6 @@
+#ifndef __VECTOR2_H__
+#define __VECTOR2_H__
+
 #pragma once
 
 #include <glm/vec2.hpp>
@@ -9,14 +12,14 @@ namespace ArenaBoss::Math
     class TVector2 final
     {
     public:
-        static const TVector2 ONE;
-        static const TVector2 ZERO;
+        constexpr static const TVector2& ONE();
+        constexpr static const TVector2& ZERO();
 
-        static const TVector2 UP;
-        static const TVector2 DOWN;
+        constexpr static const TVector2& UP();
+        constexpr static const TVector2& DOWN();
 
-        static const TVector2 RIGHT;
-        static const TVector2 LEFT;
+        constexpr static const TVector2& RIGHT();
+        constexpr static const TVector2& LEFT();
 
     public:
         union
@@ -78,8 +81,8 @@ namespace ArenaBoss::Math
             *this = Normalized();
         }
 
-        inline float& operator[](size_t idx) { return value[idx]; }
-        inline float operator[](size_t idx) const { return value[idx]; }
+        inline float& operator[](glm::length_t idx) { return value[idx]; }
+        inline float operator[](glm::length_t idx) const { return value[idx]; }
 
         constexpr TVector2& operator+=(const TVector2& other) noexcept
         {
@@ -172,3 +175,7 @@ namespace ArenaBoss::Math
     using IntVector2 = TVector2<int32_t, glm::i32vec2>;
     using UintVector2 = TVector2<uint32_t, glm::u32vec2>;
 }
+
+#include "Vector2.hpp"
+
+#endif

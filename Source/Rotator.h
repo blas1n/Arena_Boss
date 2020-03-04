@@ -62,8 +62,8 @@ namespace ArenaBoss::Math
 			euler.Set(elems);
 		}
 
-		inline float& operator[](size_t index) noexcept { return euler[index]; }
-		inline float operator[](size_t index) const noexcept { return euler[index]; }
+		inline float& operator[](glm::length_t index) noexcept { return euler[index]; }
+		inline float operator[](glm::length_t index) const noexcept { return euler[index]; }
 
 		inline Rotator operator-() const noexcept { return Rotator{ -euler }; }
 

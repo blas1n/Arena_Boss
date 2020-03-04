@@ -71,8 +71,8 @@ namespace ArenaBoss::Math
 			Set(elems[0], elems[1], elems[2], elems[3]);
 		}
 
-		inline float& operator[](size_t idx) noexcept { return value[idx]; }
-		inline float operator[](size_t idx) const noexcept { return value[idx]; }
+		inline float& operator[](glm::length_t idx) noexcept { return value[idx]; }
+		inline float operator[](glm::length_t idx) const noexcept { return value[idx]; }
 
 		inline float Length() const noexcept { return glm::length(value); }
 		inline float LengthSqrt() const noexcept { return Dot(*this, *this); }
