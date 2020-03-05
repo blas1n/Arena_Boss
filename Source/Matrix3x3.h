@@ -1,21 +1,21 @@
 #pragma once
 
-#include <DirectXMath.h>
-#include <optional>
+#include <glm/mat3x3.hpp>
 
 namespace ArenaBoss::Math
 {
 	class Matrix3x3 final
 	{
 	public:
-		static const Matrix3x3 ONE;
-		static const Matrix3x3 ZERO;
-		static const Matrix3x3 IDENTITY;
+		constexpr static Matrix3x3 ONE();
+		constexpr static Matrix3x3 ZERO();
+		constexpr static Matrix3x3 IDENTITY();
 
 	public:
 		union
 		{
-			DirectX::XMFLOAT3X3 value;
+			glm::mat3 value;
+
 			struct
 			{
 				float m00, m01, m02;
@@ -25,11 +25,18 @@ namespace ArenaBoss::Math
 		};
 
 	public:
-		Matrix3x3() noexcept = default;
-		Matrix3x3(const Matrix3x3&) noexcept = default;
-		Matrix3x3(Matrix3x3&&) noexcept = default;
+		constexpr Matrix3x3() noexcept : value() {}
 
-		explicit Matrix3x3(
+		constexpr Matrix3x3(const Matrix3x3& other) noexcept
+			: value(other.value) {}
+
+		constexpr Matrix3x3(Matrix3x3&& other) noexcept
+			: value(std::move(other.value)) {}
+
+		explicit constexpr Matrix3x3(float scalar) noexcept
+			: value(scalar) {}
+
+		explicit constexpr Matrix3x3(
 			float inM00, float inM01, float inM02,
 			float inM10, float inM11, float inM12,
 			float inM20, float inM21, float inM22) noexcept
@@ -38,93 +45,146 @@ namespace ArenaBoss::Math
 				inM10, inM11, inM12,
 				inM20, inM21, inM22) {}
 
-		explicit Matrix3x3(const float* elems) noexcept
-			: value(elems) {}
+		explicit constexpr Matrix3x3(const float* elems) noexcept
+			: value(
+				elems[0], elems[1], elems[2],
+				elems[3], elems[4], elems[5],
+				elems[6], elems[7], elems[8]) {}
 
-		Matrix3x3(DirectX::FXMMATRIX mat) noexcept
-			: Matrix3x3()
-		{
-			DirectX::XMStoreFloat3x3(&value, mat);
-		}
+		explicit constexpr Matrix3x3(const float** elems) noexcept
+			: value(
+				elems[0][0], elems[0][1], elems[0][2],
+				elems[1][0], elems[1][1], elems[1][2],
+				elems[2][0], elems[2][1], elems[2][2]) {}
 
-		Matrix3x3(const DirectX::XMFLOAT3X3& mat) noexcept
+		constexpr Matrix3x3(const glm::mat3& mat) noexcept
 			: value(mat) {}
 
-		Matrix3x3& operator=(const Matrix3x3&) noexcept = default;
-		Matrix3x3& operator=(Matrix3x3&&) noexcept = default;
+		constexpr Matrix3x3(glm::mat3&& mat) noexcept
+			: value(std::move(mat)) {}
 
-		Matrix3x3& operator=(DirectX::FXMMATRIX mat) noexcept;
-		Matrix3x3& operator=(const DirectX::XMFLOAT3X3& mat) noexcept;
+		constexpr Matrix3x3& operator=(const Matrix3x3& other) noexcept
+		{
+			value = other.value;
+			return *this;
+		}
+
+		constexpr Matrix3x3& operator=(Matrix3x3&& other) noexcept
+		{
+			value = std::move(other.value);
+			return *this;
+		}
+
+		constexpr Matrix3x3& operator=(const glm::mat3& vec) noexcept
+		{
+			value = vec;
+			return *this;
+		}
+
+		constexpr Matrix3x3& operator=(glm::mat3&& vec) noexcept
+		{
+			value = std::move(vec);
+			return *this;
+		}
 	    
-		inline operator DirectX::XMMATRIX() const noexcept { return DirectX::XMLoadFloat3x3(&value); }
-		inline operator float*() noexcept { return value.m[0]; }
-		inline operator const float*() const noexcept { return value.m[0]; }
+		constexpr operator glm::mat3&() noexcept { return value; }
+		constexpr operator const glm::mat3&() const noexcept { return value; }
+
+		constexpr operator float*() noexcept { return &m00; }
+		constexpr operator const float*() const noexcept { return &m00; }
 
 		void Set(float inM00, float inM01, float inM02,
 			float inM10, float inM11, float inM12,
 			float inM20, float inM21, float inM22) noexcept;
 
-		void Set(const float* elems) noexcept;
+		inline void Set(const float* elems) noexcept
+		{
+			Set(elems[0], elems[1], elems[2],
+				elems[3], elems[4], elems[5],
+				elems[6], elems[7], elems[8]);
+		}
+
+		inline void Set(const float** elems) noexcept
+		{
+			Set(elems[0][0], elems[0][1], elems[0][2],
+				elems[1][0], elems[1][1], elems[1][2],
+				elems[2][0], elems[2][1], elems[2][2]);
+		}
 
 		inline Matrix3x3 Transpose() const noexcept
 		{
-			return DirectX::XMMatrixTranspose(*this);
+			return glm::transpose(value);
 		}
 
 		inline void Transposed() noexcept
 		{
-			*this = DirectX::XMMatrixTranspose(*this);
+			*this = Transpose();
 		}
 
-		std::optional<Matrix3x3> Invert() const noexcept;
-		bool Inverted() noexcept;
-
-		inline float& operator()(size_t row, size_t column) noexcept
+		inline Matrix3x3 Invert() const noexcept
 		{
-			return value(row, column);
+			return glm::inverse(value);
 		}
 
-		inline float operator()(size_t row, size_t column) const noexcept
+		inline void Inverted() noexcept
 		{
-			return value(row, column);
+			*this = Invert();
+		}
+
+		inline float& operator()(glm::length_t row, glm::length_t column) noexcept
+		{
+			return value[row][column];
+		}
+
+		inline float operator()(glm::length_t row, glm::length_t column) const noexcept
+		{
+			return value[row][column];
 		}
 
 		inline Matrix3x3& operator+=(const Matrix3x3& other) noexcept
 		{
-			return Calc(other, &DirectX::XMMATRIX::operator+=);
+			value += other.value;
+			return *this;
 		}
 
 		inline Matrix3x3& operator-=(const Matrix3x3& other) noexcept
 		{
-			return Calc(other, &DirectX::XMMATRIX::operator-=);
+			value -= other.value;
+			return *this;
 		}
 
 		inline Matrix3x3& operator*=(const Matrix3x3& other) noexcept
 		{
-			return Calc(other, &DirectX::XMMATRIX::operator*=);
+			value *= other.value;
+			return *this;
 		}
 
 		inline Matrix3x3& operator*=(float scaler) noexcept
 		{
-			return Calc(scaler, &DirectX::XMMATRIX::operator*=);
+			value *= scaler;
+			return *this;
+		}
+
+		inline Matrix3x3& operator/=(const Matrix3x3& other) noexcept
+		{
+			value /= other.value;
+			return *this;
 		}
 
 		inline Matrix3x3& operator/=(float scaler) noexcept
 		{
-			return Calc(scaler, &DirectX::XMMATRIX::operator/=);
+			value /= scaler;
+			return *this;
 		}
 
 	private:
 		friend bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept;
-
-		using MatrixOperator = DirectX::XMMATRIX&(XM_CALLCONV DirectX::XMMATRIX::*)(DirectX::XMMATRIX);
-		using ScalerOperator = DirectX::XMMATRIX&(DirectX::XMMATRIX::*)(float);
-
-		Matrix3x3& Calc(const Matrix3x3& other, MatrixOperator oper) noexcept;
-		Matrix3x3& Calc(float scaler, ScalerOperator oper) noexcept;
 	};
 
-	bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept;
+	inline bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept
+	{
+		return lhs.value == rhs.value;
+	}
 
 	inline bool operator!=(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept
 	{
@@ -139,6 +199,7 @@ namespace ArenaBoss::Math
 	inline Matrix3x3 operator*(const Matrix3x3& lhs, float rhs) { return Matrix3x3{ lhs } *= rhs; }
 	inline Matrix3x3 operator*(float lhs, const Matrix3x3& rhs) { return Matrix3x3{ rhs } *= lhs; }
 
+	inline Matrix3x3 operator/(const Matrix3x3& lhs, const Matrix3x3& rhs) { return Matrix3x3{ lhs } /= rhs; }
 	inline Matrix3x3 operator/(const Matrix3x3& lhs, float rhs) { return Matrix3x3{ lhs } /= rhs; }
 
 	inline Matrix3x3 operator+(const Matrix3x3& vec) noexcept { return vec; }
