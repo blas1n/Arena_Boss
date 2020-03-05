@@ -37,8 +37,11 @@ namespace ArenaBoss::Math
 	public:
 		constexpr Quaternion() noexcept : value() {}
 
-		constexpr Quaternion(const Quaternion&) noexcept = default;
-		constexpr Quaternion(Quaternion&&) noexcept = default;
+		constexpr Quaternion(const Quaternion& other) noexcept
+			: value(other.value) {}
+
+		constexpr Quaternion(Quaternion&& other) noexcept
+			: value(std::move(other.value)) {}
 
 		explicit constexpr Quaternion(float inX, float inY, float inZ, float inW) noexcept
 			: value(inW, inX, inY, inZ) {}
@@ -58,8 +61,17 @@ namespace ArenaBoss::Math
 
 		~Quaternion() = default;
 
-		constexpr Quaternion& operator=(const Quaternion&) noexcept = default;
-		constexpr Quaternion& operator=(Quaternion&&) noexcept = default;
+		constexpr Quaternion& operator=(const Quaternion& other) noexcept
+		{
+			value = other.value;
+			return *this;
+		}
+
+		constexpr Quaternion& operator=(Quaternion&& other) noexcept
+		{
+			value = std::move(other.value);
+			return *this;
+		}
 
 		explicit operator Vector4() const noexcept;
 		Vector4 AsVector() const noexcept;

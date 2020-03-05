@@ -24,8 +24,12 @@ namespace ArenaBoss::Math
 
 	public:
 		constexpr Rotator() noexcept : euler() {}
-		constexpr Rotator(const Rotator&) noexcept = default;
-		constexpr Rotator(Rotator&&) noexcept = default;
+
+		constexpr Rotator(const Rotator& other) noexcept
+			: euler(other.euler) {}
+
+		constexpr Rotator(Rotator&& other) noexcept
+			: euler(std::move(other.euler)) {}
 
 		Rotator(const class Quaternion& quat);
 
@@ -43,8 +47,17 @@ namespace ArenaBoss::Math
 
 		~Rotator() = default;
 
-		constexpr Rotator& operator=(const Rotator&) noexcept = default;
-		constexpr Rotator& operator=(Rotator&&) noexcept = default;
+		constexpr Rotator& operator=(const Rotator& other) noexcept
+		{
+			euler = other.euler;
+			return *this;
+		}
+
+		constexpr Rotator& operator=(Rotator&& other) noexcept
+		{
+			euler = std::move(other.euler);
+			return *this;
+		}
 
 		inline explicit operator Vector3() const noexcept { return euler; }
 		operator Quaternion() const noexcept;

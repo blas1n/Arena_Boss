@@ -12,14 +12,14 @@ namespace ArenaBoss::Math
     class TVector2 final
     {
     public:
-        constexpr static const TVector2& ONE();
-        constexpr static const TVector2& ZERO();
+        constexpr static TVector2 ONE();
+        constexpr static TVector2 ZERO();
 
-        constexpr static const TVector2& UP();
-        constexpr static const TVector2& DOWN();
+        constexpr static TVector2 UP();
+        constexpr static TVector2 DOWN();
 
-        constexpr static const TVector2& RIGHT();
-        constexpr static const TVector2& LEFT();
+        constexpr static TVector2 RIGHT();
+        constexpr static TVector2 LEFT();
 
     public:
         union
@@ -35,8 +35,15 @@ namespace ArenaBoss::Math
 
     public:
         constexpr TVector2() noexcept : value() {}
-        constexpr TVector2(const TVector2&) noexcept = default;
-        constexpr TVector2(TVector2&&) noexcept = default;
+
+        constexpr TVector2(const TVector2& other) noexcept
+            : value(other.value) {}
+
+        constexpr TVector2(TVector2&& other) noexcept
+            : value(std::move(other.value)) {}
+
+        explicit constexpr TVector2(T scalar) noexcept
+            : value(scalar) {}
 
         explicit constexpr TVector2(T inX, T inY) noexcept
             : value(inX, inY) {}
@@ -50,10 +57,29 @@ namespace ArenaBoss::Math
         constexpr TVector2(P&& vec) noexcept
             : value(std::move(vec)) {}
 
-        constexpr TVector2& operator=(const TVector2&) noexcept = default;
-        constexpr TVector2& operator=(TVector2&&) noexcept = default;
+        constexpr TVector2& operator=(const TVector2& other) noexcept
+        {
+            value = other.value;
+            return *this;
+        }
 
-        constexpr TVector2& operator=(const P& vec) noexcept { value = vec; }
+        constexpr TVector2& operator=(TVector2&& other) noexcept
+        {
+            value = std::move(other.value);
+            return *this;
+        }
+
+        constexpr TVector2& operator=(const P& vec) noexcept
+        {
+            value = vec;
+            return *this;
+        }
+
+        constexpr TVector2& operator=(P&& vec) noexcept
+        {
+            value = std::move(vec);
+            return *this;
+        }
 
         constexpr operator P&() noexcept { return value; }
         constexpr operator const P&() const noexcept { return value; }

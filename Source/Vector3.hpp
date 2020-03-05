@@ -61,6 +61,10 @@ namespace ArenaBoss::Math
         : value(xy.x, xy.y, z) {}
 
     template <class T, class P>
+    TVector3<T, P>& TVector3<T, P>::operator=(const TVector2<T, P>& xy) noexcept
+        : value(xy.x, xy.y, 0.0f) {}
+
+    template <class T, class P>
     TVector3<T, P>::operator TVector2<T, P>() const noexcept
     {
         return TVector3<T, P>{ x, y };

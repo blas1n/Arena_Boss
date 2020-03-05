@@ -37,8 +37,15 @@ namespace ArenaBoss::Math
 
     public:
         constexpr TVector4() noexcept : value() {}
-        constexpr TVector4(const TVector4&) noexcept = default;
-        constexpr TVector4(TVector4&&) noexcept = default;
+
+        constexpr TVector4(const TVector4& other) noexcept
+            : value(other.value) {}
+
+        constexpr TVector4(TVector4&& other) noexcept
+            : value(std::move(other.value)) {}
+
+        explicit constexpr TVector4(T scalar) noexcept
+            : value(scalar) {}
 
         explicit constexpr TVector4(T inX, T inY, T inZ, T inW) noexcept
             : value(inX, inY, inZ, inW) {}
@@ -58,7 +65,20 @@ namespace ArenaBoss::Math
         constexpr TVector4& operator=(const TVector4&) noexcept = default;
         constexpr TVector4& operator=(TVector4&&) noexcept = default;
 
-        constexpr TVector4& operator=(const P& vec) noexcept { value = vec; }
+        TVector4& operator=(const TVector2<T, P>& xy) noexcept;
+        TVector4& operator=(const TVector3<T, P>& xyz) noexcept;
+
+        constexpr TVector4& operator=(const P& vec) noexcept
+        {
+            value = vec;
+            return *this;
+        }
+
+        constexpr TVector4& operator=(P&& vec) noexcept
+        {
+            value = std::move(vec);
+            return *this;
+        }
 
         constexpr operator P&() noexcept { return value; }
         constexpr operator const P&() const noexcept { return value; }
