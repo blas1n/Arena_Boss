@@ -8,60 +8,52 @@
 
 namespace ArenaBoss::Math
 {
-   template <class T, class P>
-    constexpr const TVector3<T, P>& TVector3<T, P>::ONE()
+    template <class T, class P>
+    constexpr TVector3<T, P> TVector3<T, P>::ONE()
     {
-        constexpr static auto vec = TVector3<T, P>{ T{ 1 }, T{ 1 }, T{ 1 } };
-        return vec;
+        return TVector3<T, P>{ T{ 1 } };
     }
 
     template <class T, class P>
-    constexpr const TVector3<T, P>& TVector3<T, P>::ZERO()
+    constexpr TVector3<T, P> TVector3<T, P>::ZERO()
     {
-        constexpr static auto vec = TVector3<T, P>{ T{ 0 }, T{ 0 }, T{ 0 } };
-        return vec;
+        return TVector3<T, P>{ T{ 0 } };
     }
 
     template <class T, class P>
-    constexpr const TVector3<T, P>& TVector3<T, P>::UP()
+    constexpr TVector3<T, P> TVector3<T, P>::UP()
     {
-        constexpr static auto vec = TVector3<T, P>{ T{ 0 }, T{ 1 }, T{ 0 } };
-        return vec;
+        return TVector3<T, P>{ T{ 0 }, T{ 1 }, T{ 0 } };
     }
 
     template <class T, class P>
-    constexpr const TVector3<T, P>& TVector3<T, P>::DOWN()
+    constexpr TVector3<T, P> TVector3<T, P>::DOWN()
     {
-        constexpr static auto vec = TVector3<T, P>{ T{ 0 }, T{ -1 }, T{ 0 } };
-        return vec;
+        return TVector3<T, P>{ T{ 0 }, T{ -1 }, T{ 0 } };
     }
 
     template <class T, class P>
-    constexpr const TVector3<T, P>& TVector3<T, P>::RIGHT()
+    constexpr TVector3<T, P> TVector3<T, P>::RIGHT()
     {
-        constexpr static auto vec = TVector3<T, P>{ T{ 1 }, T{ 0 }, T{ 0 } };
-        return vec;
+        return TVector3<T, P>{ T{ 1 }, T{ 0 }, T{ 0 } };
     }
 
     template <class T, class P>
-    constexpr const TVector3<T, P>& TVector3<T, P>::FORWARD()
+    constexpr TVector3<T, P> TVector3<T, P>::LEFT()
     {
-        constexpr static auto vec = TVector3<T, P>{ T{ 0 }, T{ 0 }, T{ 1 } };
-        return vec;
+        return TVector3<T, P>{ T{ -1 }, T{ 0 }, T{ 0 } };
     }
 
     template <class T, class P>
-    constexpr const TVector3<T, P>& TVector3<T, P>::BACKWARD()
+    constexpr TVector3<T, P> TVector3<T, P>::FORWARD()
     {
-        constexpr static auto vec = TVector3<T, P>{ T{ 0 }, T{ 0 }, T{ -1 } };
-        return vec;
+        return TVector3<T, P>{ T{ 0 }, T{ 0 }, T{ 1 } };
     }
 
     template <class T, class P>
-    constexpr const TVector3<T, P>& TVector3<T, P>::LEFT()
+    constexpr TVector3<T, P> TVector3<T, P>::BACKWARD()
     {
-        constexpr static auto vec = TVector3<T, P>{ T{ 0 }, T{ 0 }, T{ -1 } };
-        return vec;
+        return TVector3<T, P>{ T{ 0 }, T{ 0 }, T{ -1 } };
     }
 
     template <class T, class P>

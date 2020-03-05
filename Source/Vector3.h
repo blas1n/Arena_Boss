@@ -15,17 +15,17 @@ namespace ArenaBoss::Math
     class TVector3 final
     {
     public:
-        constexpr static const TVector3& ONE();
-        constexpr static const TVector3& ZERO();
+        constexpr static TVector3 ONE();
+        constexpr static TVector3 ZERO();
 
-        constexpr static const TVector3& UP();
-        constexpr static const TVector3& DOWN();
+        constexpr static TVector3 UP();
+        constexpr static TVector3 DOWN();
 
-        constexpr static const TVector3& RIGHT();
-        constexpr static const TVector3& LEFT();
+        constexpr static TVector3 RIGHT();
+        constexpr static TVector3 LEFT();
 
-        constexpr static const TVector3& FORWARD();
-        constexpr static const TVector3& BACKWARD();
+        constexpr static TVector3 FORWARD();
+        constexpr static TVector3 BACKWARD();
 
     public:
         union

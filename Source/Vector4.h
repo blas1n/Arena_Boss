@@ -18,8 +18,8 @@ namespace ArenaBoss::Math
     class TVector4 final
     {
     public:
-        constexpr static const TVector4& ONE();
-        constexpr static const TVector4& ZERO();
+        constexpr static TVector4 ONE();
+        constexpr static TVector4 ZERO();
 
     public:
         union

@@ -10,16 +10,16 @@
 namespace ArenaBoss::Math
 {
     template <class T, class P>
-    constexpr const TVector4<T, P>& TVector4<T, P>::ONE()
+    constexpr TVector4<T, P> TVector4<T, P>::ONE()
     {
-        constexpr static auto vec = TVector4<T, P>{ T{ 1 }, T{ 1 }, T{ 1 }, T{ 1 } };
+        constexpr static auto vec = TVector4<T, P>{ T{ 1 } };
         return vec;
     }
 
     template <class T, class P>
-    constexpr const TVector4<T, P>& TVector4<T, P>::ZERO()
+    constexpr TVector4<T, P> TVector4<T, P>::ZERO()
     {
-        constexpr static auto vec = TVector4<T, P>{ T{ 0 }, T{ 0 }, T{ 0 }, T{ 0 } };
+        constexpr static auto vec = TVector4<T, P>{ T{ 0 } };
         return vec;
     }
 
