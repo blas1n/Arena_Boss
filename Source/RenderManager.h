@@ -40,6 +40,8 @@ namespace ArenaBoss
 		void UnregisterComponent(MeshDrawableComponent* component);
 		void UnregisterComponent(SpriteDrawableComponent* component);
 
+		void GenerateSpriteResource();
+
 	private:
 		using WindowAccessor = Accessor<WindowManager>;
 		using ResourceAccessor = Accessor<ResourceManager>;
@@ -52,5 +54,8 @@ namespace ArenaBoss
 
 		ResourceManager& resourceManager;
 		SDL_GLContext context;
+
+		uint32_t width;
+		uint32_t height;
 	};
 }
