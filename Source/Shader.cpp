@@ -66,7 +66,7 @@ namespace ArenaBoss
 	}
 
 	bool Shader::CompileShader(const std::string& fileName, GLenum shaderType, GLuint& outShader) {
-		std::ifstream shaderFile{ fileName };
+		std::ifstream shaderFile{ "Shader\\" + fileName };
 
 		if (!shaderFile.is_open()) {
 			Log("Shader file not found: %s", fileName.c_str());
