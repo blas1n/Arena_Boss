@@ -14,12 +14,19 @@ namespace ArenaBoss
 
 	void ResourceManager::RegisterResource(Resource* resource)
 	{
-		const auto iter = IteratorFinder::
-			FindLowerIterator(resources,resource->GetName());
+		try
+		{
+			const auto iter = IteratorFinder::
+				FindLowerIterator(resources, resource->GetName());
 
-		resources.emplace_back(std::move(resource));
-		std::rotate(resources.rbegin(), resources.rbegin() + 1,
-			std::reverse_iterator{ iter });
+			resources.emplace_back(std::move(resource));
+			std::rotate(resources.rbegin(), resources.rbegin() + 1,
+				std::reverse_iterator{ iter });
+		}
+		catch (std::exception&)
+		{
+			resources.emplace_back(std::move(resource));
+		}
 	}
 
 	Resource* ResourceManager::FindResource(const std::string& name, const std::string& resourceName)

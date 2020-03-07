@@ -66,6 +66,7 @@ namespace ArenaBoss
 		delete sceneManager;
 		delete inputManager;
 		delete renderManager;
+		delete resourceManager;
 		delete windowManager;
 		SDL_Quit();
 	}
