@@ -17,6 +17,9 @@ namespace ArenaBoss
 
 		virtual ~Component() = default;
 
+		virtual void Init() = 0;
+		virtual void Release() = 0;
+
 		inline static const std::string& StaticClassName() noexcept
 		{
 			static const std::string name{ "Component" };

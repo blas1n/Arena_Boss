@@ -3,8 +3,17 @@
 
 namespace ArenaBoss
 {
-	void Entity::Init() {}
-	void Entity::Release() {}
+	void Entity::Init()
+	{
+		for (auto* component : components)
+			component->Init();
+	}
+
+	void Entity::Release()
+	{
+		for (auto* component : components)
+			component->Release();
+	}
 
 	Component* Entity::FindComponent(const std::string& componentName)
 	{
