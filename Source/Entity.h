@@ -41,7 +41,7 @@ namespace ArenaBoss
 		template <class ComponentType>
 		ComponentType& AddComponent()
 		{
-			auto* component = GetManager().CreateComponent<ComponentType>();
+			auto* component = GetManager().CreateComponent<ComponentType>(this);
 			components.push_back(component);
 			return component;
 		}

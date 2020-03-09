@@ -26,9 +26,9 @@ namespace ArenaBoss
 		void Update();
 
 		template <class ComponentType>
-		ComponentType* CreateComponent()
+		ComponentType* CreateComponent(class Entity* inEntity)
 		{
-			auto* component = new ComponentType{};
+			auto* component = new ComponentType{ inEntity };
 			RegisterComponent(component);
 			return component;
 		}

@@ -17,8 +17,8 @@ namespace ArenaBoss
 
 		virtual ~Component() = default;
 
-		virtual void Init() = 0;
-		virtual void Release() = 0;
+		virtual void Init() {}
+		virtual void Release() {}
 
 		inline static const std::string& StaticClassName() noexcept
 		{
@@ -32,11 +32,10 @@ namespace ArenaBoss
 		}
 
 		Entity* GetEntity() noexcept { return entity; }
-		void SetEntity(Entity* inEntity) noexcept { entity = inEntity; }
 
 	private:
 		friend class ComponentManager;
-		Component() = default;
+		Component(Entity* inEntity) : entity(inEntity) {}
 
 		Entity* entity;
 	};
