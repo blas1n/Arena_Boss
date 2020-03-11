@@ -10,7 +10,7 @@ namespace ArenaBoss
 	class SceneManager final
 	{
 	public:
-		SceneManager() = default;
+		SceneManager();
 
 		SceneManager(const SceneManager&) = delete;
 		SceneManager(SceneManager&&) = delete;
@@ -20,17 +20,17 @@ namespace ArenaBoss
 
 		~SceneManager() = default;
 
-		Scene& CreateScene(const std::string& name);
-		void ReserveScene(const std::string& name);
-		void RemoveScene(const std::string& name);
+		void ReserveScene(const std::string& inName);
+		void ReserveScene(std::string&& inName);
 
-		Scene& GetCurrentScene();
+		inline Scene& GetScene() noexcept { return *scene; }
+		inline const Scene& GetScene() const noexcept { return *scene; }
+
 		void Update();
 
 	private:
-		std::vector<Scene*> scenes;
-
-		Scene* curScene = nullptr;
-		Scene* reservedScene = nullptr;
+		Scene* scene;
+		std::string name;
+		bool isReserved;
 	};
 }

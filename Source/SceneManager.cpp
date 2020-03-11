@@ -6,45 +6,27 @@
 
 namespace ArenaBoss
 {
-	Scene& SceneManager::CreateScene(const std::string& name)
-	{
-		const auto iter = IteratorFinder::FindLowerIterator(scenes, name);
+	SceneManager::SceneManager()
+		: scene(new Scene{}), name(), isReserved() {}
 
-		scenes.emplace_back(new Scene{ name });
-		std::rotate(scenes.rbegin(), scenes.rbegin() + 1, std::reverse_iterator{ iter });
-		return **iter;
+	void SceneManager::ReserveScene(const std::string& inName)
+	{
+		name = inName;
+		isReserved = true;
 	}
 
-	void SceneManager::ReserveScene(const std::string& name)
+	void SceneManager::ReserveScene(std::string&& inName)
 	{
-		const auto iter = IteratorFinder::FindSameIterator(scenes, name);
-		reservedScene = *iter;
-	}
-
-	void SceneManager::RemoveScene(const std::string& name)
-	{
-		const auto iter = IteratorFinder::FindSameIterator(scenes, name);
-		delete *iter;
-		scenes.erase(iter);
-	}
-
-	Scene& SceneManager::GetCurrentScene()
-	{
-		if (curScene == nullptr)
-			throw std::exception{ "The current scene does not exist" };
-
-		return *curScene;
+		name = std::move(inName);
+		isReserved = true;
 	}
 
 	void SceneManager::Update()
 	{
-		if (reservedScene)
+		if (isReserved)
 		{
-			if (curScene)
-				curScene->Release();
-
-			reservedScene->Init();
-			curScene = std::exchange(reservedScene, nullptr);
+			scene->Load(std::move(name));
+			isReserved = true;
 		}
 	}
 }

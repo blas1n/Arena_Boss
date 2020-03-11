@@ -3,18 +3,16 @@
 
 namespace ArenaBoss
 {
-	void Scene::Init()
+	Scene::Scene()
+		: name(), entities(), isAvailable(false) {}
+
+	void Scene::Load(const std::string& inName)
 	{
-		for (auto& entity : entities)
-			entity->Init();
+		name = inName;
 	}
 
-	void Scene::Release()
+	void Scene::Save()
 	{
-		for (auto& entity : entities)
-			entity->Release();
-	}
 
-	Scene::Scene(const std::string& inName)
-		: name(inName) {}
+	}
 }

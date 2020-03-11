@@ -10,8 +10,6 @@ namespace ArenaBoss
 	class Scene final
 	{
 	public:
-		Scene() = delete;
-		
 		Scene(const Scene&) = delete;
 		Scene(Scene&&) = default;
 
@@ -20,46 +18,19 @@ namespace ArenaBoss
 
 		~Scene() = default;
 
-		void Init();
-		void Release();
-
 		inline const std::string& GetName() const noexcept { return name; }
+		inline bool IsAvailable() const noexcept { return isAvailable; }
 
 	private:
-		friend bool operator==(const Scene& lhs, const Scene& rhs);
-		friend bool operator<(const Scene& lhs, const Scene& rhs);
-
-		friend bool operator==(const Scene& lhs, const std::string& rhs);
-		friend bool operator<(const Scene& lhs, const std::string& rhs);
-
-		friend bool operator==(const std::string& lhs, const Scene& rhs);
-		friend bool operator<(const std::string& lhs, const Scene& rhs);
-
 		friend class SceneManager;
-		Scene(const std::string& inName);
+		Scene();
+
+		void Load(const std::string& inName);
+		void Save();
 
 		std::string name;
 		std::vector<Entity*> entities;
+
+		bool isAvailable;
 	};
-
-	inline bool operator==(const Scene& lhs, const Scene& rhs) { return lhs.name == rhs.name; }
-	inline bool operator!=(const Scene& lhs, const Scene& rhs) { return !(lhs == rhs); }
-	inline bool operator<(const Scene& lhs, const Scene& rhs) { return lhs.name < rhs.name; }
-	inline bool operator>(const Scene& lhs, const Scene& rhs) { return rhs < lhs; }
-	inline bool operator<=(const Scene& lhs, const Scene& rhs) { return !(rhs < lhs); }
-	inline bool operator>=(const Scene& lhs, const Scene& rhs) { return !(lhs < rhs); }
-
-	inline bool operator==(const Scene& lhs, const std::string& rhs) { return lhs.name == rhs; }
-	inline bool operator!=(const Scene& lhs, const std::string& rhs) { return !(lhs == rhs); }
-	inline bool operator<(const Scene& lhs, const std::string& rhs) { return lhs.name < rhs; }
-	inline bool operator>(const Scene& lhs, const std::string& rhs) { return rhs < lhs; }
-	inline bool operator<=(const Scene& lhs, const std::string& rhs) { return !(rhs < lhs); }
-	inline bool operator>=(const Scene& lhs, const std::string& rhs) { return !(lhs < rhs); }
-
-	inline bool operator==(const std::string& lhs, const Scene& rhs) { return lhs == rhs.name; }
-	inline bool operator!=(const std::string& lhs, const Scene& rhs) { return !(lhs == rhs); }
-	inline bool operator<(const std::string& lhs, const Scene& rhs) { return lhs < rhs.name; }
-	inline bool operator>(const std::string& lhs, const Scene& rhs) { return rhs < lhs; }
-	inline bool operator<=(const std::string& lhs, const Scene& rhs) { return !(rhs < lhs); }
-	inline bool operator>=(const std::string& lhs, const Scene& rhs) { return !(lhs < rhs); }
 }
