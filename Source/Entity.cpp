@@ -1,8 +1,16 @@
 #include "Entity.h"
-#include "Component.h"
+#include "Transform.h"
 
 namespace ArenaBoss
 {
+	Entity::Entity(const std::string& inName)
+		: name(inName), transform(nullptr), components()
+	{
+		transform = GetManager().CreateComponent<Transform>(this);
+	}
+
+	Entity::~Entity() { delete transform; }
+
 	void Entity::Init()
 	{
 		for (auto* component : components)

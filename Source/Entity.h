@@ -15,6 +15,16 @@ namespace ArenaBoss
 	class Entity final : private Accessor<ComponentManager>
 	{
 	public:
+		Entity(const std::string& inName);
+		
+		Entity(const Entity&) = delete;
+		Entity(Entity&&) = delete;
+
+		Entity& operator=(const Entity&) = delete;
+		Entity& operator=(Entity&&) = delete;
+
+		~Entity();
+
 		void Init();
 		void Release();
 
