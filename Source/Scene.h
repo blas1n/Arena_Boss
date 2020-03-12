@@ -18,6 +18,14 @@ namespace ArenaBoss
 
 		~Scene() = default;
 
+		Entity* AddEntity(const std::string& name);
+		Entity* AddEntity(Entity* entity);
+
+		void RemoveEntity(const std::string& name);
+		void RemoveEntity(Entity* entity);
+
+		Entity* GetEntity(const std::string& name);
+
 		inline const std::string& GetName() const noexcept { return name; }
 		inline bool IsAvailable() const noexcept { return isAvailable; }
 
