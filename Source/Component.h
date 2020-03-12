@@ -33,15 +33,18 @@ namespace ArenaBoss
 
 		Entity* GetEntity() noexcept { return entity; }
 
-	private:
-		friend class ComponentManager;
+	protected:
 		Component(Entity* inEntity) : entity(inEntity) {}
 
+	private:
+		friend class ComponentManager;
 		Entity* entity;
 	};
-}
 
-#define GENERATE_COMPONENT(name) \
+#define GET_MACRO(_1, _2, NAME, ...) NAME
+#define GENERATE_COMPONENT(...) GET_MACRO(__VA_ARGS__, GENERATE_COMPONENT_CUSTOM, GENERATE_COMPONENT_DEFAULT)(__VA_ARGS__)
+
+#define GENERATE_COMPONENT_SHARE(name) \
 public: \
 	inline static const std::string& StaticClassName() noexcept \
 	{ \
@@ -52,4 +55,18 @@ public: \
 	inline const std::string& ClassName() const noexcept override \
 	{ \
 		return name::StaticClassName(); \
-	}
+	} \
+\
+private: \
+	friend class ComponentManager;
+
+#define GENERATE_COMPONENT_DEFAULT(name) \
+GENERATE_COMPONENT_SHARE(name) \
+protected: \
+	name(Entity* inEntity) : Component(inEntity) {}
+
+#define GENERATE_COMPONENT_CUSTOM(name, super) \
+GENERATE_COMPONENT_SHARE(name) \
+protected: \
+	name(Entity* inEntity) : super(inEntity) {}
+}

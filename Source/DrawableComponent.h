@@ -31,13 +31,16 @@ namespace ArenaBoss
 
 	class MeshDrawableComponent : public DrawableComponent, private Accessor<class RenderManager>
 	{
-		GENERATE_COMPONENT(MeshDrawableComponent)
+		// Use GENRRATE_COMPONENT (__VA_ARGS__)
+		GENERATE_COMPONENT_CUSTOM(MeshDrawableComponent, DrawableComponent)
 
+	public:
 		void SetShader(Shader* inShader) noexcept override;
 	};
 
 	class SpriteDrawableComponent : public DrawableComponent
 	{
-		GENERATE_COMPONENT(SpriteDrawableComponent)
+		// Use GENRRATE_COMPONENT (__VA_ARGS__)
+		GENERATE_COMPONENT_CUSTOM(SpriteDrawableComponent,DrawableComponent)
 	};
 }
