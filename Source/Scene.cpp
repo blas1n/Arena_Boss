@@ -13,7 +13,7 @@ namespace ArenaBoss
 	{
 		rapidjson::Document LoadJson(const std::string& name)
 		{
-			std::ifstream file{ name, std::ios::in | std::ios::binary | std::ios::ate };
+			std::ifstream file{ "Asset\\" + name, std::ios::in | std::ios::binary | std::ios::ate };
 			if (!file.is_open())
 				throw std::exception{ "File not found." };
 
