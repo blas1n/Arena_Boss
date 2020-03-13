@@ -23,6 +23,21 @@ namespace ArenaBoss
 			component->Release();
 	}
 
+	void Entity::Load(const Json::Object& object)
+	{
+		for (auto component : components)
+			delete component;
+
+		components.clear();
+
+		// Load Component
+	}
+
+	void Entity::Save(Json::JsonSaver& saver)
+	{
+
+	}
+
 	Component* Entity::FindComponent(const std::string& componentName)
 	{
 		for (auto& component : components)
