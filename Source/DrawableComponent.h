@@ -25,7 +25,7 @@ namespace ArenaBoss
 		inline void SetVisible(bool inVisible) noexcept { visible = inVisible; }
 
 	private:
-		Shader* shader;
+		Shader* shader = nullptr;
 		bool visible = true;
 	};
 
