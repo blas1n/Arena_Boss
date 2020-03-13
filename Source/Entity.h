@@ -2,9 +2,9 @@
 
 #include <string>
 #include <vector>
-#include "Accessor.h"
 #include "ComponentManager.h"
 #include "Game.h"
+#include "JsonForwarder.h"
 #include "Log.h"
 
 namespace ArenaBoss
@@ -15,7 +15,7 @@ namespace ArenaBoss
 	class Entity final : private Accessor<ComponentManager>
 	{
 	public:
-		Entity(const std::string& inName);
+		explicit Entity(const std::string& inName);
 		
 		Entity(const Entity&) = delete;
 		Entity(Entity&&) = delete;
@@ -63,12 +63,46 @@ namespace ArenaBoss
 			Game::Exit();
 		}
 
+		inline const std::string& GetName() const noexcept { return name; }
+		inline void SetName(const std::string& inName) noexcept { name = inName; }
+		inline void SetName(std::string&& inName) noexcept { name = std::move(inName); }
+
 	private:
 		Component* FindComponent(const std::string& componentName);
 
 	private:
+		friend bool operator==(const Entity& lhs, const Entity& rhs);
+		friend bool operator<(const Entity& lhs, const Entity& rhs);
+
+		friend bool operator==(const Entity& lhs, const std::string& rhs);
+		friend bool operator<(const Entity& lhs, const std::string& rhs);
+
+		friend bool operator==(const std::string& lhs, const Entity& rhs);
+		friend bool operator<(const std::string& lhs, const Entity& rhs);
+
 		std::string name;
 		Transform* transform;
 		std::vector<Component*> components;
 	};
+
+	inline bool operator==(const Entity& lhs, const Entity& rhs) { return lhs.name == rhs.name; }
+	inline bool operator!=(const Entity& lhs, const Entity& rhs) { return !(lhs == rhs); }
+	inline bool operator<(const Entity& lhs, const Entity& rhs) { return lhs.name < rhs.name; }
+	inline bool operator>(const Entity& lhs, const Entity& rhs) { return rhs < lhs; }
+	inline bool operator<=(const Entity& lhs, const Entity& rhs) { return !(rhs < lhs); }
+	inline bool operator>=(const Entity& lhs, const Entity& rhs) { return !(lhs < rhs); }
+
+	inline bool operator==(const Entity& lhs, const std::string& rhs) { return lhs.name == rhs; }
+	inline bool operator!=(const Entity& lhs, const std::string& rhs) { return !(lhs == rhs); }
+	inline bool operator<(const Entity& lhs, const std::string& rhs) { return lhs.name < rhs; }
+	inline bool operator>(const Entity& lhs, const std::string& rhs) { return rhs < lhs; }
+	inline bool operator<=(const Entity& lhs, const std::string& rhs) { return !(rhs < lhs); }
+	inline bool operator>=(const Entity& lhs, const std::string& rhs) { return !(lhs < rhs); }
+
+	inline bool operator==(const std::string& lhs, const Entity& rhs) { return lhs == rhs.name; }
+	inline bool operator!=(const std::string& lhs, const Entity& rhs) { return !(lhs == rhs); }
+	inline bool operator<(const std::string& lhs, const Entity& rhs) { return lhs < rhs.name; }
+	inline bool operator>(const std::string& lhs, const Entity& rhs) { return rhs < lhs; }
+	inline bool operator<=(const std::string& lhs, const Entity& rhs) { return !(rhs < lhs); }
+	inline bool operator>=(const std::string& lhs, const Entity& rhs) { return !(lhs < rhs); }
 }
