@@ -1,9 +1,9 @@
 #include "JsonHelper.h"
 #include "Rotator.h"
 
-namespace ArenaBoss::JsonHelper
+namespace ArenaBoss::Json
 {
-	std::optional<int> GetInt(const rapidjson::Value& inObject, const char* name)
+	std::optional<int> JsonHelper::GetInt(const Object& inObject, const char* name)
 	{
 		const auto iter = inObject.FindMember(name);
 		if (iter == inObject.MemberEnd())
@@ -16,7 +16,7 @@ namespace ArenaBoss::JsonHelper
 		return property.GetInt();
 	}
 
-	std::optional<float> GetFloat(const rapidjson::Value& inObject, const char* name)
+	std::optional<float> JsonHelper::GetFloat(const Object& inObject, const char* name)
 	{
 		const auto iter = inObject.FindMember(name);
 		if (iter == inObject.MemberEnd())
@@ -29,7 +29,7 @@ namespace ArenaBoss::JsonHelper
 		return property.GetFloat();
 	}
 
-	std::optional<std::string> GetString(const rapidjson::Value& inObject, const char* name) {
+	std::optional<std::string> JsonHelper::GetString(const Object& inObject, const char* name) {
 		const auto iter = inObject.FindMember(name);
 		if (iter == inObject.MemberEnd())
 			return {};
@@ -41,7 +41,7 @@ namespace ArenaBoss::JsonHelper
 		return property.GetString();
 	}
 
-	std::optional<bool> GetBool(const rapidjson::Value& inObject, const char* name)
+	std::optional<bool> JsonHelper::GetBool(const Object& inObject, const char* name)
 	{
 		const auto iter = inObject.FindMember(name);
 		if (iter == inObject.MemberEnd())
@@ -54,7 +54,7 @@ namespace ArenaBoss::JsonHelper
 		return property.GetBool();
 	}
 
-	std::optional<Math::Vector2> GetVector2(const rapidjson::Value& inObject, const char* name)
+	std::optional<Math::Vector2> JsonHelper::GetVector2(const Object& inObject, const char* name)
 	{
 		auto iter = inObject.FindMember(name);
 		if (iter == inObject.MemberEnd())
@@ -75,7 +75,7 @@ namespace ArenaBoss::JsonHelper
 		};
 	}
 
-	std::optional<Math::Vector3> GetVector3(const rapidjson::Value& inObject, const char* name)
+	std::optional<Math::Vector3> JsonHelper::GetVector3(const Object& inObject, const char* name)
 	{
 		auto iter = inObject.FindMember(name);
 		if (iter == inObject.MemberEnd())
@@ -97,7 +97,7 @@ namespace ArenaBoss::JsonHelper
 		};
 	}
 
-	std::optional<Math::Rotator> GetRotator(const rapidjson::Value& inObject, const char* name) 
+	std::optional<Math::Rotator> JsonHelper::GetRotator(const Object& inObject, const char* name)
 	{
 		auto iter = inObject.FindMember(name);
 		if (iter == inObject.MemberEnd())
@@ -119,67 +119,60 @@ namespace ArenaBoss::JsonHelper
 		};
 	}
 
-	void AddInt(rapidjson::Document::AllocatorType& alloc,
-		rapidjson::Value& inObject, const char* name, int value)
+	void JsonHelper::AddInt(JsonSaver& saver, const char* name, int value)
 	{
-		rapidjson::Value v{ value };
-		inObject.AddMember(rapidjson::StringRef(name), v, alloc);
+		Object v{ value };
+		saver.object.AddMember(rapidjson::StringRef(name), v, saver.alloc);
 	}
 
-	void AddFloat(rapidjson::Document::AllocatorType& alloc,
-		rapidjson::Value& inObject, const char* name, float value)
+	void JsonHelper::AddFloat(JsonSaver& saver, const char* name, float value)
 	{
-		rapidjson::Value v{ value };
-		inObject.AddMember(rapidjson::StringRef(name), v, alloc);
+		Object v{ value };
+		saver.object.AddMember(rapidjson::StringRef(name), v, saver.alloc);
 	}
 
-	void AddString(rapidjson::Document::AllocatorType& alloc,
-		rapidjson::Value& inObject, const char* name, const std::string& value)
+	void JsonHelper::AddString(JsonSaver& saver, const char* name, const std::string& value)
 	{
-		rapidjson::Value v;
-		v.SetString(value.c_str(), static_cast<rapidjson::SizeType>(value.length()), alloc);
-		inObject.AddMember(rapidjson::StringRef(name), v, alloc);
+		Object v;
+		v.SetString(value.c_str(), static_cast<rapidjson::SizeType>(value.length()), saver.alloc);
+		saver.object.AddMember(rapidjson::StringRef(name), v, saver.alloc);
 	}
 
-	void AddBool(rapidjson::Document::AllocatorType& alloc,
-		rapidjson::Value& inObject, const char* name, const bool value)
+	void JsonHelper::AddBool(JsonSaver& saver, const char* name, const bool value)
 	{
-		rapidjson::Value v{ value };
-		inObject.AddMember(rapidjson::StringRef(name), v, alloc);
+		Object v{ value };
+		saver.object.AddMember(rapidjson::StringRef(name), v, saver.alloc);
 	}
 
-	void AddVector2(rapidjson::Document::AllocatorType& alloc,
-		rapidjson::Value& inObject, const char* name, const Math::Vector2& value)
+	void JsonHelper::AddVector2(JsonSaver& saver, const char* name, const Math::Vector2& value)
 	{
-		rapidjson::Value v{ rapidjson::kArrayType };
+		Object v{ rapidjson::kArrayType };
 
-		v.PushBack(rapidjson::Value{ value.x }.Move(), alloc);
-		v.PushBack(rapidjson::Value{ value.y }.Move(), alloc);
+		v.PushBack(Object{ value.x }.Move(), saver.alloc);
+		v.PushBack(Object{ value.y }.Move(), saver.alloc);
 
-		inObject.AddMember(rapidjson::StringRef(name), v, alloc);
+		saver.object.AddMember(rapidjson::StringRef(name), v, saver.alloc);
 	}
 
-	void AddVector3(rapidjson::Document::AllocatorType& alloc,
-		rapidjson::Value& inObject, const char* name, const Math::Vector3& value)
+	void JsonHelper::AddVector3(JsonSaver& saver, const char* name, const Math::Vector3& value)
 	{
-		rapidjson::Value v{ rapidjson::kArrayType };
+		Object v{ rapidjson::kArrayType };
 
-		v.PushBack(rapidjson::Value{ value.x }.Move(), alloc);
-		v.PushBack(rapidjson::Value{ value.y }.Move(), alloc);
-		v.PushBack(rapidjson::Value{ value.z }.Move(), alloc);
+		v.PushBack(Object{ value.x }.Move(), saver.alloc);
+		v.PushBack(Object{ value.y }.Move(), saver.alloc);
+		v.PushBack(Object{ value.z }.Move(), saver.alloc);
 
-		inObject.AddMember(rapidjson::StringRef(name), v, alloc);
+		saver.object.AddMember(rapidjson::StringRef(name), v, saver.alloc);
 	}
 
-	void AddRotator(rapidjson::Document::AllocatorType& alloc,
-		rapidjson::Value& inObject, const char* name, const Math::Rotator& value)
+	void JsonHelper::AddRotator(JsonSaver& saver, const char* name, const Math::Rotator& value)
 	{
-		rapidjson::Value v{ rapidjson::kArrayType };
+		Object v{ rapidjson::kArrayType };
 
-		v.PushBack(rapidjson::Value{ value.roll }.Move(), alloc);
-		v.PushBack(rapidjson::Value{ value.pitch }.Move(), alloc);
-		v.PushBack(rapidjson::Value{ value.yaw }.Move(), alloc);
+		v.PushBack(Object{ value.roll }.Move(), saver.alloc);
+		v.PushBack(Object{ value.pitch }.Move(), saver.alloc);
+		v.PushBack(Object{ value.yaw }.Move(), saver.alloc);
 
-		inObject.AddMember(rapidjson::StringRef(name), v, alloc);
+		saver.object.AddMember(rapidjson::StringRef(name), v, saver.alloc);
 	}
 }

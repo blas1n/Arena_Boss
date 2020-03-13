@@ -3,6 +3,7 @@
 #include <optional>
 #include <rapidjson/document.h>
 #include <string>
+#include "JsonForwarder.h"
 #include "Vector2.h"
 #include "Vector3.h"
 
@@ -10,35 +11,41 @@ namespace ArenaBoss
 {
 	namespace Math { class Rotator; }
 
-	namespace JsonHelper
+	namespace Json
 	{
-		std::optional<int> GetInt(const rapidjson::Value& object, const char* name);
-		std::optional<float> GetFloat(const rapidjson::Value& object, const char* name);
-		std::optional<std::string> GetString(const rapidjson::Value& object, const char* name);
-		std::optional<bool> GetBool(const rapidjson::Value& object, const char* name);
-		std::optional<Math::Vector2> GetVector2(const rapidjson::Value& object, const char* name);
-		std::optional<Math::Vector3> GetVector3(const rapidjson::Value& object, const char* name);
-		std::optional<Math::Rotator> GetRotator(const rapidjson::Value& object, const char* name);
+		struct JsonSaver final
+		{
+		public:
+			JsonSaver(Allocator& inAlloc, Object& inObject)
+				: alloc(inAlloc), object(inObject) {}
 
-		void AddInt(rapidjson::Document::AllocatorType& alloc,
-			rapidjson::Value& object, const char* name, int value);
+			JsonSaver(JsonSaver& other, Object& inObject)
+				: alloc(other.alloc), object(inObject) {}
 
-		void AddFloat(rapidjson::Document::AllocatorType& alloc,
-			rapidjson::Value& object, const char* name, float value);
+		private:
+			friend struct JsonHelper;
 
-		void AddString(rapidjson::Document::AllocatorType& alloc,
-			rapidjson::Value& object, const char* name, const std::string& value);
+			Allocator& alloc;
+			Object& object;
+		};
 
-		void AddBool(rapidjson::Document::AllocatorType& alloc,
-			rapidjson::Value& object, const char* name, bool value);
+		struct JsonHelper final
+		{
+			static std::optional<int> GetInt(const Object& object, const char* name);
+			static std::optional<float> GetFloat(const Object& object, const char* name);
+			static std::optional<std::string> GetString(const Object& object, const char* name);
+			static std::optional<bool> GetBool(const Object& object, const char* name);
+			static std::optional<Math::Vector2> GetVector2(const Object& object, const char* name);
+			static std::optional<Math::Vector3> GetVector3(const Object& object, const char* name);
+			static std::optional<Math::Rotator> GetRotator(const Object& object, const char* name);
 
-		void AddVector2(rapidjson::Document::AllocatorType& alloc,
-			rapidjson::Value& object, const char* name, const Math::Vector2& value);
-
-		void AddVector3(rapidjson::Document::AllocatorType& alloc,
-			rapidjson::Value& object, const char* name, const Math::Vector3& value);
-
-		void AddRotator(rapidjson::Document::AllocatorType& alloc,
-			rapidjson::Value& object, const char* name, const Math::Rotator& value);
+			static void AddInt(JsonSaver& saver, const char* name, int value);
+			static void AddFloat(JsonSaver& saver, const char* name, float value);
+			static void AddString(JsonSaver& saver, const char* name, const std::string& value);
+			static void AddBool(JsonSaver& saver, const char* name, bool value);
+			static void AddVector2(JsonSaver& saver, const char* name, const Math::Vector2& value);
+			static void AddVector3(JsonSaver& saver, const char* name, const Math::Vector3& value);
+			static void AddRotator(JsonSaver& saver, const char* name, const Math::Rotator& value);
+		};
 	}
 };
