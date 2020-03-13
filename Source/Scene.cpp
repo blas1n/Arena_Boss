@@ -4,6 +4,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 #include "Entity.h"
+#include "IteratorFinder.h"
 #include "JsonHelper.h"
 
 namespace ArenaBoss
@@ -33,12 +34,12 @@ namespace ArenaBoss
 		}
 	}
 
-	Scene::Scene()
-		: name(), entities(), isAvailable(false) {}
-
-	void Scene::Load(const std::string& inName)
+	void Scene::Load()
 	{
-		name = inName;
+		for (auto entity : entities)
+			delete entity;
+
+		entities.clear();
 
 		const auto doc = LoadJson(name);
 		const auto& entities = doc["entities"];
@@ -46,20 +47,77 @@ namespace ArenaBoss
 		if (!entities.IsArray())
 			throw std::exception{ "File is not vaild." };
 
-		for (rapidjson::SizeType i = 0; i < entities.Size(); ++i) {
+		for (rapidjson::SizeType i = 0; i < entities.Size(); ++i)
+		{
 			const auto& entityObj = entities[i];
 			if (!entityObj.IsObject()) continue;
 
-			const auto name = JsonHelper::GetString(entityObj, "name");
+			const auto name = Json::JsonHelper::GetString(entityObj, "name");
 			if (!name) throw std::exception{ "Entity is not vaild." };
 
 			auto* entity = AddEntity(*name);
-			// Load entities components.
+			entity->Load(entityObj);
 		}
+	}
+
+	void Scene::Load(const std::string& inName)
+	{
+		name = inName;
+		Load();
+	}
+
+	void Scene::Load(std::string&& inName)
+	{
+		name = std::move(inName);
+		Load();
 	}
 
 	void Scene::Save()
 	{
 
+	}
+
+	void Scene::Save(const std::string& inName)
+	{
+		name = inName;
+		Save();
+	}
+
+	void Scene::Save(std::string&& inName)
+	{
+		name = std::move(inName);
+		Save();
+	}
+
+	Entity* Scene::AddEntity(const std::string& inName)
+	{
+		return AddEntity(new Entity{ inName });
+	}
+
+	Entity* Scene::AddEntity(Entity* entity)
+	{
+		const auto iter = IteratorFinder::FindLowerIterator(entities, *entity);
+
+		entities.emplace_back(entity);
+		std::rotate(entities.rbegin(), entities.rbegin() + 1, std::reverse_iterator{ iter });
+		return *iter;
+	}
+
+	void Scene::RemoveEntity(const std::string& inName)
+	{
+		const auto iter = IteratorFinder::FindSameIterator(entities, inName);
+		delete *iter;
+		entities.erase(iter);
+	}
+
+	void Scene::RemoveEntity(Entity* entity)
+	{
+		RemoveEntity(entity->GetName());
+	}
+
+	Entity* Scene::GetEntity(const std::string& inName)
+	{
+		const auto iter = IteratorFinder::FindSameIterator(entities, inName);
+		return *iter;
 	}
 }

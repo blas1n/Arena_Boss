@@ -18,27 +18,31 @@ namespace ArenaBoss
 
 		~Scene() = default;
 
-		Entity* AddEntity(const std::string& name);
+		void Load();
+		void Load(const std::string& inName);
+		void Load(std::string&& inName);
+
+		void Save();
+		void Save(const std::string& inName);
+		void Save(std::string&& inName);
+
+		Entity* AddEntity(const std::string& inName);
 		Entity* AddEntity(Entity* entity);
 
-		void RemoveEntity(const std::string& name);
+		void RemoveEntity(const std::string& inName);
 		void RemoveEntity(Entity* entity);
 
-		Entity* GetEntity(const std::string& name);
+		Entity* GetEntity(const std::string& inName);
 
 		inline const std::string& GetName() const noexcept { return name; }
-		inline bool IsAvailable() const noexcept { return isAvailable; }
+		inline void SetName(const std::string& inName) noexcept { name = inName; }
+		inline void SetName(std::string&& inName) noexcept { name = std::move(inName); }
 
 	private:
 		friend class SceneManager;
-		Scene();
-
-		void Load(const std::string& inName);
-		void Save();
+		Scene() : name(), entities() {}
 
 		std::string name;
 		std::vector<Entity*> entities;
-
-		bool isAvailable;
 	};
 }
