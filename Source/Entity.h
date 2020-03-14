@@ -28,8 +28,8 @@ namespace ArenaBoss
 		void Init();
 		void Release();
 
-		void Load(const Json::Object& object);
-		void Save(Json::JsonSaver& saver);
+		void Load(const Json::Object& inObject);
+		void Save(Json::JsonSaver& inSaver) const;
 
 		template <class ComponentType>
 		ComponentType& GetComponent() 

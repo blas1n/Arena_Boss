@@ -23,7 +23,7 @@ namespace ArenaBoss
 			component->Release();
 	}
 
-	void Entity::Load(const Json::Object& object)
+	void Entity::Load(const Json::Object& inObject)
 	{
 		for (auto component : components)
 			delete component;
@@ -33,9 +33,13 @@ namespace ArenaBoss
 		// Load Component
 	}
 
-	void Entity::Save(Json::JsonSaver& saver)
+	void Entity::Save(Json::JsonSaver& inSaver) const
 	{
+		rapidjson::Value obj{ rapidjson::kObjectType };
+		Json::JsonSaver saver{inSaver, }
 
+		for (const auto* component : components)
+			component->Save();
 	}
 
 	Component* Entity::FindComponent(const std::string& componentName)

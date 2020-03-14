@@ -22,7 +22,7 @@ namespace ArenaBoss
 		void Load(const std::string& inName);
 		void Load(std::string&& inName);
 
-		void Save();
+		void Save() const;
 		void Save(const std::string& inName);
 		void Save(std::string&& inName);
 
