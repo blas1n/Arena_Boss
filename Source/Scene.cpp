@@ -72,9 +72,26 @@ namespace ArenaBoss
 		Load();
 	}
 
-	void Scene::Save()
+	void Scene::Save() const
 	{
+		rapidjson::Document doc;
+		doc.SetObject();
 
+		rapidjson::Value entitiesObj{ rapidjson::kArrayType };
+		Json::JsonSaver saver{ doc.GetAllocator(), entitiesObj };
+
+		for (const auto entity : entities) 
+			entity->Save(saver);
+
+		doc.AddMember("entities", entitiesObj, doc.GetAllocator());
+
+		rapidjson::StringBuffer buffer;
+		rapidjson::PrettyWriter<rapidjson::StringBuffer> writer{ buffer };
+		doc.Accept(writer);
+
+		std::ofstream outFile{ name, std::ios::trunc };
+		if (outFile.is_open())
+			outFile << buffer.GetString();
 	}
 
 	void Scene::Save(const std::string& inName)
