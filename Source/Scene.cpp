@@ -77,13 +77,18 @@ namespace ArenaBoss
 		rapidjson::Document doc;
 		doc.SetObject();
 
-		rapidjson::Value entitiesObj{ rapidjson::kArrayType };
-		Json::JsonSaver saver{ doc.GetAllocator(), entitiesObj };
-
-		for (const auto entity : entities) 
+		rapidjson::Value entitiesArray{ rapidjson::kArrayType };
+		auto& alloc = doc.GetAllocator();
+		
+		for (const auto* entity : entities)
+		{
+			rapidjson::Value obj{ rapidjson::kObjectType };
+			Json::JsonSaver saver{ alloc, obj };
 			entity->Save(saver);
+			entitiesArray.PushBack(obj, alloc);
+		}
 
-		doc.AddMember("entities", entitiesObj, doc.GetAllocator());
+		doc.AddMember("entities", entitiesArray, doc.GetAllocator());
 
 		rapidjson::StringBuffer buffer;
 		rapidjson::PrettyWriter<rapidjson::StringBuffer> writer{ buffer };

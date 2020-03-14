@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "JsonHelper.h"
 #include "Transform.h"
 
 namespace ArenaBoss
@@ -35,11 +36,18 @@ namespace ArenaBoss
 
 	void Entity::Save(Json::JsonSaver& inSaver) const
 	{
-		rapidjson::Value obj{ rapidjson::kObjectType };
-		Json::JsonSaver saver{inSaver, }
+		Json::JsonHelper::AddString(inSaver, "name", name);
+		rapidjson::Value componentsArray{ rapidjson::kArrayType };
 
 		for (const auto* component : components)
-			component->Save();
+		{
+			rapidjson::Value obj{ rapidjson::kObjectType };
+			Json::JsonSaver saver{ inSaver, obj };
+			component->Save(saver);
+			componentsArray.PushBack(obj, inSaver.alloc);
+		}
+
+		inSaver.object.AddMember("components", componentsArray, inSaver.alloc);
 	}
 
 	Component* Entity::FindComponent(const std::string& componentName)
