@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "JsonForwarder.h"
 
 namespace ArenaBoss
 {
@@ -19,6 +20,9 @@ namespace ArenaBoss
 
 		virtual void Init() {}
 		virtual void Release() {}
+
+		virtual void Load(const Json::Object& object);
+		virtual void Save(Json::JsonSaver& saver) const;
 
 		inline static const std::string& StaticClassName() noexcept
 		{
