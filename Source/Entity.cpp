@@ -31,7 +31,23 @@ namespace ArenaBoss
 
 		components.clear();
 
-		// Load Component
+		auto& componentManager = Accessor<ComponentManager>::GetManager();
+
+		const auto& componentsArray = inObject["components"];
+		if (!componentsArray.IsArray())
+			throw std::exception{ "File is not vaild." };
+
+		for (rapidjson::SizeType i = 0; i < componentsArray.Size(); ++i)
+		{
+			const auto& componentObj = componentsArray[i];
+			if (!componentObj.IsObject()) continue;
+
+			const auto type = Json::JsonHelper::GetString(componentObj, "type");
+			if (!type) throw std::exception{ "Component is not vaild." };
+
+			auto* component = componentManager.CreateComponent<Component/*type*/>(this);
+			component->Load(componentObj);
+		}
 	}
 
 	void Entity::Save(Json::JsonSaver& inSaver) const
