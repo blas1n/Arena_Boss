@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 #include "Accessor.h"
 
@@ -32,6 +33,8 @@ namespace ArenaBoss
 			RegisterComponent(component);
 			return component;
 		}
+
+		Component* CreateComponent(const std::string& name, Entity* inEntity);
 		
 		void DeleteComponent(Component* component);
 		void DeleteComponent(MeshDrawableComponent* component);
