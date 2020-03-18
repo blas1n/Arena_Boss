@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/mat4x4.hpp>
+#include "Vector3.h"
 
 namespace ArenaBoss::Math
 {
@@ -188,6 +189,43 @@ namespace ArenaBoss::Math
 			value /= scaler;
 			return *this;
 		}
+
+		inline Vector3 GetXAxis() const
+		{
+			return Vector3{ m00, m01, m02 };
+		}
+
+		inline Vector3 GetYAxis() const
+		{
+			return Vector3{ m10, m11, m12 };
+		}
+
+		inline Vector3 GetZAxis() const
+		{
+			return Vector3{ m20, m21, m22 };
+		}
+
+		inline Vector3 GetTranslation() const
+		{
+			return Vector3{ m30, m31, m32 };
+		}
+
+		Vector3 GetScale() const;
+
+		static Matrix4x4 CreateFromPosition(const Vector3& position);
+		static Matrix4x4 CreateFromPosition(float x, float y, float z);
+		static Matrix4x4 CreateFromPosition(float position);
+
+		static Matrix4x4 CreateFromRotationX(float theta);
+		static Matrix4x4 CreateFromRotationY(float theta);
+		static Matrix4x4 CreateFromRotationZ(float theta);
+
+		static Matrix4x4 CreateFromRotation(const class Rotator& rotator);
+		static Matrix4x4 CreateFromRotation(const class Quaternion& quat);
+
+		static Matrix4x4 CreateFromScale(const Vector3& scale);
+		static Matrix4x4 CreateFromScale(float x, float y, float z);
+		static Matrix4x4 CreateFromScale(float scale);
 
 	private:
 		friend bool operator==(const Matrix4x4& lhs, const Matrix4x4& rhs) noexcept;

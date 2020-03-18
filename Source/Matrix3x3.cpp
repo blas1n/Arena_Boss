@@ -1,4 +1,5 @@
 #include "Matrix3x3.h"
+#include "MathFunctions.h"
 
 namespace ArenaBoss::Math
 {
@@ -36,5 +37,61 @@ namespace ArenaBoss::Math
 		m20 = inM20;
 		m21 = inM21;
 		m22 = inM22;
+	}
+
+	Matrix3x3 Matrix3x3::CreateFromPosition(const Vector2& position)
+	{
+		return CreateFromPosition(position.x, position.y);
+	}
+
+	Matrix3x3 Matrix3x3::CreateFromPosition(float x, float y)
+	{
+		const float temp[]
+		{
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			   x,    y, 1.0f,
+		};
+
+		return Matrix3x3{ temp };
+	}
+
+	Matrix3x3 Matrix3x3::CreateFromPosition(float position)
+	{
+		return CreateFromPosition(position, position);
+	}
+
+	Matrix3x3 Matrix3x3::CreateFromRotation(float theta)
+	{
+		const float temp[]
+		{
+	 		 Math::Cos(theta),  Math::Sin(theta), 0.0f,
+			-Math::Sin(theta),  Math::Cos(theta), 0.0f,
+			             0.0f,              0.0f, 1.0f,
+		};
+
+		return Matrix3x3{ temp };
+	}
+
+	Matrix3x3 Matrix3x3::CreateFromScale(const Vector2& scale)
+	{
+		return CreateFromScale(scale.x, scale.y);
+	}
+
+	Matrix3x3 Matrix3x3::CreateFromScale(float x, float y)
+	{
+		const float temp[]
+		{
+			   x, 0.0f, 0.0f,
+			0.0f,    y, 0.0f,
+			0.0f, 0.0f, 1.0f,
+		};
+
+		return Matrix3x3{ temp };
+	}
+
+	Matrix3x3 Matrix3x3::CreateFromScale(float scale)
+	{
+		return CreateFromScale(scale, scale);
 	}
 }

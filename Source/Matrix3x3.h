@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/mat3x3.hpp>
+#include "Vector3.h"
 
 namespace ArenaBoss::Math
 {
@@ -176,6 +177,16 @@ namespace ArenaBoss::Math
 			value /= scaler;
 			return *this;
 		}
+
+		static Matrix3x3 CreateFromPosition(const Vector2& position);
+		static Matrix3x3 CreateFromPosition(float x, float y);
+		static Matrix3x3 CreateFromPosition(float position);
+
+		static Matrix3x3 CreateFromRotation(float theta);
+		
+		static Matrix3x3 CreateFromScale(const Vector2& scale);
+		static Matrix3x3 CreateFromScale(float x, float y);
+		static Matrix3x3 CreateFromScale(float scale);
 
 	private:
 		friend bool operator==(const Matrix3x3& lhs, const Matrix3x3& rhs) noexcept;
