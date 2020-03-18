@@ -10,7 +10,8 @@ namespace ArenaBoss
 	class SceneManager final
 	{
 	public:
-		SceneManager();
+		SceneManager(const std::string& inName);
+		SceneManager(std::string&& inName);
 
 		SceneManager(const SceneManager&) = delete;
 		SceneManager(SceneManager&&) = delete;
@@ -31,6 +32,6 @@ namespace ArenaBoss
 	private:
 		Scene* scene;
 		std::string name;
-		bool isReserved;
+		bool isReserved = false;
 	};
 }

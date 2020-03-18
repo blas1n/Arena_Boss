@@ -6,8 +6,17 @@
 
 namespace ArenaBoss
 {
-	SceneManager::SceneManager()
-		: scene(new Scene{}), name(), isReserved() {}
+	SceneManager::SceneManager(const std::string& inName)
+		: scene(new Scene{}), name(), isReserved()
+	{
+		ReserveScene(inName);
+	}
+
+	SceneManager::SceneManager(std::string&& inName)
+		: scene(new Scene{}), name(), isReserved()
+	{
+		ReserveScene(std::move(inName));
+	}
 
 	void SceneManager::ReserveScene(const std::string& inName)
 	{
@@ -26,7 +35,7 @@ namespace ArenaBoss
 		if (isReserved)
 		{
 			scene->Load(std::move(name));
-			isReserved = true;
+			isReserved = false;
 		}
 	}
 }

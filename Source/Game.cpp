@@ -48,7 +48,7 @@ namespace ArenaBoss
 			inputManager = new InputManager{};
 			Accessor<InputManager>::manager = inputManager;
 
-			sceneManager = new SceneManager{};
+			sceneManager = new SceneManager{ *config("Scene", "StartName") };
 			Accessor<SceneManager>::manager = sceneManager;
 
 			componentManager = new ComponentManager{};
