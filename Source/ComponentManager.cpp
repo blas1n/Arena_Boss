@@ -5,6 +5,7 @@
 #include <type_traits>
 #include "DrawableComponent.h"
 #include "RenderManager.h"
+#include "Transform.h"
 #include "UpdatableComponent.h"
 
 #define FACTORY_PAIR(name) std::make_pair(#name, &Create<name>)
@@ -21,7 +22,7 @@ namespace ArenaBoss
 
 		const std::map<std::string, Component*(*)(ComponentManager*, Entity*)> factoryMap
 		{
-			FACTORY_PAIR(Component)
+			FACTORY_PAIR(Component), FACTORY_PAIR(Transform)
 		};
 	}
 
