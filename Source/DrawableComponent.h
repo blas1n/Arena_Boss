@@ -9,7 +9,7 @@ namespace ArenaBoss
 
 	class DrawableComponent : public Component
 	{
-		GENERATE_COMPONENT(DrawableComponent)
+		GENERATE_COMPONENT1(DrawableComponent)
 
 	public:
 		virtual void Draw() = 0;
@@ -31,8 +31,7 @@ namespace ArenaBoss
 
 	class MeshDrawableComponent : public DrawableComponent, private Accessor<class RenderManager>
 	{
-		// Use GENRRATE_COMPONENT (__VA_ARGS__)
-		GENERATE_COMPONENT_CUSTOM(MeshDrawableComponent, DrawableComponent)
+		GENERATE_COMPONENT2(MeshDrawableComponent, DrawableComponent)
 
 	public:
 		void SetShader(Shader* inShader) noexcept override;
@@ -40,7 +39,6 @@ namespace ArenaBoss
 
 	class SpriteDrawableComponent : public DrawableComponent
 	{
-		// Use GENRRATE_COMPONENT (__VA_ARGS__)
-		GENERATE_COMPONENT_CUSTOM(SpriteDrawableComponent,DrawableComponent)
+		GENERATE_COMPONENT2(SpriteDrawableComponent, DrawableComponent)
 	};
 }

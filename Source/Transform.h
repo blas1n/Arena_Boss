@@ -6,6 +6,6 @@ namespace ArenaBoss
 {
 	class Transform : public Component
 	{
-		GENERATE_COMPONENT(Transform)
+		GENERATE_COMPONENT1(Transform)
 	};
 }

@@ -45,11 +45,10 @@ namespace ArenaBoss
 		Entity* entity;
 	};
 
-#define GET_MACRO(_1, _2, NAME, ...) NAME
-#define GENERATE_COMPONENT(...) GET_MACRO(__VA_ARGS__, GENERATE_COMPONENT_CUSTOM, GENERATE_COMPONENT_DEFAULT)(__VA_ARGS__)
-
-#define GENERATE_COMPONENT_SHARE(name) \
+#define GENERATE_COMPONENT_IMPL(name, super) \
 public: \
+	using Super = super; \
+\
 	inline static const std::string& StaticClassName() noexcept \
 	{ \
 		static const std::string componentName{ #name }; \
@@ -61,16 +60,12 @@ public: \
 		return name::StaticClassName(); \
 	} \
 \
+protected: \
+	name(Entity* inEntity) : Super(inEntity) {} \
+\
 private: \
 	friend class ComponentManager;
 
-#define GENERATE_COMPONENT_DEFAULT(name) \
-GENERATE_COMPONENT_SHARE(name) \
-protected: \
-	name(Entity* inEntity) : Component(inEntity) {}
-
-#define GENERATE_COMPONENT_CUSTOM(name, super) \
-GENERATE_COMPONENT_SHARE(name) \
-protected: \
-	name(Entity* inEntity) : super(inEntity) {}
+#define GENERATE_COMPONENT1(name) GENERATE_COMPONENT_IMPL(name, Component)
+#define GENERATE_COMPONENT2(name, super) GENERATE_COMPONENT_IMPL(name, super)
 }
