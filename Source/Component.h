@@ -16,8 +16,11 @@ namespace ArenaBoss
 		Component& operator=(const Component&) = delete;
 		Component& operator=(Component&&) = delete;
 
-		virtual ~Component() = default;
-		
+		virtual ~Component() { Destruct(); }
+
+		virtual void Construct() {}
+		virtual void Destruct() noexcept {}
+
 		virtual void Init() {}
 		virtual void Release() {}
 
@@ -38,7 +41,10 @@ namespace ArenaBoss
 		Entity* GetEntity() noexcept { return entity; }
 
 	protected:
-		Component(Entity* inEntity) : entity(inEntity) {}
+		Component(Entity* inEntity) : entity(inEntity)
+		{
+			Construct();
+		}
 
 	private:
 		friend class ComponentManager;

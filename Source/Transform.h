@@ -16,6 +16,9 @@ namespace ArenaBoss
 		GENERATE_COMPONENT1(Transform)
 
 	public:
+		void Construct() override;
+		void Destruct() noexcept override;
+
 		void Load(const Json::Object& object) override;
 		void Save(Json::JsonSaver& saver) const override;
 

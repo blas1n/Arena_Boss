@@ -15,6 +15,20 @@ namespace ArenaBoss
 		bool needRecompute;
 	};
 
+	void Transform::Construct()
+	{
+		Super::Construct();
+
+		impl = new TransformImpl{};
+	}
+
+	void Transform::Destruct() noexcept
+	{
+		delete impl;
+
+		Super::Destruct();
+	}
+
 	void Transform::Load(const Json::Object& object)
 	{
 		Super::Load(object);
