@@ -55,6 +55,8 @@ namespace ArenaBoss
 public: \
 	using Super = super; \
 \
+	~name() override { Destruct(); } \
+\
 	inline static const std::string& StaticClassName() noexcept \
 	{ \
 		static const std::string componentName{ #name }; \
@@ -67,7 +69,7 @@ public: \
 	} \
 \
 protected: \
-	name(Entity* inEntity) : Super(inEntity) {} \
+	name(Entity* inEntity) : Super(inEntity) { Construct(); } \
 \
 private: \
 	friend class ComponentManager;
