@@ -3,3 +3,6 @@ Name=ArenaBoss
 Width=1920
 Height=1080
 ScreenMode=Borderless
+
+[Scene]
+StartName=Arena.json
