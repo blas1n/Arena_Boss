@@ -118,11 +118,18 @@ namespace ArenaBoss
 
 	Entity* Scene::AddEntity(Entity* entity)
 	{
-		const auto iter = IteratorFinder::FindLowerIterator(entities, *entity);
+		try
+		{
+			const auto iter = IteratorFinder::FindLowerIterator(entities, *entity);
 
-		entities.emplace_back(entity);
-		std::rotate(entities.rbegin(), entities.rbegin() + 1, std::reverse_iterator{ iter });
-		return *iter;
+			entities.emplace_back(entity);
+			std::rotate(entities.rbegin(), entities.rbegin() + 1, std::reverse_iterator{ iter });
+			return *iter;
+		}
+		catch (std::exception&)
+		{
+			entities.emplace_back(std::move(entity));
+		}
 	}
 
 	void Scene::RemoveEntity(const std::string& inName)
