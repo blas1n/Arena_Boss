@@ -34,22 +34,36 @@ namespace ArenaBoss
 		}
 	}
 
-	void Scene::Load()
+	void Scene::Init()
+	{
+		for (auto* entity : entities)
+			entity->Init();
+	}
+
+	void Scene::Release() noexcept
 	{
 		for (auto entity : entities)
+		{
+			entity->Release();
 			delete entity;
+		}
 
 		entities.clear();
+	}
+
+	void Scene::Load()
+	{
+		Release();
 
 		const auto doc = LoadJson(name);
-		const auto& entities = doc["entities"];
+		const auto& entitiesArray = doc["entities"];
 
-		if (!entities.IsArray())
+		if (!entitiesArray.IsArray())
 			throw std::exception{ "File is not vaild." };
 
-		for (rapidjson::SizeType i = 0; i < entities.Size(); ++i)
+		for (rapidjson::SizeType i = 0; i < entitiesArray.Size(); ++i)
 		{
-			const auto& entityObj = entities[i];
+			const auto& entityObj = entitiesArray[i];
 			if (!entityObj.IsObject()) continue;
 
 			const auto name = Json::JsonHelper::GetString(entityObj, "name");
@@ -124,12 +138,13 @@ namespace ArenaBoss
 
 			entities.emplace_back(entity);
 			std::rotate(entities.rbegin(), entities.rbegin() + 1, std::reverse_iterator{ iter });
-			return *iter;
 		}
 		catch (std::exception&)
 		{
-			entities.emplace_back(std::move(entity));
+			entities.emplace_back(entity);
 		}
+
+		return entity;
 	}
 
 	void Scene::RemoveEntity(const std::string& inName)

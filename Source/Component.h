@@ -22,7 +22,7 @@ namespace ArenaBoss
 		virtual void Destruct() noexcept {}
 
 		virtual void Init() {}
-		virtual void Release() {}
+		virtual void Release() noexcept {}
 
 		virtual void Load(const Json::Object& object) {}
 		virtual void Save(Json::JsonSaver& saver) const;

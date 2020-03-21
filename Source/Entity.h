@@ -26,7 +26,7 @@ namespace ArenaBoss
 		~Entity();
 
 		void Init();
-		void Release();
+		void Release() noexcept;
 
 		void Load(const Json::Object& inObject);
 		void Save(Json::JsonSaver& inSaver) const;

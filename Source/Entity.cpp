@@ -18,7 +18,7 @@ namespace ArenaBoss
 			component->Init();
 	}
 
-	void Entity::Release()
+	void Entity::Release() noexcept
 	{
 		for (auto* component : components)
 			component->Release();

@@ -16,7 +16,10 @@ namespace ArenaBoss
 		Scene& operator=(const Scene&) = delete;
 		Scene& operator=(Scene&&) = default;
 
-		~Scene() = default;
+		~Scene() { Release(); }
+
+		void Init();
+		void Release() noexcept;
 
 		void Load();
 		void Load(const std::string& inName);
