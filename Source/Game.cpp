@@ -73,16 +73,23 @@ namespace ArenaBoss
 
 	int Game::Run()
 	{
-		while (isRun)
+		try
 		{
-			while (!SDL_TICKS_PASSED(SDL_GetTicks(), ticksCount + 16));
-			const auto deltaTime = Math::Min(static_cast<float>(SDL_GetTicks() - ticksCount) / 1000.0f, 0.05f);
-			ticksCount = SDL_GetTicks();
+			while (isRun)
+			{
+				while (!SDL_TICKS_PASSED(SDL_GetTicks(), ticksCount + 16));
+				const auto deltaTime = Math::Min(static_cast<float>(SDL_GetTicks() - ticksCount) / 1000.0f, 0.05f);
+				ticksCount = SDL_GetTicks();
 
-			inputManager->Update();
-			sceneManager->Update();
-			componentManager->Update();
-			renderManager->Draw();
+				inputManager->Update();
+				sceneManager->Update();
+				componentManager->Update();
+				renderManager->Draw();
+			}
+		}
+		catch (std::exception & e)
+		{
+			Log(e.what());
 		}
 
 		return 0;
