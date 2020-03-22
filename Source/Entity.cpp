@@ -10,7 +10,17 @@ namespace ArenaBoss
 		transform = GetManager().CreateComponent<Transform>(this);
 	}
 
-	Entity::~Entity() { delete transform; }
+	Entity::~Entity()
+	{
+		for (auto* component : components)
+		{
+			component->Release();
+			delete component;
+		}
+
+		transform->Release();
+		delete transform;
+	}
 
 	void Entity::Init()
 	{
