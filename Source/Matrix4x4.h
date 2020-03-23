@@ -108,7 +108,7 @@ namespace ArenaBoss::Math
 			float inM20, float inM21, float inM22, float inM23,
 			float inM30, float inM31, float inM32, float inM33) noexcept;
 
-		inline void Set(const float* elems) noexcept
+		inline void Set(float* elems) noexcept
 		{
 			Set(elems[ 0], elems[ 1], elems[ 2], elems[ 3],
 				elems[ 4], elems[ 5], elems[ 6], elems[ 7],
@@ -116,7 +116,7 @@ namespace ArenaBoss::Math
 				elems[12], elems[13], elems[14], elems[15]);
 		}
 
-		inline void Set(const float** elems) noexcept
+		inline void Set(float** elems) noexcept
 		{
 			Set(elems[0][0], elems[0][1], elems[0][2], elems[0][3],
 				elems[1][0], elems[1][1], elems[1][2], elems[1][3],
@@ -226,6 +226,11 @@ namespace ArenaBoss::Math
 		static Matrix4x4 CreateFromScale(const Vector3& scale);
 		static Matrix4x4 CreateFromScale(float x, float y, float z);
 		static Matrix4x4 CreateFromScale(float scale);
+
+		static Matrix4x4 CreateLookAt(const Vector3& eye, const Vector3& target, const Vector3& up);
+		static Matrix4x4 CreateOrtho(float width, float height, float near, float far);
+		static Matrix4x4 CreatePerspectiveFOV(float fovY, float width, float height, float near, float far);
+		static Matrix4x4 CreateSimpleViewProjection(float width, float height);
 
 	private:
 		friend bool operator==(const Matrix4x4& lhs, const Matrix4x4& rhs) noexcept;

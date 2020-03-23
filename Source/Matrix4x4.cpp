@@ -160,4 +160,70 @@ namespace ArenaBoss::Math
     {
         return CreateFromScale(scale, scale, scale);
     }
+
+    Matrix4x4 Matrix4x4::CreateLookAt(const Vector3& eye, const Vector3& target, const Vector3& up)
+    {
+        const auto zaxis = (target - eye).Normalized();
+        const auto xaxis = Vector3::Cross(up, zaxis).Normalized();
+        const auto yaxis = Vector3::Cross(zaxis, xaxis).Normalized();
+
+        const Vector3 trans
+        {
+            -Vector3::Dot(xaxis, eye),
+            -Vector3::Dot(yaxis, eye),
+            -Vector3::Dot(zaxis, eye)
+        };
+
+        const float temp[]
+        {
+            xaxis.x, yaxis.x, zaxis.x, 0.0f,
+            xaxis.y, yaxis.y, zaxis.y, 0.0f,
+            xaxis.z, yaxis.z, zaxis.z, 0.0f,
+            trans.x, trans.y, trans.z, 1.0f
+        };
+
+        return Matrix4x4{ temp };
+    }
+
+    Matrix4x4 Matrix4x4::CreateOrtho(float width, float height, float near, float far)
+    {
+        const float temp[]
+        {
+            2.0f / width,          0.0f,                0.0f, 0.0f,
+                    0.0f, 2.0f / height,                0.0f, 0.0f,
+                    0.0f,          0.0f, 1.0f / (far - near), 0.0f,
+                    0.0f,          0.0f, near / (near - far), 1.0f
+        };
+
+        return Matrix4x4{ temp };
+    }
+
+    Matrix4x4 Matrix4x4::CreatePerspectiveFOV(float fovY, float width, float height, float near, float far)
+    {
+        const auto yScale = Math::Cot(fovY / 2.0f);
+        const auto xScale = yScale * height / width;
+
+        const float temp[]
+        {
+            xScale,   0.0f,                       0.0f, 0.0f,
+              0.0f, yScale,                       0.0f, 0.0f,
+              0.0f,   0.0f,         far / (far - near), 1.0f,
+              0.0f,   0.0f, -near * far / (far - near), 0.0f
+        };
+
+        return Matrix4x4{ temp };
+    }
+
+    Matrix4x4 Matrix4x4::CreateSimpleViewProjection(float width, float height)
+    {
+        const float temp[]
+        {
+            2.0f / width,          0.0f, 0.0f, 0.0f,
+                    0.0f, 2.0f / height, 0.0f, 0.0f,
+                    0.0f,          0.0f, 1.0f, 0.0f,
+                    0.0f,          0.0f, 1.0f, 1.0f
+        };
+
+        return Matrix4x4{ temp };
+    }
 }
