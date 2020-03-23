@@ -25,14 +25,14 @@ namespace ArenaBoss::Math
 	template <class T>
 	using IsDecimal = std::enable_if_t<std::is_floating_point_v<T>, T>;
 
-	constexpr inline float ToRadians(const float degrees) noexcept
+	constexpr float ToRadians(float degrees) noexcept
 	{
 		return degrees * PI / 180.0f;
 	}
 
 	Rotator ToRadians(const Rotator& degrees) noexcept;
 
-	constexpr inline float ToDegrees(const float radians) noexcept
+	constexpr float ToDegrees(float radians) noexcept
 	{
 		return radians * 180.0f / PI;
 	}
