@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include "Accessor.h"
+#include "Matrix4x4.h"
 
 namespace ArenaBoss
 {
@@ -26,6 +27,8 @@ namespace ArenaBoss
 		void Draw();
 
 		void SetComponentInTree(MeshDrawableComponent* component);
+
+		inline void SetViewMatrix(const Math::Matrix4x4& inView) { view = inView; }
 
 	private:
 		friend class ComponentManager;
@@ -54,6 +57,9 @@ namespace ArenaBoss
 
 		ResourceManager& resourceManager;
 		SDL_GLContext context;
+
+		Math::Matrix4x4 view;
+		Math::Matrix4x4 projection;
 
 		uint32_t width;
 		uint32_t height;

@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <string>
 #include "DrawableComponent.h"
+#include "MathFunctions.h"
 #include "Matrix4x4.h"
 #include "RenderTree.h"
 #include "ResourceManager.h"
@@ -19,6 +20,8 @@ namespace ArenaBoss
 		window(nullptr),
 		resourceManager(ResourceAccessor::GetManager()),
 		context(nullptr),
+		view(),
+		projection(),
 		width(0u),
 		height(0u)
 	{
@@ -26,6 +29,11 @@ namespace ArenaBoss
 		window = windowManager.GetWindow();
 		width = windowManager.GetWidth();
 		height = windowManager.GetHeight();
+
+		view = Math::Matrix4x4::CreateLookAt(Math::Vector3::ZERO(), Math::Vector3::RIGHT(), Math::Vector3::FORWARD());
+
+		projection = Math::Matrix4x4::CreatePerspectiveFOV(Math::ToRadians(70.0f),
+			width, height, 25.0f, 10000.0f);
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
@@ -64,7 +72,10 @@ namespace ArenaBoss
 		glDisable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);
 
-		renderTree->Draw([](auto& shader) {});
+		renderTree->Draw([viewProj = view * projection](auto& shader)
+		{
+			shader.SetUniformValue("uViewProjection", viewProj);
+		});
 
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
