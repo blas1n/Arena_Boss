@@ -4,7 +4,9 @@
 #include <map>
 #include <type_traits>
 #include "DrawableComponent.h"
+#include "MeshComponent.h"
 #include "RenderManager.h"
+#include "SpriteComponent.h"
 #include "Transform.h"
 #include "UpdatableComponent.h"
 
@@ -42,13 +44,13 @@ namespace ArenaBoss
 		delete component;
 	}
 
-	void ComponentManager::DeleteComponent(MeshDrawableComponent* component)
+	void ComponentManager::DeleteComponent(MeshComponent* component)
 	{
 		Accessor<RenderManager>::GetManager().UnregisterComponent(component);
 		delete component;
 	}
 
-	void ComponentManager::DeleteComponent(SpriteDrawableComponent* component)
+	void ComponentManager::DeleteComponent(SpriteComponent* component)
 	{
 		Accessor<RenderManager>::GetManager().UnregisterComponent(component);
 		delete component;
@@ -61,12 +63,12 @@ namespace ArenaBoss
 		delete component;
 	}
 
-	void ComponentManager::RegisterComponent(MeshDrawableComponent* component)
+	void ComponentManager::RegisterComponent(MeshComponent* component)
 	{
 		Accessor<RenderManager>::GetManager().RegisterComponent(component);
 	}
 
-	void ComponentManager::RegisterComponent(SpriteDrawableComponent* component)
+	void ComponentManager::RegisterComponent(SpriteComponent* component)
 	{
 		Accessor<RenderManager>::GetManager().RegisterComponent(component);
 	}

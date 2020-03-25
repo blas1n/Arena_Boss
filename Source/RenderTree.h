@@ -6,7 +6,7 @@
 namespace ArenaBoss
 {
 	class Shader;
-	class MeshDrawableComponent;
+	class MeshComponent;
 	
 	class RenderTree final
 	{
@@ -17,7 +17,7 @@ namespace ArenaBoss
 				: shader(inShader), components() {}
 
 			Shader* shader;
-			std::vector<MeshDrawableComponent*> components;
+			std::vector<MeshComponent*> components;
 		};
 
 	public:
@@ -26,11 +26,11 @@ namespace ArenaBoss
 		void RegisterShader(Shader* shader);
 		void UnregisterShader(Shader* shader);
 
-		void RegisterComponent(MeshDrawableComponent* component);
-		void UnregisterComponent(MeshDrawableComponent* component);
+		void RegisterComponent(MeshComponent* component);
+		void UnregisterComponent(MeshComponent* component);
 
 	private:
-		std::vector<MeshDrawableComponent*>& GetComponents(Shader* shader);
+		std::vector<MeshComponent*>& GetComponents(Shader* shader);
 
 	private:
 		std::vector<RenderNode> nodes;

@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <exception>
 #include <string>
-#include "DrawableComponent.h"
 #include "IteratorFinder.h"
+#include "MeshComponent.h"
 #include "Shader.h"
 
 namespace ArenaBoss
@@ -34,9 +34,9 @@ namespace ArenaBoss
 			}
 		};
 
-		using ComponentLess = std::less<MeshDrawableComponent*>;
-		using ComponentEqual = std::equal_to<MeshDrawableComponent*>;
-		using ComponentNonEqual = std::not_equal_to<MeshDrawableComponent*>;
+		using ComponentLess = std::less<MeshComponent*>;
+		using ComponentEqual = std::equal_to<MeshComponent*>;
+		using ComponentNonEqual = std::not_equal_to<MeshComponent*>;
 
 		template <class Comp, class Confirmer, class T, class U>
 		decltype(auto) FindIter(std::vector<T>& vec, const U& value, const std::string& msg)
@@ -81,7 +81,7 @@ namespace ArenaBoss
 		nodes.erase(iter);
 	}
 
-	void RenderTree::RegisterComponent(MeshDrawableComponent* component)
+	void RenderTree::RegisterComponent(MeshComponent* component)
 	{
 		auto& components = GetComponents(component->GetShader());
 		const auto nodeIter = FindIter<ComponentLess, ComponentNonEqual>(
@@ -92,7 +92,7 @@ namespace ArenaBoss
 			std::reverse_iterator{ nodeIter });
 	}
 
-	void RenderTree::UnregisterComponent(MeshDrawableComponent* component)
+	void RenderTree::UnregisterComponent(MeshComponent* component)
 	{
 		auto& components = GetComponents(component->GetShader());
 		const auto nodeIter = FindIter<ComponentLess, ComponentEqual>(
@@ -100,7 +100,7 @@ namespace ArenaBoss
 		components.erase(nodeIter);
 	}
 
-	std::vector<MeshDrawableComponent*>& RenderTree::GetComponents(Shader* shader)
+	std::vector<MeshComponent*>& RenderTree::GetComponents(Shader* shader)
 	{
 		const auto iter = FindIter<NodeLess, NodeEqual>(
 			nodes, shader, "This shader doesn't exists.");

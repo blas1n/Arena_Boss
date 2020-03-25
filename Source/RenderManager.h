@@ -7,8 +7,8 @@
 
 namespace ArenaBoss
 {
-	class MeshDrawableComponent;
-	class SpriteDrawableComponent;
+	class MeshComponent;
+	class SpriteComponent;
 	class RenderTree;
 
 	class RenderManager final : Accessor<class WindowManager>, Accessor<class ResourceManager>
@@ -26,22 +26,22 @@ namespace ArenaBoss
 
 		void Draw();
 
-		void SetComponentInTree(MeshDrawableComponent* component);
+		void SetComponentInTree(MeshComponent* component);
 
 		inline void SetViewMatrix(const Math::Matrix4x4& inView) { view = inView; }
 
 	private:
 		friend class ComponentManager;
 
-		void RegisterComponent(MeshDrawableComponent* component);
+		void RegisterComponent(MeshComponent* component);
 
-		inline void RegisterComponent(SpriteDrawableComponent* component)
+		inline void RegisterComponent(SpriteComponent* component)
 		{
 			spriteComponents.push_back(component);
 		}
 
-		void UnregisterComponent(MeshDrawableComponent* component);
-		void UnregisterComponent(SpriteDrawableComponent* component);
+		void UnregisterComponent(MeshComponent* component);
+		void UnregisterComponent(SpriteComponent* component);
 
 		void GenerateSpriteResource();
 
@@ -49,8 +49,8 @@ namespace ArenaBoss
 		using WindowAccessor = Accessor<WindowManager>;
 		using ResourceAccessor = Accessor<ResourceManager>;
 
-		std::vector<MeshDrawableComponent*> meshComponents;
-		std::vector<SpriteDrawableComponent*> spriteComponents;
+		std::vector<MeshComponent*> meshComponents;
+		std::vector<SpriteComponent*> spriteComponents;
 
 		RenderTree* renderTree;
 		SDL_Window* window;

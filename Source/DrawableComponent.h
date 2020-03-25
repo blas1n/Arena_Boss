@@ -28,17 +28,4 @@ namespace ArenaBoss
 		Shader* shader = nullptr;
 		bool visible = true;
 	};
-
-	class MeshDrawableComponent : public DrawableComponent, private Accessor<class RenderManager>
-	{
-		GENERATE_COMPONENT2(MeshDrawableComponent, DrawableComponent)
-
-	public:
-		void SetShader(Shader* inShader) noexcept override;
-	};
-
-	class SpriteDrawableComponent : public DrawableComponent
-	{
-		GENERATE_COMPONENT2(SpriteDrawableComponent, DrawableComponent)
-	};
 }

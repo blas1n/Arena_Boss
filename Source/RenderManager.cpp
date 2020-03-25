@@ -6,9 +6,11 @@
 #include "DrawableComponent.h"
 #include "MathFunctions.h"
 #include "Matrix4x4.h"
+#include "MeshComponent.h"
 #include "RenderTree.h"
 #include "ResourceManager.h"
 #include "Shader.h"
+#include "SpriteComponent.h"
 #include "VertexArray.h"
 #include "WindowManager.h"
 
@@ -95,15 +97,7 @@ namespace ArenaBoss
 		SDL_GL_SwapWindow(window);
 	}
 
-	void RenderManager::RegisterComponent(MeshDrawableComponent* component)
-	{
-		meshComponents.push_back(component);
-
-		if (component->HaveShader())
-			SetComponentInTree(component);
-	}
-
-	void RenderManager::SetComponentInTree(MeshDrawableComponent* component)
+	void RenderManager::SetComponentInTree(MeshComponent* component)
 	{
 		if (component->HaveShader())
 			renderTree->RegisterComponent(component);
@@ -111,14 +105,22 @@ namespace ArenaBoss
 			renderTree->UnregisterComponent(component);
 	}
 
-	void RenderManager::UnregisterComponent(MeshDrawableComponent* component)
+	void RenderManager::RegisterComponent(MeshComponent* component)
+	{
+		meshComponents.push_back(component);
+
+		if (component->HaveShader())
+			renderTree->RegisterComponent(component);
+	}
+
+	void RenderManager::UnregisterComponent(MeshComponent* component)
 	{
 		const auto iter = std::find(meshComponents.begin(),
 			meshComponents.end(), component);
 		meshComponents.erase(iter);
 	}
 
-	void RenderManager::UnregisterComponent(SpriteDrawableComponent* component)
+	void RenderManager::UnregisterComponent(SpriteComponent* component)
 	{
 		const auto iter = std::find(spriteComponents.begin(),
 			spriteComponents.end(), component);
