@@ -3,6 +3,7 @@
 #include "Mesh.h"
 #include "RenderManager.h"
 #include "Shader.h"
+#include "Texture.h"
 #include "Transform.h"
 #include "VertexArray.h"
 
