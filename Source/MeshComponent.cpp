@@ -1,5 +1,6 @@
 #include "MeshComponent.h"
 #include "Entity.h"
+#include "Mesh.h"
 #include "RenderManager.h"
 #include "Shader.h"
 #include "Transform.h"
@@ -14,7 +15,7 @@ namespace ArenaBoss
 		auto* shader = GetShader();
 
 		shader->SetUniformValue("uWorldTransform", GetEntity()->GetComponent<Transform>().GetWorldMatrix());
-		//shader->SetUniformValue("uSpecularPower", mesh->GetSpecularPower());
+		shader->SetUniformValue("uSpecularPower", mesh->GetSpecularPower());
 
 		auto t = mesh->GetTexture(textureIndex);
 		if (t) t->Activate();
