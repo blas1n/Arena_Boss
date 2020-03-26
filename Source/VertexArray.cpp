@@ -60,13 +60,8 @@ namespace ArenaBoss
 		}
 	}
 
-	VertexArray::~VertexArray()
-	{
-		if (layout != VertexLayout::Undefined)
-			Unload();
-	}
-
-	void VertexArray::Load(const VertexArrayParam& param)
+	VertexArray::VertexArray(const std::string& inName, const VertexArrayParam& param)
+		: Resource(inName)
 	{
 		layout = param.layout;
 		numVerts = param.numVerts;
@@ -89,11 +84,14 @@ namespace ArenaBoss
 		enableFunctions[static_cast<int32_t>(layout)]();
 	}
 
-	void VertexArray::Unload()
+	VertexArray::~VertexArray()
 	{
-		glDeleteBuffers(1, &indexBuffer);
-		glDeleteBuffers(1, &vertexBuffer);
-		glDeleteVertexArrays(1, &vertexArray);
+		if (layout != VertexLayout::Undefined)
+		{
+			glDeleteBuffers(1, &indexBuffer);
+			glDeleteBuffers(1, &vertexBuffer);
+			glDeleteVertexArrays(1, &vertexArray);
+		}
 	}
 
 	void VertexArray::Activate()

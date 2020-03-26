@@ -29,15 +29,8 @@ namespace ArenaBoss
 		GENERATE_RESOURCE(VertexArray)
 
 	public:
-		VertexArray(const std::string& inName)
-			: Resource(inName) {}
+		VertexArray(const std::string& inName, const VertexArrayParam& param);
 
-		VertexArray(const std::string& inName, const VertexArrayParam& param)
-			: VertexArray(inName)
-		{
-			Load(param);
-		}
-		
 		VertexArray(const VertexArray&) = delete;
 		VertexArray(VertexArray&&) = delete;
 
@@ -45,9 +38,6 @@ namespace ArenaBoss
 		VertexArray& operator=(VertexArray&&) = delete;
 
 		~VertexArray();
-
-		void Load(const VertexArrayParam& param);
-		void Unload();
 
 		void Activate();
 
