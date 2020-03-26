@@ -23,15 +23,12 @@ namespace ArenaBoss
 			const std::string& fragName);
 
 		Shader(const Shader&) = delete;
-		Shader(Shader&&) = default;
+		Shader(Shader&&) = delete;
 
 		Shader& operator=(const Shader&) = delete;
-		Shader& operator=(Shader&&) = default;
+		Shader& operator=(Shader&&) = delete;
 
 		~Shader() override;
-
-		bool Load(const std::string& vertName, const std::string& fragName);
-		void Unload();
 
 		void Activate();
 
