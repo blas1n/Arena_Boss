@@ -31,7 +31,6 @@ namespace ArenaBoss
 			glDeleteShader(fragShader);
 			glDeleteShader(vertexShader);
 		}
-			Unload();
 	}
 
 	void Shader::Activate()
