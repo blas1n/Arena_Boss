@@ -23,6 +23,8 @@ namespace ArenaBoss
 		Mesh& operator=(const Mesh&) = delete;
 		Mesh& operator=(Mesh&&) = delete;
 
+		~Mesh() override;
+
 		inline Texture* GetTexture(size_t index) noexcept
 		{
 			return index < textures.size() ? textures[index] : nullptr;

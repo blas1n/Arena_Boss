@@ -6,6 +6,7 @@
 #include "JsonHelper.h"
 #include "MathFunctions.h"
 #include "ResourceManager.h"
+#include "Texture.h"
 #include "Vector3.h"
 #include "VertexArray.h"
 
