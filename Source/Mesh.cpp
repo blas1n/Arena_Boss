@@ -123,7 +123,7 @@ namespace ArenaBoss
 			throw std::exception{ "Mesh has no indices" };
 
 		std::vector<uint> indices;
-		indices.reserve(jsonIndices.Size() * 3);
+		indices.reserve(static_cast<size_t>(jsonIndices.Size()) * 3u);
 		for (rapidjson::SizeType i = 0; i < jsonIndices.Size(); ++i)
 		{
 			const auto& index = jsonIndices[i];
@@ -141,13 +141,12 @@ namespace ArenaBoss
 		{
 			layout,
 			vertices.data(),
-			static_cast<uint>(vertices.size()) / vertSize,
+			static_cast<uint>(vertices.size() / vertSize),
 			indices.data(),
 			static_cast<unsigned int>(indices.size())
 		};
 
-		const auto vertexName = "Vertex of " + GetName();
-		vertexArray = resourceManager.CreateResource<VertexArray>(std::move(vertexName),  param);
+		vertexArray = resourceManager.CreateResource<VertexArray>("Vertex of " + GetName(),  param);
 	}
 
 	Mesh::~Mesh()
