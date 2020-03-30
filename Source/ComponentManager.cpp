@@ -24,7 +24,7 @@ namespace ArenaBoss
 
 		const std::map<std::string, Component*(*)(ComponentManager*, Entity*)> factoryMap
 		{
-			FACTORY_PAIR(Component), FACTORY_PAIR(Transform)
+			FACTORY_PAIR(Component), FACTORY_PAIR(Transform), FACTORY_PAIR(MeshComponent)
 		};
 	}
 
