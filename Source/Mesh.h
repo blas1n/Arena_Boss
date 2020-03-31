@@ -25,6 +25,8 @@ namespace ArenaBoss
 
 		~Mesh() override;
 
+		inline const std::string& GetPath() const noexcept { return path; }
+
 		inline Texture* GetTexture(size_t index) noexcept
 		{
 			return index < textures.size() ? textures[index] : nullptr;
@@ -42,6 +44,8 @@ namespace ArenaBoss
 		inline float GetSpecularPower() const noexcept { return specPower; }
 
 	private:
+		std::string path;
+
 		std::vector<Texture*> textures;
 		VertexArray* vertexArray;
 		float radius;
