@@ -24,7 +24,7 @@ namespace ArenaBoss
 	Mesh::Mesh(const std::string& inName, const std::string& fileName)
 		: Resource(inName), textures(), vertexArray(nullptr), radius(0.0f), specPower(0.0f)
 	{
-		std::ifstream file{ fileName };
+		std::ifstream file{ "Asset\\" + fileName };
 		if (!file.is_open())
 			throw std::exception{ "Cannot found mesh file." };
 
