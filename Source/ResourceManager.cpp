@@ -12,13 +12,10 @@ namespace ArenaBoss
 		resources.erase(iter);
 	}
 
-	void ResourceManager::RegisterResource(Resource* resource)
+	void ResourceManager::RegisterResource(Resource* resource, std::vector<Resource*>::iterator iter)
 	{
 		try
 		{
-			const auto iter = IteratorFinder::
-				FindLowerIterator(resources, resource->GetName());
-
 			resources.emplace_back(std::move(resource));
 			std::rotate(resources.rbegin(), resources.rbegin() + 1,
 				std::reverse_iterator{ iter });

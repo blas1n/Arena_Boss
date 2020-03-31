@@ -23,8 +23,19 @@ namespace ArenaBoss
 		template <class ResourceType, class... Args>
 		ResourceType* CreateResource(const std::string& name, Args&&... args)
 		{
+			std::vector<Resource*>::iterator iter;
+
+			try
+			{
+				iter = IteratorFinder::FindLowerIterator(resources, name);
+			}
+			catch (std::exception&)
+			{
+				return *iter;
+			}
+
 			auto* resource = new ResourceType{ name, std::forward<Args>(args)... };
-			RegisterResource(resource);
+			RegisterResource(resource, iter);
 			return resource;
 		}
 
@@ -38,7 +49,7 @@ namespace ArenaBoss
 		}
 
 	private:
-		void RegisterResource(Resource* name);
+		void RegisterResource(Resource* name, std::vector<Resource*>::iterator iter);
 		Resource* FindResource(const std::string& name, const std::string& resourceName);
 
 	private:
