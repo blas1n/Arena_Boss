@@ -35,7 +35,7 @@ namespace ArenaBoss
 		view = Math::Matrix4x4::CreateLookAt(Math::Vector3::ZERO(), Math::Vector3::RIGHT(), Math::Vector3::FORWARD());
 
 		projection = Math::Matrix4x4::CreatePerspectiveFOV(Math::ToRadians(70.0f),
-			width, height, 25.0f, 10000.0f);
+			static_cast<float>(width), static_cast<float>(height), 25.0f, 10000.0f);
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 

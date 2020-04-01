@@ -42,7 +42,7 @@ namespace ArenaBoss
 			saver.object.AddMember("mesh", obj, saver.alloc);
 		}
 
-		Json::JsonHelper::AddInt(saver, "texture index", textureIndex);
+		Json::JsonHelper::AddInt(saver, "texture index", static_cast<int>(textureIndex));
 	}
 
 	void MeshComponent::Draw()
