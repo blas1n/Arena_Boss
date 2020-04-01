@@ -16,8 +16,6 @@ namespace ArenaBoss
 		GENERATE_RESOURCE(Shader)
 
 	public:
-		Shader(const std::string& name) : Resource(name) {}
-
 		Shader(const std::string& name,
 			const std::string& vertName,
 			const std::string& fragName);
