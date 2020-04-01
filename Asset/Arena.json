@@ -13,7 +13,7 @@
 					"type": "MeshComponent",
 					"mesh": {
 						"name": "Test Mesh",
-						"path": "Test.fbx"
+						"path": "Test.mesh"
 					},
 					"texture index": 0
 				}
