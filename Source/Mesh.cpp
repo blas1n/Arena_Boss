@@ -146,7 +146,7 @@ namespace ArenaBoss
 			static_cast<unsigned int>(indices.size())
 		};
 
-		vertexArray = resourceManager.CreateResource<VertexArray>("Vertex of " + GetName(),  param);
+		vertexArray = resourceManager.CreateResource<VertexArray>("Vertex of " + GetName(), std::move(param));
 	}
 
 	Mesh::~Mesh()
