@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include "IteratorFinder.h"
+#include "Shader.h"
 
 namespace ArenaBoss
 {
@@ -23,20 +25,17 @@ namespace ArenaBoss
 		template <class ResourceType, class... Args>
 		ResourceType* CreateResource(const std::string& name, Args&&... args)
 		{
-			std::vector<Resource*>::iterator iter;
-
 			try
 			{
-				iter = IteratorFinder::FindLowerIterator(resources, name);
+				const auto iter = IteratorFinder::FindSameIterator(resources, name);
+				return static_cast<ResourceType*>(*iter);
 			}
 			catch (std::exception&)
 			{
-				return *iter;
+				auto* resource = new ResourceType{ name, std::forward<Args>(args)... };
+				RegisterResource(resource);
+				return resource;
 			}
-
-			auto* resource = new ResourceType{ name, std::forward<Args>(args)... };
-			RegisterResource(resource, iter);
-			return resource;
 		}
 
 		void DeleteResource(const std::string& name);
@@ -49,7 +48,7 @@ namespace ArenaBoss
 		}
 
 	private:
-		void RegisterResource(Resource* name, std::vector<Resource*>::iterator iter);
+		void RegisterResource(Resource* name);
 		Resource* FindResource(const std::string& name, const std::string& resourceName);
 
 	private:

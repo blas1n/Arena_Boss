@@ -1,6 +1,5 @@
 #include "ResourceManager.h"
 #include <exception>
-#include "IteratorFinder.h"
 #include "Resource.h"
 
 namespace ArenaBoss
@@ -12,10 +11,12 @@ namespace ArenaBoss
 		resources.erase(iter);
 	}
 
-	void ResourceManager::RegisterResource(Resource* resource, std::vector<Resource*>::iterator iter)
+	void ResourceManager::RegisterResource(Resource* resource)
 	{
 		try
 		{
+			const auto iter = IteratorFinder::FindLowerIterator(resources, resource->GetName());
+
 			resources.emplace_back(std::move(resource));
 			std::rotate(resources.rbegin(), resources.rbegin() + 1,
 				std::reverse_iterator{ iter });
