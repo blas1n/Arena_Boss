@@ -46,7 +46,7 @@ namespace ArenaBoss
 			for (rapidjson::SizeType i = 0; i < jsonTextures.Size(); ++i)
 			{
 				const std::string name = jsonTextures[i].GetString();
-				auto texture = resourceManager.GetResource<Texture>(name);
+				auto texture = resourceManager.CreateResource<Texture>(name, name);
 
 				if (texture == nullptr)
 					texture = resourceManager.GetResource<Texture>("Default.png");
