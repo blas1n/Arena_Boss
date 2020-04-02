@@ -9,7 +9,9 @@ namespace ArenaBoss
 		: Resource(inName), textureId(0u), width(0), height(0)
 	{
 		auto channel = 0;
-		auto image = SOIL_load_image(fileName.c_str(),
+		const auto path = "Asset\\" + fileName;
+
+		auto image = SOIL_load_image(path.c_str(),
 			&width, &height, &channel, SOIL_LOAD_AUTO);
 
 		if (image == nullptr)
