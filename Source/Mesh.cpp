@@ -49,7 +49,7 @@ namespace ArenaBoss
 				auto texture = resourceManager.GetResource<Texture>(name);
 
 				if (texture == nullptr)
-					texture = resourceManager.GetResource<Texture>("Assets/Default.png");
+					texture = resourceManager.GetResource<Texture>("Default.png");
 
 				textures.emplace_back(std::move(texture));
 			}
