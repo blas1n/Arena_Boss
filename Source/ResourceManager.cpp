@@ -19,6 +19,7 @@ namespace ArenaBoss
 			resource->GetName(),
 			[](const auto& lhs, const auto& rhs) { return lhs < *rhs; }
 		);
+		resources.insert(iter, resource);
 	}
 
 	Resource* ResourceManager::FindResource(const std::string& name, const std::string& resourceName)

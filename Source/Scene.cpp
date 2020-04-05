@@ -132,18 +132,13 @@ namespace ArenaBoss
 
 	Entity* Scene::AddEntity(Entity* entity)
 	{
-		try
-		{
-			const auto iter = IteratorFinder::FindLowerIterator(entities, *entity);
-
-			entities.emplace_back(entity);
-			std::rotate(entities.rbegin(), entities.rbegin() + 1, std::reverse_iterator{ iter });
-		}
-		catch (std::exception&)
-		{
-			entities.emplace_back(entity);
-		}
-
+		const auto iter = std::upper_bound(
+			entities.cbegin(),
+			entities.cend(),
+			entity->GetName(),
+			[](const auto& lhs, const auto& rhs) { return lhs < *rhs; }
+		);
+		entities.insert(iter, entity);
 		return entity;
 	}
 
