@@ -15,13 +15,25 @@ namespace ArenaBoss
 	{
 		Super::Load(object);
 		
+		auto& manager = Accessor<ResourceManager>::GetManager();
+
 		if (object.HasMember("mesh"))
 		{
 			const auto& meshObj = object["mesh"];
 			const auto meshName = *Json::JsonHelper::GetString(meshObj, "name");
 			const auto meshPath = *Json::JsonHelper::GetString(meshObj, "path");
 
-			mesh = Accessor<ResourceManager>::GetManager().CreateResource<Mesh>(meshName, meshPath);
+			mesh = manager.CreateResource<Mesh>(meshName, meshPath);
+		}
+
+		if (object.HasMember("shader"))
+		{
+			const auto& shaderObj = object["shader"];
+			const auto shaderName = *Json::JsonHelper::GetString(shaderObj, "name");
+			const auto shaderVert = *Json::JsonHelper::GetString(shaderObj, "vert");
+			const auto shaderFrag = *Json::JsonHelper::GetString(shaderObj, "frag");
+
+			SetShader(manager.CreateResource<Shader>(shaderName, shaderVert, shaderFrag));
 		}
 		
 		textureIndex = *Json::JsonHelper::GetInt(object, "texture index");
