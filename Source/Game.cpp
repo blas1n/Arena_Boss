@@ -87,7 +87,7 @@ namespace ArenaBoss
 				renderManager->Draw();
 			}
 		}
-		catch (std::exception & e)
+		catch (std::exception& e)
 		{
 			Log(e.what());
 		}
