@@ -15,6 +15,11 @@
 						"name": "Test Mesh",
 						"path": "Test.mesh"
 					},
+					"shader": {
+						"name": "Phong Shader",
+						"vert": "Phong.vert",
+						"frag": "Phong.frag"
+					},
 					"texture index": 0
 				}
 			]
