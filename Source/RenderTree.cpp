@@ -84,8 +84,12 @@ namespace ArenaBoss
 	void RenderTree::RegisterComponent(MeshComponent* component)
 	{
 		auto& components = GetComponents(component->GetShader());
-		const auto nodeIter = FindIter<ComponentLess, ComponentNonEqual>(
+		
+		const auto iter = std::upper_bound(components.cbegin(), components.cend(), component);  FindIter<ComponentLess, ComponentNonEqual>(
 			components, component, "This component already exists.");
+		
+		components.insert(iter, component);
+		
 
 		components.emplace_back(component);
 		std::rotate(components.rbegin(), components.rbegin() + 1,
