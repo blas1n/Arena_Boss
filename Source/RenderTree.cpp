@@ -10,45 +10,8 @@ namespace ArenaBoss
 {
 	namespace
 	{
-		struct NodeLess
-		{
-			constexpr bool operator()(const RenderTree::RenderNode& lhs, const Shader* rhs) const
-			{
-				return lhs.shader < rhs;
-			}
-		};
-
-		struct NodeEqual
-		{
-			constexpr bool operator()(const RenderTree::RenderNode& lhs, const Shader* rhs) const
-			{
-				return lhs.shader == rhs;
-			}
-		};
-
-		struct NodeNonEqual
-		{
-			constexpr bool operator()(const RenderTree::RenderNode& lhs, const Shader* rhs) const
-			{
-				return lhs.shader != rhs;
-			}
-		};
-
-		using ComponentLess = std::less<MeshComponent*>;
-		using ComponentEqual = std::equal_to<MeshComponent*>;
-		using ComponentNonEqual = std::not_equal_to<MeshComponent*>;
-
-		template <class Comp, class Confirmer, class T, class U>
-		decltype(auto) FindIter(std::vector<T>& vec, const U& value, const std::string& msg)
-		{
-			const auto iter = std::lower_bound(vec.begin(),
-				vec.end(), value, Comp{});
-
-			if (!Confirmer{}(*iter, value))
-				throw std::exception{ msg.c_str() };
-
-			return iter;
-		}
+		constexpr static auto NodeLess = [](const auto& lhs, const auto& rhs) { return lhs.shader < rhs; };
+		constexpr static auto NodeGreater = [](const auto& lhs, const auto& rhs) { return lhs < rhs.shader; };
 	}
 
 	void RenderTree::Draw(std::function<void(Shader&)> fn)
@@ -66,48 +29,47 @@ namespace ArenaBoss
 
 	void RenderTree::RegisterShader(Shader* shader)
 	{
-		const auto iter = FindIter<NodeLess, NodeNonEqual>(
-			nodes, shader, "This shader already exists.");
+		const auto iter = std::upper_bound(nodes.cbegin(), nodes.cend(), shader, NodeGreater);
 
-		nodes.emplace_back(RenderNode{ shader });
-		std::rotate(nodes.rbegin(), nodes.rbegin() + 1,
-			std::reverse_iterator{ iter });
+		if (iter == nodes.cend() || iter->shader != shader)
+			nodes.insert(iter, shader);
 	}
 
 	void RenderTree::UnregisterShader(Shader* shader)
 	{
-		const auto iter = FindIter<NodeLess, NodeEqual>(
-			nodes, shader, "This shader doesn't exists.");
-		nodes.erase(iter);
+		const auto iter = std::lower_bound(nodes.cbegin(), nodes.cend(), shader, NodeLess);
+
+		if (iter != nodes.cend() && iter->shader == shader)
+			nodes.erase(iter);
 	}
 
 	void RenderTree::RegisterComponent(MeshComponent* component)
 	{
 		auto& components = GetComponents(component->GetShader());
 		
-		const auto iter = std::upper_bound(components.cbegin(), components.cend(), component);  FindIter<ComponentLess, ComponentNonEqual>(
-			components, component, "This component already exists.");
-		
-		components.insert(iter, component);
-		
+		const auto iter = std::upper_bound(components.cbegin(), components.cend(), component);
 
-		components.emplace_back(component);
-		std::rotate(components.rbegin(), components.rbegin() + 1,
-			std::reverse_iterator{ nodeIter });
+		if (iter == components.cend() || *iter != component)
+			components.insert(iter, component);
 	}
 
 	void RenderTree::UnregisterComponent(MeshComponent* component)
 	{
 		auto& components = GetComponents(component->GetShader());
-		const auto nodeIter = FindIter<ComponentLess, ComponentEqual>(
-			components, component, "This component doesn't exists.");
-		components.erase(nodeIter);
+
+		const auto iter = std::lower_bound(components.cbegin(), components.cend(), component);
+
+		if (iter != components.cend() && *iter == component)
+			components.erase(iter);
 	}
 
 	std::vector<MeshComponent*>& RenderTree::GetComponents(Shader* shader)
 	{
-		const auto iter = FindIter<NodeLess, NodeEqual>(
-			nodes, shader, "This shader doesn't exists.");
-		return iter->components;
+		const auto iter = std::upper_bound(nodes.begin(), nodes.end(), shader, NodeGreater);
+
+		if (iter != nodes.cend() && iter->shader == shader)
+			return iter->components;
+
+		return nodes.insert(iter, shader)->components;
 	}
 }
