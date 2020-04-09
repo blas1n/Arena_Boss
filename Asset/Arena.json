@@ -1,4 +1,12 @@
 {
+	"globals": {
+		"ambientLight": [ 0.2, 0.2, 0.2 ],
+		"directionalLight": {
+			"direction": [ 0.0, -0.7, -0.7 ],
+			"diffuseColor": [ 0.78, 0.88, 1.0 ],
+			"specularColor": [ 0.8, 0.8, 0.8 ]
+		}
+	},
 	"entities": [
 		{
 			"name": "Test",
