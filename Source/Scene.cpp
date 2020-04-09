@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "IteratorFinder.h"
 #include "JsonHelper.h"
+#include "RenderManager.h"
 
 namespace ArenaBoss
 {
@@ -56,6 +57,27 @@ namespace ArenaBoss
 		Release();
 
 		const auto doc = LoadJson(name);
+
+		const auto& globals = doc["globals"];
+
+		if (!globals.IsObject())
+			throw std::exception{ "File is not vaild." };
+
+		auto& manager = Accessor<RenderManager>::GetManager();
+
+		const auto ambient = Json::JsonHelper::GetVector3(globals, "ambientLight");
+		if (ambient) manager.SetAmbientLight(*ambient);
+
+		const auto& dirObj = globals["directionalLight"];
+		if (dirObj.IsObject())
+		{
+			auto& dir = manager.GetDirectionalLight();
+
+			dir.direction = *Json::JsonHelper::GetVector3(dirObj, "direction");
+			dir.diffuseColor = *Json::JsonHelper::GetVector3(dirObj, "diffuseColor");
+			dir.specularColor = *Json::JsonHelper::GetVector3(dirObj, "specularColor");
+		}
+
 		const auto& entitiesArray = doc["entities"];
 
 		if (!entitiesArray.IsArray())
@@ -91,8 +113,28 @@ namespace ArenaBoss
 		rapidjson::Document doc;
 		doc.SetObject();
 
-		rapidjson::Value entitiesArray{ rapidjson::kArrayType };
 		auto& alloc = doc.GetAllocator();
+
+		rapidjson::Value globals{ rapidjson::kObjectType };
+		auto& manager = Accessor<RenderManager>::GetManager();
+
+		Json::JsonSaver saver{ alloc, globals };
+		Json::JsonHelper::AddVector3(saver, "ambientLight", manager.GetAmbientLight());
+
+		auto& dirObj = globals["directionalLight"];
+		if (dirObj.IsObject())
+		{
+			auto& dir = manager.GetDirectionalLight();
+			Json::JsonSaver dirSaver{ saver, dirObj };
+
+			Json::JsonHelper::AddVector3(dirSaver, "direction", dir.direction);
+			Json::JsonHelper::AddVector3(dirSaver, "diffuseColor", dir.diffuseColor);
+			Json::JsonHelper::AddVector3(dirSaver, "specularColor", dir.specularColor);
+		}
+
+		doc.AddMember("globals", globals, alloc);
+
+		rapidjson::Value entitiesArray{ rapidjson::kArrayType };
 		
 		for (const auto* entity : entities)
 		{
@@ -102,7 +144,7 @@ namespace ArenaBoss
 			entitiesArray.PushBack(obj, alloc);
 		}
 
-		doc.AddMember("entities", entitiesArray, doc.GetAllocator());
+		doc.AddMember("entities", entitiesArray, alloc);
 
 		rapidjson::StringBuffer buffer;
 		rapidjson::PrettyWriter<rapidjson::StringBuffer> writer{ buffer };

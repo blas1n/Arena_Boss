@@ -2,12 +2,13 @@
 
 #include <string>
 #include <vector>
+#include "Accessor.h"
 
 namespace ArenaBoss
 {
 	class Entity;
 
-	class Scene final
+	class Scene final : public Accessor<class RenderManager>
 	{
 	public:
 		Scene(const Scene&) = delete;
