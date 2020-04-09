@@ -9,7 +9,15 @@ namespace ArenaBoss
 {
 	class MeshComponent;
 	class SpriteComponent;
+	class Shader;
 	class RenderTree;
+
+	struct DirectionalLight
+	{
+		Math::Vector3 direction;
+		Math::Vector3 diffuseColor;
+		Math::Vector3 specularColor;
+	};
 
 	class RenderManager final : Accessor<class WindowManager>, Accessor<class ResourceManager>
 	{
@@ -28,7 +36,13 @@ namespace ArenaBoss
 
 		void SetComponentInTree(MeshComponent* component);
 
-		inline void SetViewMatrix(const Math::Matrix4x4& inView) { view = inView; }
+		inline void SetViewMatrix(const Math::Matrix4x4& inView) noexcept { view = inView; }
+
+		inline const Math::Vector3& GetAmbientLight() const noexcept { return ambientLight; }
+		inline void SetAmbientLight(const Math::Vector3& inAmbientLight) noexcept { ambientLight = inAmbientLight; }
+
+		inline DirectionalLight& GetDirectionalLight() noexcept { return dirLight; }
+		inline const DirectionalLight& GetDirectionalLight() const noexcept { return dirLight; }
 
 	private:
 		friend class ComponentManager;
@@ -45,6 +59,8 @@ namespace ArenaBoss
 
 		void GenerateSpriteResource();
 
+		void SetLightUniforms(Shader& shader);
+
 	private:
 		using WindowAccessor = Accessor<WindowManager>;
 		using ResourceAccessor = Accessor<ResourceManager>;
@@ -60,6 +76,9 @@ namespace ArenaBoss
 
 		Math::Matrix4x4 view;
 		Math::Matrix4x4 projection;
+
+		DirectionalLight dirLight;
+		Math::Vector3 ambientLight;
 
 		uint32_t width;
 		uint32_t height;

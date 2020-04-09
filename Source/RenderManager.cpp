@@ -74,9 +74,10 @@ namespace ArenaBoss
 		glDisable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);
 
-		renderTree->Draw([viewProj = view * projection](auto& shader)
+		renderTree->Draw([this, viewProj = view * projection](auto& shader)
 		{
 			shader.SetUniformValue("uViewProjection", viewProj);
+			SetLightUniforms(shader);
 		});
 
 		glDisable(GL_DEPTH_TEST);
@@ -160,5 +161,18 @@ namespace ArenaBoss
 
 		VertexArrayParam param{ VertexLayout::PosNormTex, vertices, 4, indices, 6 };
 		resourceManager.CreateResource<VertexArray>("Sprite Vertex", std::move(param));
+	}
+
+	void RenderManager::SetLightUniforms(Shader& shader)
+	{
+		auto invView = view.Invert();
+
+		shader.SetUniformValue("uCameraPos", invView.GetTranslation());
+
+		shader.SetUniformValue("uAmbientLight", ambientLight);
+
+		shader.SetUniformValue("uDirLight.direction", dirLight.direction);
+		shader.SetUniformValue("uDirLight.diffuseColor", dirLight.diffuseColor);
+		shader.SetUniformValue("uDirLight.specularColor", dirLight.specularColor);
 	}
 }
