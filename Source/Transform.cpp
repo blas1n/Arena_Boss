@@ -9,10 +9,10 @@ namespace ArenaBoss
 	{
 		Math::Vector3 position;
 		Math::Rotator rotation;
-		float scale;
+		float scale = 1.0f;
 
 		Math::Matrix4x4 worldMatrix;
-		bool needRecompute;
+		bool needRecompute = true;
 	};
 
 	void Transform::Construct()
@@ -87,6 +87,7 @@ namespace ArenaBoss
 			impl->worldMatrix = Math::Matrix4x4::CreateFromScale(impl->scale);
 			impl->worldMatrix *= Math::Matrix4x4::CreateFromRotation(impl->rotation);
 			impl->worldMatrix *= Math::Matrix4x4::CreateFromPosition(impl->position);
+			impl->needRecompute = false;
 		}
 
 		return impl->worldMatrix;
