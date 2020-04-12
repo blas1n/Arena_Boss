@@ -55,8 +55,13 @@ namespace ArenaBoss
 			const auto type = Json::JsonHelper::GetString(componentObj, "type");
 			if (!type) throw std::exception{ "Component is not vaild." };
 
-			auto* component = componentManager.CreateComponent(*type, this);
-			component->Load(componentObj);
+			if (*type != "transform")
+			{
+				auto* component = componentManager.CreateComponent(*type, this);
+				component->Load(componentObj);
+			}
+			else
+				transform->Load(componentObj);
 		}
 	}
 
