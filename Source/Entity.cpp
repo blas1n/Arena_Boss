@@ -70,6 +70,12 @@ namespace ArenaBoss
 		Json::JsonHelper::AddString(inSaver, "name", name);
 		rapidjson::Value componentsArray{ rapidjson::kArrayType };
 
+		{
+			rapidjson::Value obj{ rapidjson::kObjectType };
+			Json::JsonSaver saver{ inSaver, obj };
+			transform->Save(saver);
+		}
+
 		for (const auto* component : components)
 		{
 			rapidjson::Value obj{ rapidjson::kObjectType };
