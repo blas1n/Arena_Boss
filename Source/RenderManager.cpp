@@ -32,7 +32,7 @@ namespace ArenaBoss
 		width = windowManager.GetWidth();
 		height = windowManager.GetHeight();
 
-		view = Math::Matrix4x4::CreateLookAt(Math::Vector3::FORWARD() * 10.0f, Math::Vector3::ZERO(), Math::Vector3::UP());
+		view = Math::Matrix4x4::CreateLookAt(Math::Vector3::ZERO(), Math::Vector3::BACKWARD(), Math::Vector3::UP());
 
 		projection = Math::Matrix4x4::CreatePerspectiveFOV(Math::ToRadians(70.0f),
 			static_cast<float>(width), static_cast<float>(height), 25.0f, 10000.0f);
@@ -74,7 +74,7 @@ namespace ArenaBoss
 		glDisable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);
 
-		renderTree->Draw([this, viewProj = view * projection](auto& shader)
+		renderTree->Draw([this, viewProj = view](auto& shader)
 		{
 			shader.SetUniformValue("uViewProjection", viewProj);
 			SetLightUniforms(shader);
