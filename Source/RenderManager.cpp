@@ -135,13 +135,8 @@ namespace ArenaBoss
 
 		shader->Activate();
 
-		const Math::Matrix4x4 viewProjection
-		{
-			2.0f / width, 0.0f, 0.0f, 0.0f,
-			0.0f, 2.0f / height, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 1.0f
-		};
+		const Math::Matrix4x4 viewProjection =
+			Math::Matrix4x4::CreateSimpleViewProjection(static_cast<float>(width), static_cast<float>(height));
 
 		shader->SetUniformValue("uViewProjection", viewProjection);
 
