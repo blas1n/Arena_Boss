@@ -74,7 +74,7 @@ namespace ArenaBoss
 		glDisable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);
 
-		renderTree->Draw([this, viewProj = view](auto& shader)
+		renderTree->Draw([this, viewProj = view * projection](auto& shader)
 		{
 			shader.SetUniformValue("uViewProjection", viewProj);
 			SetLightUniforms(shader);
