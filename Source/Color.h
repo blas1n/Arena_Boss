@@ -21,12 +21,12 @@ namespace ArenaBoss
         };
 
     public:
-        Color() : value(Math::Vector4::ZERO) {}
-        Color(const Color&) = default;
-        Color(Color&&) = default;
+        Color() noexcept : value(Math::Vector4::ZERO()) {}
+        Color(const Color&) noexcept = default;
+        Color(Color&&) noexcept = default;
 
-        explicit Color(const Math::Vector4& vec) : value(vec) {}
-        explicit Color(Math::Vector4&& vec) : value(std::move(vec)) {}
+        explicit Color(const Math::Vector4& vec) noexcept : value(vec) {}
+        explicit Color(Math::Vector4&& vec) noexcept : value(std::move(vec)) {}
 
         inline static Color FromFloat(const Math::Vector4& vec) { return Color{ vec }; }
         inline static Color FromFloat(Math::Vector4&& vec) { return Color{ std::move(vec) }; }
@@ -55,17 +55,20 @@ namespace ArenaBoss
             );
         }
 
-        Color& operator=(const Color&) = default;
-        Color& operator=(Color&&) = default;
+        Color& operator=(const Color&) noexcept = default;
+        Color& operator=(Color&&) noexcept = default;
 
-        inline void AsPtr(float out[4]) const noexcept
+        constexpr operator float*() noexcept { return static_cast<float*>(value); }
+        constexpr operator const float*() const noexcept { return static_cast<const float*>(value); }
+
+        inline void Set(float inX, float inY, float inZ, float inW) noexcept
         {
-            DirectX::XMStoreFloat4(reinterpret_cast<DirectX::XMFLOAT4*>(out), value);
+            value.Set(inX, inY, inZ, inW);
         }
 
-        inline Math::Vector4 AsVector() const noexcept
+        inline void Set(const float* elems) noexcept
         {
-            return value;
+            Set(elems[0], elems[1], elems[2], elems[3]);
         }
 
         inline float& operator[](size_t idx) noexcept { return value[idx]; }
@@ -83,26 +86,5 @@ namespace ArenaBoss
     inline bool operator!=(const Color& lhs, const Color& rhs) noexcept
     {
         return !(lhs == rhs);
-    }
-
-    inline Color Max(const Color& lhs, const Color& rhs)
-    {
-        return Color{ Math::Vector4{ DirectX::XMVectorMax(lhs.AsVector(), rhs.AsVector()) } };
-    }
-
-    inline Color Min(const Color& lhs, const Color& rhs)
-    {
-        return Color{ Math::Vector4{ DirectX::XMVectorMin(lhs.AsVector(), rhs.AsVector()) } };
-    }
-
-    inline Color Clamp(const Color& x, const Color& min, const Color& max)
-    {
-        return Color
-        {
-            Math::Vector4
-            {
-                DirectX::XMVectorClamp(x.AsVector(), min.AsVector(), max.AsVector())
-            }
-        };
     }
 }
