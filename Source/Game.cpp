@@ -16,11 +16,6 @@ namespace ArenaBoss
 {
 	Game::Game()
 	{
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
-		{
-			Log("Unable to initialize SDL: %s", SDL_GetError());
-		}
-
 		try
 		{
 			ConfigFile config{ "Config.txt" };

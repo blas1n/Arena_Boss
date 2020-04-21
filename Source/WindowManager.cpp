@@ -1,59 +1,87 @@
 #include "WindowManager.h"
+#include <exception>
+#include <GL/glew.h>
 
 namespace ArenaBoss
 {
-	WindowManager::WindowManager(const char* inTitle,
-		uint32_t inWidth, uint32_t inHeight, ScreenMode inScreenMode)
+	WindowManager::WindowManager(const char* title,
+		uint32_t width, uint32_t height, ScreenMode inScreenMode)
 		: window(nullptr),
-		title(inTitle),
-		width(inWidth),
-		height(inHeight),
 		screenMode(inScreenMode)
 	{
-		uint32_t flag = SDL_WINDOW_OPENGL;
+		if (!glfwInit())
+			throw std::exception{ "Failed to initialze GLFW" };
 
-		if (screenMode == ScreenMode::FullScreen)
-			flag |= SDL_WINDOW_FULLSCREEN;
-		else if (screenMode == ScreenMode::Borderless)
-			flag |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+		auto* monitor = glfwGetPrimaryMonitor();
+		auto* mode = glfwGetVideoMode(monitor);
 
-		window = SDL_CreateWindow(
-			title,
-			SDL_WINDOWPOS_CENTERED,
-			SDL_WINDOWPOS_CENTERED,
-			width,
-			height,
-			flag);
+		glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+		glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+		glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+		glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+		glfwWindowHint(GLFW_SAMPLES, 4);
+		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+		window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+
+		glewExperimental = true;
+		if (glewInit() != GLEW_OK)
+			throw std::exception{ "Failed to initialze GLEW" };
 	}
 
 	WindowManager::~WindowManager()
 	{
-		SDL_DestroyWindow(window);
+		glfwDestroyWindow(window);
+		glfwTerminate();
 	}
 
-	void WindowManager::SetTitle(const char* inTitle) noexcept
+	std::string WindowManager::GetTitle() const noexcept
 	{
-		title = inTitle;
-		SDL_SetWindowTitle(window, title);
+		char title[50];
+		glfwGetWindowTitle(window, title);
+		return std::string{ title };
 	}
 
-	void WindowManager::SetSize(uint32_t inWidth, uint32_t inHeight) noexcept
+	Math::UintVector2 WindowManager::GetSize() const noexcept
 	{
-		width = inWidth;
-		height = inHeight;
-		SDL_SetWindowSize(window, width, height);
+		int w, h;
+		glfwGetWindowSize(window, &w, &h);
+		return Math::UintVector2{ w, h };
 	}
 
 	void WindowManager::SetScreenMode(ScreenMode inScreenMode) noexcept
 	{
 		screenMode = inScreenMode;
+		
+		auto* monitor = glfwGetPrimaryMonitor();
+		auto* mode = glfwGetVideoMode(monitor);
 
-		uint32_t flag = 0;
-		if (screenMode == ScreenMode::FullScreen)
-			flag = SDL_WINDOW_FULLSCREEN;
-		else if (screenMode == ScreenMode::Borderless)
-			flag = SDL_WINDOW_FULLSCREEN_DESKTOP;
+		switch (screenMode)
+		{
+		case ScreenMode::Window:
+		{
+			int x, y, w, h;
+			glfwGetWindowPos(window, &x, &y);
+			glfwGetWindowSize(window, &w, &h);
 
-		SDL_SetWindowFullscreen(window, flag);
+			glfwSetWindowMonitor(window, nullptr, x, y, w, h, 0);
+			break;
+		}
+		case ScreenMode::FullScreen:
+		{
+			glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, 0);
+			break;
+		}
+		case ScreenMode::Borderless:
+		{
+			glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+			break;
+		}
+		}
 	}
 }

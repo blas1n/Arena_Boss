@@ -1,7 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include <SDL2/SDL.h>
+#include <GLFW/glfw3.h>
+#include <string>
 #include "Vector2.h"
 
 namespace ArenaBoss
@@ -27,46 +28,37 @@ namespace ArenaBoss
 
 		~WindowManager();
 
-		inline SDL_Window* GetWindow() noexcept
+		inline GLFWwindow* GetWindow() noexcept
 		{
 			return window;
 		}
 
-		inline const char* GetTitle() const noexcept
-		{
-			return title;
-		}
+		std::string GetTitle() const noexcept;
 
-		inline uint32_t GetWidth() const noexcept
-		{
-			return width;
-		}
+		inline uint32_t GetWidth() const noexcept { return GetSize().x; }
+		inline uint32_t GetHeight() const noexcept { return GetSize().y; }
 
-		inline uint32_t GetHeight() const noexcept
-		{
-			return height;
-		}
-
-		inline Math::UintVector2 GetSize() const noexcept
-		{
-			return Math::UintVector2{ width, height };
-		}
+		Math::UintVector2 GetSize() const noexcept;
 
 		inline ScreenMode GetScreenMode() const noexcept
 		{
 			return screenMode;
 		}
 
-		void SetTitle(const char* inTitle) noexcept;
-		void SetSize(uint32_t inWidth, uint32_t inHeight) noexcept;
+		inline void SetTitle(const char* title) noexcept
+		{
+			glfwSetWindowTitle(window, title);
+		}
+
+		inline void SetSize(uint32_t width, uint32_t height) noexcept
+		{
+			glfwSetWindowSize(window, width, height);
+		}
+
 		void SetScreenMode(ScreenMode inScreenMode) noexcept;
 
 	private:
-		SDL_Window* window;
-
-		const char* title;
-		uint32_t width;
-		uint32_t height;
+		GLFWwindow* window;
 		ScreenMode screenMode;
 	};
 }
