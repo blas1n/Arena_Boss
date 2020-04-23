@@ -28,10 +28,7 @@ namespace ArenaBoss
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		window = glfwCreateWindow(width, height, title, nullptr, nullptr);
-
-		glewExperimental = true;
-		if (glewInit() != GLEW_OK)
-			throw std::exception{ "Failed to initialze GLEW" };
+		glfwMakeContextCurrent(window);
 	}
 
 	WindowManager::~WindowManager()
