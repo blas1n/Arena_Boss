@@ -36,7 +36,6 @@ namespace ArenaBoss
 
 	void RenderManager::Draw()
 	{
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glDisable(GL_BLEND);
@@ -63,7 +62,7 @@ namespace ArenaBoss
 
 		// Draw ui
 
-		SDL_GL_SwapWindow(window);
+		WindowAccessor::GetManager().SwapBuffer();
 	}
 
 	void RenderManager::SetComponentInTree(MeshComponent* component)
