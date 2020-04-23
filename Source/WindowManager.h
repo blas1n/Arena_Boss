@@ -28,10 +28,7 @@ namespace ArenaBoss
 
 		~WindowManager();
 
-		inline GLFWwindow* GetWindow() noexcept
-		{
-			return window;
-		}
+		inline void SwapBuffer() noexcept { glfwSwapBuffers(window); }
 
 		std::string GetTitle() const noexcept;
 
