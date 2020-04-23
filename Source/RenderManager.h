@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+#include <GLFW/glfw3.h>
 #include <vector>
 #include "Accessor.h"
 #include "Matrix4x4.h"
@@ -30,7 +30,7 @@ namespace ArenaBoss
 		RenderManager& operator=(const RenderManager&) = delete;
 		RenderManager& operator=(RenderManager&&) = delete;
 
-		~RenderManager();
+		~RenderManager() = default;
 
 		void Draw();
 
@@ -69,18 +69,11 @@ namespace ArenaBoss
 		std::vector<SpriteComponent*> spriteComponents;
 
 		RenderTree* renderTree;
-		SDL_Window* window;
-
-		ResourceManager& resourceManager;
-		SDL_GLContext context;
 
 		Math::Matrix4x4 view;
 		Math::Matrix4x4 projection;
 
 		DirectionalLight dirLight;
 		Math::Vector3 ambientLight;
-
-		uint32_t width;
-		uint32_t height;
 	};
 }
