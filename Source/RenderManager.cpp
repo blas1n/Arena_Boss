@@ -53,6 +53,7 @@ namespace ArenaBoss
 		glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
+		auto& resourceManager = ResourceAccessor::GetManager();
 		resourceManager.GetResource<Shader>("Sprite Shader")->Activate();
 		resourceManager.GetResource<VertexArray>("Sprite Vertex")->Activate();
 
