@@ -22,11 +22,6 @@ namespace ArenaBoss
 		view(),
 		projection()
 	{
-		view = Math::Matrix4x4::CreateLookAt(Math::Vector3::ZERO(), Math::Vector3::BACKWARD(), Math::Vector3::UP());
-
-		projection = Math::Matrix4x4::CreateOrtho(static_cast<float>(width), 
-			static_cast<float>(height), 25.0f, 10000.0f);
-
 		glewExperimental = GL_TRUE;
 		if (glewInit() != GLEW_OK)
 			throw std::exception{ "Failed to initialize GLEW" };
@@ -98,6 +93,17 @@ namespace ArenaBoss
 
 	void RenderManager::GenerateSpriteResource()
 	{
+		auto& windowManager = WindowAccessor::GetManager();
+		auto& resourceManager = ResourceAccessor::GetManager();
+
+		view = Math::Matrix4x4::CreateLookAt(Math::Vector3::ZERO(), Math::Vector3::BACKWARD(), Math::Vector3::UP());
+
+		const auto width = windowManager.GetWidth();
+		const auto height = windowManager.GetHeight();
+
+		projection = Math::Matrix4x4::CreateOrtho(static_cast<float>(width),
+			static_cast<float>(height), 25.0f, 10000.0f);
+
 		auto shader = resourceManager.CreateResource<Shader>
 			("Sprite Shader", "Sprite.vert", "Sprite.frag");
 
