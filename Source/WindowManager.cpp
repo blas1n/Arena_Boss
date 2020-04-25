@@ -41,7 +41,7 @@ namespace ArenaBoss
 	{
 		int w, h;
 		glfwGetWindowSize(window, &w, &h);
-		return Math::UintVector2{ w, h };
+		return Math::UintVector2{ static_cast<uint32_t>(w), static_cast<uint32_t>(h) };
 	}
 
 	void WindowManager::SetScreenMode(ScreenMode inScreenMode) noexcept
