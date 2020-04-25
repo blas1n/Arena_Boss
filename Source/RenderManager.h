@@ -29,7 +29,7 @@ namespace ArenaBoss
 		RenderManager& operator=(const RenderManager&) = delete;
 		RenderManager& operator=(RenderManager&&) = delete;
 
-		~RenderManager() = default;
+		~RenderManager();
 
 		void Draw();
 
