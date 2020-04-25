@@ -37,13 +37,6 @@ namespace ArenaBoss
 		glfwTerminate();
 	}
 
-	std::string WindowManager::GetTitle() const noexcept
-	{
-		char title[50];
-		glfwGetWindowTitle(window, title);
-		return std::string{ title };
-	}
-
 	Math::UintVector2 WindowManager::GetSize() const noexcept
 	{
 		int w, h;

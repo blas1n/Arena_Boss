@@ -30,7 +30,7 @@ namespace ArenaBoss
 
 		inline void SwapBuffer() noexcept { glfwSwapBuffers(window); }
 
-		std::string GetTitle() const noexcept;
+		const std::string& GetTitle() const noexcept { return title; }
 
 		inline uint32_t GetWidth() const noexcept { return GetSize().x; }
 		inline uint32_t GetHeight() const noexcept { return GetSize().y; }
@@ -42,9 +42,10 @@ namespace ArenaBoss
 			return screenMode;
 		}
 
-		inline void SetTitle(const char* title) noexcept
+		inline void SetTitle(const std::string& inTitle) noexcept
 		{
-			glfwSetWindowTitle(window, title);
+			title = inTitle;
+			glfwSetWindowTitle(window, title.c_str());
 		}
 
 		inline void SetSize(uint32_t width, uint32_t height) noexcept
@@ -56,6 +57,7 @@ namespace ArenaBoss
 
 	private:
 		GLFWwindow* window;
+		std::string title;
 		ScreenMode screenMode;
 	};
 }
