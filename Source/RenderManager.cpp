@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <exception>
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <string>
 #include "DrawableComponent.h"
 #include "MathFunctions.h"

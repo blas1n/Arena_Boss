@@ -1,6 +1,5 @@
 #include "WindowManager.h"
 #include <exception>
-#include <GL/glew.h>
 
 namespace ArenaBoss
 {

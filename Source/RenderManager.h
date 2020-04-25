@@ -1,6 +1,5 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
 #include <vector>
 #include "Accessor.h"
 #include "Matrix4x4.h"
