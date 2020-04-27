@@ -168,7 +168,7 @@ namespace ArenaBoss::Math
 
     Matrix4x4 Matrix4x4::CreateOrtho(float width, float height, float near, float far)
     {
-        glm::ortho(0.0f, width, 0.0f, height, near, far);
+        return glm::ortho(0.0f, width, 0.0f, height, near, far);
     }
 
     Matrix4x4 Matrix4x4::CreatePerspectiveFOV(float fov, float width, float height, float near, float far)
