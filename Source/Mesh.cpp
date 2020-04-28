@@ -143,7 +143,7 @@ namespace ArenaBoss
 			vertices.data(),
 			static_cast<uint>(vertices.size() / vertSize),
 			indices.data(),
-			static_cast<unsigned int>(indices.size())
+			static_cast<uint>(indices.size())
 		};
 
 		vertexArray = resourceManager.CreateResource<VertexArray>("Vertex of " + GetName(), std::move(param));
