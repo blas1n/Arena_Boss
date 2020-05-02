@@ -72,7 +72,7 @@ namespace ArenaBoss
 		{
 			while (isRun)
 			{
-				while (!SDL_TICKS_PASSED(SDL_GetTicks(), ticksCount + 16));
+				// GLFW version v-sync.
 				const auto deltaTime = Math::Min(static_cast<float>(SDL_GetTicks() - ticksCount) / 1000.0f, 0.05f);
 				ticksCount = SDL_GetTicks();
 
