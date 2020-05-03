@@ -1,6 +1,5 @@
 #include "Game.h"
 #include <exception>
-#include <SDL2/SDL.h>
 #include "Accessor.h"
 #include "ComponentManager.h"
 #include "ConfigFile.h"
@@ -73,8 +72,7 @@ namespace ArenaBoss
 			while (isRun)
 			{
 				// GLFW version v-sync.
-				const auto deltaTime = Math::Min(static_cast<float>(SDL_GetTicks() - ticksCount) / 1000.0f, 0.05f);
-				ticksCount = SDL_GetTicks();
+				// Calc delta time.
 
 				inputManager->Update();
 				sceneManager->Update();
