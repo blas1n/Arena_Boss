@@ -27,6 +27,7 @@ namespace ArenaBoss
 		if (glewInit() != GLEW_OK)
 			throw std::exception{ "Failed to initialize GLEW" };
 
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		GenerateSpriteResource();
 	}
 
