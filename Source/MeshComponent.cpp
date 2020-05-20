@@ -17,15 +17,6 @@ namespace ArenaBoss
 		
 		auto& manager = Accessor<ResourceManager>::GetManager();
 
-		if (object.HasMember("mesh"))
-		{
-			const auto& meshObj = object["mesh"];
-			const auto meshName = *Json::JsonHelper::GetString(meshObj, "name");
-			const auto meshPath = *Json::JsonHelper::GetString(meshObj, "path");
-
-			mesh = manager.CreateResource<Mesh>(meshName, meshPath);
-		}
-
 		if (object.HasMember("shader"))
 		{
 			const auto& shaderObj = object["shader"];
@@ -35,6 +26,15 @@ namespace ArenaBoss
 
 			SetShader(manager.CreateResource<Shader>(shaderName, shaderVert, shaderFrag));
 		}
+
+		if (object.HasMember("mesh"))
+		{
+			const auto& meshObj = object["mesh"];
+			const auto meshName = *Json::JsonHelper::GetString(meshObj, "name");
+			const auto meshPath = *Json::JsonHelper::GetString(meshObj, "path");
+
+			mesh = manager.CreateResource<Mesh>(meshName, meshPath);
+		}
 		
 		textureIndex = *Json::JsonHelper::GetInt(object, "texture index");
 	}
@@ -43,13 +43,25 @@ namespace ArenaBoss
 	{
 		Super::Save(saver);
 
+		if (const auto* shader = Super::GetShader())
+		{
+			rapidjson::Value obj{ rapidjson::kObjectType };
+			Json::JsonSaver shaderSaver{ saver, obj };
+
+			Json::JsonHelper::AddString(shaderSaver, "name", mesh->GetName());
+			Json::JsonHelper::AddString(shaderSaver, "vert", mesh->GetPath());
+			Json::JsonHelper::AddString(shaderSaver, "frag", mesh->GetPath());
+
+			saver.object.AddMember("shader", obj, saver.alloc);
+		}
+
 		if (mesh)
 		{
 			rapidjson::Value obj{ rapidjson::kObjectType };
 			Json::JsonSaver meshSaver{ saver, obj };
 
-			Json::JsonHelper::AddString(saver, "name", mesh->GetName());
-			Json::JsonHelper::AddString(saver, "path", mesh->GetPath());
+			Json::JsonHelper::AddString(meshSaver, "name", mesh->GetName());
+			Json::JsonHelper::AddString(meshSaver, "path", mesh->GetPath());
 
 			saver.object.AddMember("mesh", obj, saver.alloc);
 		}
