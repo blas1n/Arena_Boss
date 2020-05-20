@@ -16,7 +16,7 @@ namespace ArenaBoss
 		
 		void Draw() override;
 
-		virtual inline void SetMesh(Mesh* inMesh) noexcept { mesh = inMesh; }
+		virtual void SetMesh(Mesh* inMesh) noexcept;
 		inline void SetTexutreIndex(size_t inTextureIndex) noexcept { textureIndex = inTextureIndex; }
 
 		void SetShader(Shader* inShader) noexcept override;

@@ -75,6 +75,12 @@ namespace ArenaBoss
 		glDrawElements(GL_TRIANGLES, vertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
 	}
 
+	void MeshComponent::SetMesh(Mesh* inMesh) noexcept
+	{
+		if (mesh) delete mesh;
+		mesh = inMesh;
+	}
+
 	void MeshComponent::SetShader(Shader* inShader) noexcept
 	{
 		DrawableComponent::SetShader(inShader);
