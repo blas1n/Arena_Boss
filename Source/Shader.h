@@ -34,6 +34,8 @@ namespace ArenaBoss
 		void SetUniformValue(const std::string& name, const Math::Matrix4x4& value);
 		void SetUniformValue(const std::string& name, const Math::Vector3& value);
 		void SetUniformValue(const std::string& name, float value);
+		void SetUniformValue(const std::string& name, bool value);
+		void SetUniformValue(const std::string& name, int value);
 
 	private:
 		bool CompileShader(const std::string& fileName, GLenum shaderType, GLuint& outShader);
