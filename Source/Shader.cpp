@@ -1,5 +1,4 @@
 #include "Shader.h"
-#include <SDL2/SDL.h>
 #include <fstream>
 #include <sstream>
 #include "Log.h"
@@ -40,26 +39,26 @@ namespace ArenaBoss
 
 	void Shader::SetUniformValue(const std::string& name, Math::Matrix4x4* matrices, uint32_t count)
 	{
-		GLuint loc = glGetUniformLocation(shaderProgram, name.c_str());
-		glUniformMatrix4fv(loc, count, GL_TRUE, reinterpret_cast<const GLfloat*>(matrices));
+		if (const auto loc = glGetUniformLocation(shaderProgram, name.c_str()); loc >= 0)
+			glUniformMatrix4fv(loc, count, GL_TRUE, reinterpret_cast<const GLfloat*>(matrices));
 	}
 
 	void Shader::SetUniformValue(const std::string& name, const Math::Matrix4x4& value)
 	{
-		const auto loc = glGetUniformLocation(shaderProgram, name.c_str());
-		glUniformMatrix4fv(loc, 1, GL_TRUE, static_cast<const GLfloat*>(value));
+		if (const auto loc = glGetUniformLocation(shaderProgram, name.c_str()); loc >= 0)
+			glUniformMatrix4fv(loc, 1, GL_TRUE, static_cast<const GLfloat*>(value));
 	}
 
 	void Shader::SetUniformValue(const std::string& name, const Math::Vector3& value)
 	{
-		const auto loc = glGetUniformLocation(shaderProgram, name.c_str());
-		glUniform3fv(loc, 1, static_cast<const GLfloat*>(value));
+		if (const auto loc = glGetUniformLocation(shaderProgram, name.c_str()); loc >= 0)
+			glUniform3fv(loc, 1, static_cast<const GLfloat*>(value));
 	}
 
 	void Shader::SetUniformValue(const std::string& name, const float value)
 	{
-		const auto loc = glGetUniformLocation(shaderProgram, name.c_str());
-		glUniform1f(loc, value);
+		if (const auto loc = glGetUniformLocation(shaderProgram, name.c_str()); loc >= 0)
+			glUniform1f(loc, value);
 	}
 
 	bool Shader::CompileShader(const std::string& fileName, GLenum shaderType, GLuint& outShader)
