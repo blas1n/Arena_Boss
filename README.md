@@ -1,3 +1,3 @@
 # Arena_Boss
 
-  project for BS Engine development.
+ Sub project for BS Engine development.
