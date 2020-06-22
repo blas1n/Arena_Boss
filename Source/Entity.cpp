@@ -89,7 +89,7 @@ namespace ArenaBoss
 
 	Component* Entity::FindComponent(const std::string& componentName)
 	{
-		for (auto& component : components)
+		for (auto component : components)
 			if (component->ClassName() == componentName)
 				return component;
 
