@@ -1,75 +1,72 @@
 #include "WindowManager.h"
+#include <SDL2/SDL.h>
 #include <exception>
 
 namespace ArenaBoss
 {
-	WindowManager::WindowManager(const char* title,
+	WindowManager::WindowManager(const char* inTitle,
 		uint32_t width, uint32_t height, ScreenMode inScreenMode)
-		: window(nullptr),
-		screenMode(inScreenMode)
+		: window(nullptr), title(inTitle), screenMode(inScreenMode)
 	{
-		if (!glfwInit())
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 			throw std::exception{ "Failed to initialze GLFW" };
 
-		auto* monitor = glfwGetPrimaryMonitor();
-		auto* mode = glfwGetVideoMode(monitor);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-		glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-		glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-		glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-		glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
-		glfwWindowHint(GLFW_SAMPLES, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-		window = glfwCreateWindow(width, height, title, nullptr, nullptr);
-		glfwMakeContextCurrent(window);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+
+		window = SDL_CreateWindow("ArenaBoss",
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			static_cast<int>(width),
+			static_cast<int>(height),
+			SDL_WINDOW_OPENGL | GetSDLScreenMode());
+
+		if (!window)
+			throw std::exception{ "Failed to create window" };
 	}
 
 	WindowManager::~WindowManager()
 	{
-		glfwDestroyWindow(window);
-		glfwTerminate();
+		SDL_DestroyWindow(window);
+	}
+
+	void WindowManager::SetTitle(const std::string& inTitle) noexcept
+	{
+		title = inTitle;
+		SDL_SetWindowTitle(window, inTitle.c_str());
 	}
 
 	Math::UintVector2 WindowManager::GetSize() const noexcept
 	{
 		int w, h;
-		glfwGetWindowSize(window, &w, &h);
+		SDL_GetWindowSize(window, &w, &h);
 		return Math::UintVector2{ static_cast<uint32_t>(w), static_cast<uint32_t>(h) };
+	}
+
+	void WindowManager::SetSize(uint32_t width, uint32_t height) noexcept
+	{
+		SDL_SetWindowSize(window, static_cast<int>(width), static_cast<int>(height));
 	}
 
 	void WindowManager::SetScreenMode(ScreenMode inScreenMode) noexcept
 	{
 		screenMode = inScreenMode;
-		
-		auto* monitor = glfwGetPrimaryMonitor();
-		auto* mode = glfwGetVideoMode(monitor);
+		SDL_SetWindowFullscreen(window, GetSDLScreenMode());
+	}
 
-		switch (screenMode)
-		{
-		case ScreenMode::Window:
-		{
-			int x, y, w, h;
-			glfwGetWindowPos(window, &x, &y);
-			glfwGetWindowSize(window, &w, &h);
-
-			glfwSetWindowMonitor(window, nullptr, x, y, w, h, 0);
-			break;
-		}
-		case ScreenMode::FullScreen:
-		{
-			glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, 0);
-			break;
-		}
-		case ScreenMode::Borderless:
-		{
-			glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-			break;
-		}
-		}
+	Uint32 WindowManager::GetSDLScreenMode() const noexcept
+	{
+		constexpr static Uint32 Mode[3]{ 0, SDL_WINDOW_FULLSCREEN, SDL_WINDOW_FULLSCREEN_DESKTOP };
+		return Mode[static_cast<uint8_t>(screenMode);
 	}
 }
