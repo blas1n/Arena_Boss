@@ -21,7 +21,7 @@
 					"type": "MeshComponent",
 					"mesh": {
 						"name": "Test Mesh",
-						"path": "Test.mesh"
+						"path": "Test.obj"
 					},
 					"shader": {
 						"name": "Phong Shader",
