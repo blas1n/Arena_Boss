@@ -2,10 +2,25 @@
 
 #include <string>
 
+#define GENERATE_RESOURCE(name) \
+public: \
+	inline static const std::string& StaticClassName() noexcept \
+	{ \
+		static const std::string className{ #name }; \
+		return className; \
+	} \
+\
+	inline const std::string& ClassName() const noexcept override \
+	{ \
+		return name::StaticClassName(); \
+	}
+
 namespace ArenaBoss
 {
 	class Resource
 	{
+		GENERATE_RESOURCE(Resource);
+
 	public:
 		Resource(const std::string& inName)
 			: name(inName) {}
@@ -19,17 +34,6 @@ namespace ArenaBoss
 		virtual ~Resource() = default;
 
 		inline const std::string& GetName() const noexcept { return name; }
-
-		inline static const std::string& StaticClassName() noexcept
-		{
-			static const std::string className{ "Resource" };
-			return className;
-		}
-
-		inline virtual const std::string& ClassName() const noexcept
-		{
-			return Resource::StaticClassName();
-		}
 
 	private:
 		friend bool operator==(const Resource& lhs, const Resource& rhs);
@@ -64,17 +68,4 @@ namespace ArenaBoss
 	inline bool operator>(const std::string& lhs, const Resource& rhs) { return rhs < lhs; }
 	inline bool operator<=(const std::string& lhs, const Resource& rhs) { return !(rhs < lhs); }
 	inline bool operator>=(const std::string& lhs, const Resource& rhs) { return !(lhs < rhs); }
-
-#define GENERATE_RESOURCE(name) \
-public: \
-	inline static const std::string& StaticClassName() noexcept \
-	{ \
-		static const std::string className{ #name }; \
-		return className; \
-	} \
-\
-	inline const std::string& ClassName() const noexcept override \
-	{ \
-		return name::StaticClassName(); \
-	}
 }
