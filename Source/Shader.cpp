@@ -20,16 +20,15 @@ namespace ArenaBoss
 		glAttachShader(shaderProgram, vertexShader);
 		glAttachShader(shaderProgram, fragShader);
 		glLinkProgram(shaderProgram);
+
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragShader);
 	}
 
 	Shader::~Shader()
 	{
 		if (IsValidProgram())
-		{
 			glDeleteProgram(shaderProgram);
-			glDeleteShader(fragShader);
-			glDeleteShader(vertexShader);
-		}
 	}
 
 	void Shader::Activate()
